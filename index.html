@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iOS 26 Settings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- App Background / Home Screen Mock -->
+    <div class="app-background">
+        <div class="status-bar">
+            <span class="time">12:53</span>
+            <div class="status-icons">
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+        <div class="home-screen-content">
+            <h1>iOS 26</h1>
+            <p>Welcome to your web app.</p>
+            <button id="reset-onboarding" class="debug-btn">Reset First-Time State</button>
+        </div>
+    </div>
+
+    <!-- Bottom Sheet Modal with Liquid Glass Effect -->
+    <div class="sheet-overlay" id="sheetOverlay">
+        <div class="bottom-sheet" id="bottomSheet">
+            <div class="sheet-indicator"></div>
+            <div class="sheet-header">
+                <h2>Settings Setup</h2>
+                <span class="close-sheet" id="closeSheet">✕</span>
+            </div>
+            <div class="sheet-body" id="sheetBody">
+                <!-- Content will be added next -->
+                <p>This is the fresh start popup sheet mimicking iOS style.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
