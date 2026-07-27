@@ -37,11 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openSheet() {
         sheetOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
         goToPage(1);
     }
 
     function closeSheet() {
         sheetOverlay.classList.remove("active");
+        document.body.style.overflow = "";
     }
 
     function goToPage(pageNumber) {
@@ -96,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Save profile names to localStorage and update main screen display
         localStorage.setItem("ios26_firstname", fName);
         localStorage.setItem("ios26_lastname", lName);
         displayProfileName.textContent = `${fName} ${lName}`.trim();
