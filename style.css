@@ -20,7 +20,7 @@ body {
     width: 100%;
     max-width: 430px;
     height: 100%;
-    background: linear-gradient(135deg, #1a1c29 0%, #0d0e15 100%);
+    background-color: #000000;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -37,31 +37,247 @@ body {
     font-size: 14px;
     font-weight: 600;
     z-index: 10;
+    color: #fff;
+    flex-shrink: 0;
 }
 
-.home-screen-content {
-    padding: 40px 24px;
-    text-align: center;
+.status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
 }
 
-.home-screen-content h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
+/* Settings Main View Layout */
+.settings-container {
+    padding: 10px 16px 20px 16px;
+    overflow-y: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.home-screen-content p {
+.settings-container::-webkit-scrollbar {
+    display: none;
+}
+
+.main-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+    padding-left: 4px;
+    margin-top: 4px;
+}
+
+/* iOS Grouped Settings Cards */
+.settings-card {
+    background: rgba(28, 28, 30, 0.85);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.profile-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 14px;
+    cursor: pointer;
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #3a3a3c;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+    margin-bottom: 2px;
+}
+
+.profile-sub {
+    font-size: 13px;
     color: #8e8e93;
-    margin-bottom: 20px;
+}
+
+.card-divider {
+    height: 0.5px;
+    background: rgba(255, 255, 255, 0.12);
+    margin-left: 16px;
+}
+
+.card-divider.indent {
+    margin-left: 54px;
+}
+
+.settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 16px;
+}
+
+.settings-row.clickable {
+    cursor: pointer;
+}
+
+.row-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.row-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.row-label-text {
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 400;
+}
+
+.row-status-text {
+    font-size: 15px;
+    color: #8e8e93;
+}
+
+.chevron-icon {
+    font-size: 20px;
+    color: #48484a;
+    font-weight: 400;
+}
+
+.notification-badge {
+    background-color: #ff3b30;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Setting Row Icons Styling */
+.setting-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    color: #fff;
+}
+
+.setting-icon.orange { background-color: #ff9500; }
+.setting-icon.blue { background-color: #007aff; }
+.setting-icon.green { background-color: #34c759; }
+.setting-icon.green-dark { background-color: #30b0c7; }
+.setting-icon.blue-dark { background-color: #5856d6; }
+
+/* iOS Toggle Switch */
+.ios-switch {
+    position: relative;
+    display: inline-block;
+    width: 51px;
+    height: 31px;
+}
+
+.ios-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #39393d;
+    transition: .3s cubic-bezier(0.3, 1.2, 0.2, 1);
+    border-radius: 31px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .3s cubic-bezier(0.3, 1.2, 0.2, 1);
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+input:checked + .slider {
+    background-color: #34c759;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Bottom Actions & Mock Search */
+.bottom-actions-container {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 10px;
+}
+
+.search-bar-mock {
+    background: rgba(118, 118, 128, 0.24);
+    border-radius: 10px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    color: #8e8e93;
+    font-size: 15px;
+}
+
+.search-placeholder {
+    flex-grow: 1;
 }
 
 .debug-btn {
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: #fff;
-    padding: 10px 16px;
-    border-radius: 12px;
+    padding: 8px 14px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    align-self: center;
 }
 
 /* Sheet Overlay */
@@ -110,7 +326,6 @@ body {
     transform: translateY(0);
 }
 
-/* Handle Bar Indicator */
 .sheet-indicator {
     width: 36px;
     height: 5px;
@@ -134,7 +349,6 @@ body {
     font-weight: 600;
 }
 
-/* Multi-page container inside sheet */
 .sheet-pages-container {
     position: relative;
     width: 100%;
@@ -164,7 +378,6 @@ body {
     transform: translateX(0);
 }
 
-/* App Icon & Typography Styling */
 .text-center {
     text-align: center;
     display: flex;
@@ -213,7 +426,6 @@ body {
     margin-bottom: 12px;
 }
 
-/* iOS Styled Input Card */
 .ios-input-card {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -254,7 +466,6 @@ body {
     margin-left: 16px;
 }
 
-/* Error Message styling */
 .error-msg-container {
     margin-top: 10px;
     padding: 0 4px;
@@ -275,7 +486,6 @@ body {
     line-height: 1.4;
 }
 
-/* Shake Animation for Profile Card */
 @keyframes shake {
     0% { transform: translateX(0); }
     20% { transform: translateX(-6px); }
@@ -289,7 +499,6 @@ body {
     animation: shake 0.4s ease-in-out;
 }
 
-/* Footer & Liquid Glass Buttons */
 .sheet-footer {
     display: flex;
     width: 100%;
