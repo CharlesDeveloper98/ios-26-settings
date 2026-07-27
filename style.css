@@ -13,7 +13,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden; /* Allow vertical scrolling, hide horizontal */
+    overflow-y: auto;   /* Enable vertical scrolling on body */
 
 
         -webkit-user-select: none; /* Safari */
@@ -69,7 +70,7 @@ body {
 .app-background {
     width: 100%;
     max-width: 430px;
-    height: 100%;
+    min-height: 100vh; /* Change from height: 100% to min-height */
     background-color: #000000;
     position: relative;
     display: flex;
