@@ -13,8 +13,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden; /* Allow vertical scrolling, hide horizontal */
-    overflow-y: auto;   /* Enable vertical scrolling on body */
+    overflow: hidden;
 
 
         -webkit-user-select: none; /* Safari */
@@ -70,7 +69,7 @@ body {
 .app-background {
     width: 100%;
     max-width: 430px;
-    min-height: 100vh; /* Change from height: 100% to min-height */
+    height: 100%;
     background-color: #000000;
     position: relative;
     display: flex;
@@ -85,13 +84,10 @@ body {
     flex-direction: column;
     gap: 16px;
     flex: 1;
-    overflow-y: visible; /* Ensure content can flow and trigger body scroll */
 }
 
-/* Remove or comment out this rule if it was hiding scrollbars globally on container */
 .settings-container::-webkit-scrollbar {
-    display: block; /* Optional: or leave hidden if you prefer clean mobile look */
-    width: 0px;
+    display: none;
 }
 
 
