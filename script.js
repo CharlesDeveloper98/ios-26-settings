@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const sheetOverlay = document.getElementById("sheetOverlay");
     const sheetTitle = document.getElementById("sheetTitle");
-    const resetBtn = document.getElementById("reset-onboarding");
     
     const page1 = document.getElementById("page1");
     const page2 = document.getElementById("page2");
@@ -107,11 +106,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sheetOverlay.addEventListener("click", (e) => {
         e.stopPropagation();
-    });
-
-    resetBtn.addEventListener("click", () => {
-        localStorage.clear();
-        alert("State cleared! Refresh the page to see the fresh start popup again.");
-        location.reload();
     });
 });
