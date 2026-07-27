@@ -8,19 +8,146 @@
 </head>
 <body>
 
-    <!-- App Background / Home Screen Mock -->
+    <!-- App Background / iOS Native Settings Screen -->
     <div class="app-background">
         <div class="status-bar">
-            <span class="time">12:53</span>
+            <span class="time">11:42</span>
             <div class="status-icons">
                 <span>📶</span>
-                <span>🔋</span>
+                <span>LTE</span>
+                <span class="battery-icon">80</span>
             </div>
         </div>
-        <div class="home-screen-content">
-            <h1>iOS 26</h1>
-            <p>Welcome to your web app.</p>
-            <button id="reset-onboarding" class="debug-btn">Reset First-Time State</button>
+
+        <!-- Main Scrollable Settings Content -->
+        <div class="settings-container">
+            <h1 class="main-title">Settings</h1>
+
+            <!-- Apple Account Profile Card -->
+            <div class="settings-card profile-card-link">
+                <div class="profile-row">
+                    <div class="profile-avatar">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar">
+                    </div>
+                    <div class="profile-info">
+                        <h2 class="profile-name" id="displayProfileName">Guest User</h2>
+                        <p class="profile-sub">Apple Account, iCloud and more</p>
+                    </div>
+                    <span class="chevron-icon">›</span>
+                </div>
+                <div class="card-divider"></div>
+                <div class="settings-row payment-row">
+                    <div class="row-left">
+                        <span class="row-label-text">Update Payment Details</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="notification-badge">1</span>
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connectivity Group Card -->
+            <div class="settings-card group-card">
+                <!-- Airplane Mode -->
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="setting-icon orange">✈️</div>
+                        <span class="row-label-text">Airplane Mode</span>
+                    </div>
+                    <div class="row-right">
+                        <label class="ios-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="card-divider indent"></div>
+
+                <!-- Wi-Fi -->
+                <div class="settings-row clickable">
+                    <div class="row-left">
+                        <div class="setting-icon blue">📶</div>
+                        <span class="row-label-text">Wi-Fi</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="row-status-text">Not Connected</span>
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+                <div class="card-divider indent"></div>
+
+                <!-- Bluetooth -->
+                <div class="settings-row clickable">
+                    <div class="row-left">
+                        <div class="setting-icon blue">ᛒ</div>
+                        <span class="row-label-text">Bluetooth</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="row-status-text">On</span>
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+                <div class="card-divider indent"></div>
+
+                <!-- Mobile Service -->
+                <div class="settings-row clickable">
+                    <div class="row-left">
+                        <div class="setting-icon green">📡</div>
+                        <span class="row-label-text">Mobile Service</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+                <div class="card-divider indent"></div>
+
+                <!-- Personal Hotspot -->
+                <div class="settings-row clickable">
+                    <div class="row-left">
+                        <div class="setting-icon green">🔗</div>
+                        <span class="row-label-text">Personal Hotspot</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+                <div class="card-divider indent"></div>
+
+                <!-- Battery -->
+                <div class="settings-row clickable">
+                    <div class="row-left">
+                        <div class="setting-icon green-dark">🔋</div>
+                        <span class="row-label-text">Battery</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+                <div class="card-divider indent"></div>
+
+                <!-- VPN -->
+                <div class="settings-row clickable">
+                    <div class="row-left">
+                        <div class="setting-icon blue-dark">🌐</div>
+                        <span class="row-label-text">VPN</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="row-status-text">Not Connected</span>
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Search Bar & Debug Reset Container -->
+            <div class="bottom-actions-container">
+                <div class="search-bar-mock">
+                    <span class="search-icon">🔍</span>
+                    <span class="search-placeholder">Search</span>
+                    <span class="mic-icon">🎙️</span>
+                </div>
+                <button id="reset-onboarding" class="debug-btn">Reset First-Time State</button>
+            </div>
         </div>
     </div>
 
