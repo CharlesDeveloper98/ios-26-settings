@@ -15,6 +15,7 @@ body {
     overflow: hidden;
 }
 
+
 /* App Background Container */
 .app-background {
     width: 100%;
@@ -24,14 +25,15 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
 /* Settings Main View Layout */
 .settings-container {
     padding: 16px 16px 30px 16px;
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
-    flex-grow: 1;
+    -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -40,6 +42,7 @@ body {
 .settings-container::-webkit-scrollbar {
     display: none;
 }
+
 
 .main-title {
     font-size: 34px;
