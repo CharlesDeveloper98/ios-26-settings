@@ -27,35 +27,14 @@ body {
     overflow: hidden;
 }
 
-/* Status Bar */
-.status-bar {
-    height: 44px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 24px;
-    font-size: 14px;
-    font-weight: 600;
-    z-index: 10;
-    color: #fff;
-    flex-shrink: 0;
-}
-
-.status-icons {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-}
-
 /* Settings Main View Layout */
 .settings-container {
-    padding: 10px 16px 20px 16px;
+    padding: 16px 16px 30px 16px;
     overflow-y: auto;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
 .settings-container::-webkit-scrollbar {
@@ -68,13 +47,14 @@ body {
     letter-spacing: 0.4px;
     color: #ffffff;
     padding-left: 4px;
-    margin-top: 4px;
+    margin-top: 6px;
+    margin-bottom: 2px;
 }
 
-/* iOS Grouped Settings Cards */
+/* iOS 26 Super-Rounded Grouped Cards */
 .settings-card {
     background: rgba(28, 28, 30, 0.85);
-    border-radius: 12px;
+    border-radius: 20px;
     overflow: hidden;
     border: 0.5px solid rgba(255, 255, 255, 0.08);
 }
@@ -199,6 +179,9 @@ body {
 .setting-icon.green { background-color: #34c759; }
 .setting-icon.green-dark { background-color: #30b0c7; }
 .setting-icon.blue-dark { background-color: #5856d6; }
+.setting-icon.grey-icon { background-color: #8e8e93; }
+.setting-icon.red { background-color: #ff3b30; }
+.setting-icon.purple { background-color: #af52de; }
 
 /* iOS Toggle Switch */
 .ios-switch {
@@ -244,40 +227,30 @@ input:checked + .slider:before {
     transform: translateX(20px);
 }
 
-/* Bottom Actions & Mock Search */
-.bottom-actions-container {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-bottom: 10px;
+/* Bottom Liquid Glass Search Bar */
+.bottom-search-container {
+    margin-top: 10px;
+    padding-bottom: 20px;
 }
 
-.search-bar-mock {
-    background: rgba(118, 118, 128, 0.24);
-    border-radius: 10px;
-    height: 36px;
+.search-bar-liquid {
+    background: rgba(40, 40, 44, 0.65);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    height: 44px;
     display: flex;
     align-items: center;
-    padding: 0 12px;
-    gap: 8px;
+    padding: 0 16px;
+    gap: 10px;
     color: #8e8e93;
     font-size: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .search-placeholder {
     flex-grow: 1;
-}
-
-.debug-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    padding: 8px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 13px;
-    align-self: center;
 }
 
 /* Sheet Overlay */
