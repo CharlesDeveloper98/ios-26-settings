@@ -9,11 +9,15 @@
 body {
     background-color: #000;
     color: #fff;
-    height: 100vh;
+   
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    /* Enables smooth momentum scrolling on iOS devices */
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    height: 100%;
 
 
         -webkit-user-select: none; /* Safari */
