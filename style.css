@@ -1,5 +1,8 @@
 * {
     
+     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
     font-family: 'MyCustomFont', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -7,17 +10,14 @@
 body {
     background-color: #000;
     color: #fff;
-    
-    /* Remove conflicting flex centering properties that break scroll containment */
-    display: block;
-    margin: 0;
-    
-    /* Set correct height and enable natural document scrolling */
-    min-height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
     
     /* Enable true native momentum scrolling */
+    overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     
     /* Hardware acceleration layer */
@@ -28,10 +28,8 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-
-    /* Add comfortable breathing room/space below the last item without over-scrolling */
-    padding-bottom: env(safe-area-inset-bottom, 40px);
-    box-sizing: border-box;
+    
+    height: 100%;
 
 
         -webkit-user-select: none; /* Safari */
