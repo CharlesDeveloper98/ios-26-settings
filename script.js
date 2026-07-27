@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const toPage2BtnFrom3 = document.getElementById("toPage2BtnFrom3");
     const finishBtn = document.getElementById("finishBtn");
 
+    const firstNameInput = document.getElementById("firstName");
+    const lastNameInput = document.getElementById("lastName");
+    const profileCard = document.getElementById("profileCard");
+    const errorMsg = document.getElementById("errorMsg");
+
     // Check if it's the user's first time opening the app
     const hasOpenedBefore = localStorage.getItem("ios26_installed");
 
@@ -46,8 +51,27 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (pageNumber === 3) {
             page3.classList.add("active");
             sheetTitle.textContent = "Profile Setup";
+            validateInputs(); // Check input state when entering page 3
         }
     }
+
+    // Dynamic Validation for Input Fields
+    function validateInputs() {
+        const fName = firstNameInput.value.trim();
+        const lName = lastNameInput.value.trim();
+
+        if (fName !== "" || lName !== "") {
+            finishBtn.classList.remove("disabled");
+            finishBtn.classList.add("ios-blue");
+            errorMsg.classList.remove("visible");
+        } else {
+            finishBtn.classList.add("disabled");
+            finishBtn.classList.remove("ios-blue");
+        }
+    }
+
+    firstNameInput.addEventListener("input", validateInputs);
+    lastNameInput.addEventListener("input", validateInputs);
 
     // Navigation Event Listeners
     toPage2Btn.addEventListener("click", () => goToPage(2));
@@ -55,20 +79,29 @@ document.addEventListener("DOMContentLoaded", () => {
     toPage3Btn.addEventListener("click", () => goToPage(3));
     toPage2BtnFrom3.addEventListener("click", () => goToPage(2));
 
-    // Final finish button exits/closes the popup sheet
+    // Finish / Tick Button Logic with Shake & Error Feedback
     finishBtn.addEventListener("click", () => {
-        const firstName = document.getElementById("firstName").value;
-        const lastName = document.getElementById("lastName").value;
-        if(firstName || lastName) {
-            console.log("Saved Profile:", firstName, lastName);
+        const fName = firstNameInput.value.trim();
+        const lName = lastNameInput.value.trim();
+
+        if (fName === "" && lName === "") {
+            // Trigger Shake Animation
+            profileCard.classList.remove("shake");
+            void profileCard.offsetWidth; // Force reflow
+            profileCard.classList.add("shake");
+
+            // Show iOS-styled error message
+            errorMsg.classList.add("visible");
+            return;
         }
+
+        // Successfully completed setup
         closeSheet();
     });
 
+    // Prevent closing the popup when clicking outside (on the sheet overlay background)
     sheetOverlay.addEventListener("click", (e) => {
-        if (e.target === sheetOverlay) {
-            closeSheet();
-        }
+        e.stopPropagation();
     });
 
     resetBtn.addEventListener("click", () => {
