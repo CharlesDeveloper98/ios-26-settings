@@ -17,6 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const lastNameInput = document.getElementById("lastName");
     const profileCard = document.getElementById("profileCard");
     const errorMsg = document.getElementById("errorMsg");
+    const displayProfileName = document.getElementById("displayProfileName");
+
+    // Load saved profile name if already stored
+    const savedFirstName = localStorage.getItem("ios26_firstname");
+    const savedLastName = localStorage.getItem("ios26_lastname");
+    if (savedFirstName || savedLastName) {
+        displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
+    }
 
     // Check if it's the user's first time opening the app
     const hasOpenedBefore = localStorage.getItem("ios26_installed");
@@ -51,11 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (pageNumber === 3) {
             page3.classList.add("active");
             sheetTitle.textContent = "Profile Setup";
-            validateInputs(); // Check input state when entering page 3
+            validateInputs();
         }
     }
 
-    // Dynamic Validation for Input Fields
     function validateInputs() {
         const fName = firstNameInput.value.trim();
         const lName = lastNameInput.value.trim();
@@ -73,39 +80,38 @@ document.addEventListener("DOMContentLoaded", () => {
     firstNameInput.addEventListener("input", validateInputs);
     lastNameInput.addEventListener("input", validateInputs);
 
-    // Navigation Event Listeners
     toPage2Btn.addEventListener("click", () => goToPage(2));
     toPage1Btn.addEventListener("click", () => goToPage(1));
     toPage3Btn.addEventListener("click", () => goToPage(3));
     toPage2BtnFrom3.addEventListener("click", () => goToPage(2));
 
-    // Finish / Tick Button Logic with Shake & Error Feedback
     finishBtn.addEventListener("click", () => {
         const fName = firstNameInput.value.trim();
         const lName = lastNameInput.value.trim();
 
         if (fName === "" && lName === "") {
-            // Trigger Shake Animation
             profileCard.classList.remove("shake");
-            void profileCard.offsetWidth; // Force reflow
+            void profileCard.offsetWidth;
             profileCard.classList.add("shake");
-
-            // Show iOS-styled error message
             errorMsg.classList.add("visible");
             return;
         }
 
-        // Successfully completed setup
+        // Save profile names to localStorage and update main screen display
+        localStorage.setItem("ios26_firstname", fName);
+        localStorage.setItem("ios26_lastname", lName);
+        displayProfileName.textContent = `${fName} ${lName}`.trim();
+
         closeSheet();
     });
 
-    // Prevent closing the popup when clicking outside (on the sheet overlay background)
     sheetOverlay.addEventListener("click", (e) => {
         e.stopPropagation();
     });
 
     resetBtn.addEventListener("click", () => {
-        localStorage.removeItem("ios26_installed");
+        localStorage.clear();
         alert("State cleared! Refresh the page to see the fresh start popup again.");
+        location.reload();
     });
 });
