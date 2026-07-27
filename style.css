@@ -85,10 +85,13 @@ body {
     flex-direction: column;
     gap: 16px;
     flex: 1;
+    overflow-y: visible; /* Ensure content can flow and trigger body scroll */
 }
 
+/* Remove or comment out this rule if it was hiding scrollbars globally on container */
 .settings-container::-webkit-scrollbar {
-    display: none;
+    display: block; /* Optional: or leave hidden if you prefer clean mobile look */
+    width: 0px;
 }
 
 
