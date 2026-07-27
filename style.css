@@ -29,14 +29,12 @@ body {
 
 /* Settings Main View Layout */
 .settings-container {
-    padding: 16px 16px 30px 16px;
-    flex: 1;
-    min-height: 0; /* Crucial: allows the flex item to shrink and enable scrolling */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    padding: 16px 16px 40px 16px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    flex: 1;
 }
 
 .settings-container::-webkit-scrollbar {
