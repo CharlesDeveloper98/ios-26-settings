@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    // Force page to start at the top on load/refresh
+    window.scrollTo(0, 0);
+    
     const sheetOverlay = document.getElementById("sheetOverlay");
     const sheetTitle = document.getElementById("sheetTitle");
     
