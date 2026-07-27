@@ -84,7 +84,7 @@
                         </div>
                         
                         <!-- iOS Styled Input Form Card -->
-                        <div class="ios-input-card">
+                        <div class="ios-input-card" id="profileCard">
                             <div class="input-row">
                                 <label for="firstName">First Name</label>
                                 <input type="text" id="firstName" placeholder="Enter first name" autocomplete="off">
@@ -95,13 +95,18 @@
                                 <input type="text" id="lastName" placeholder="Enter last name" autocomplete="off">
                             </div>
                         </div>
+
+                        <!-- Error Message Container -->
+                        <div class="error-msg-container" id="errorMsg">
+                            <span class="error-text">Required field: Please input a name to continue identity synchronization.</span>
+                        </div>
                     </div>
                     
                     <div class="sheet-footer split">
                         <button class="liquid-glass-btn" id="toPage2BtnFrom3">
                             <span class="chevron">‹</span>
                         </button>
-                        <button class="liquid-glass-btn ios-blue" id="finishBtn">
+                        <button class="liquid-glass-btn disabled" id="finishBtn">
                             <span class="tick">✓</span>
                         </button>
                     </div>
