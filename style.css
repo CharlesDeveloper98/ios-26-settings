@@ -14,9 +14,20 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    /* Enables smooth momentum scrolling on iOS devices */
+    
+    /* Enable true native momentum scrolling */
+    overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
+    
+    /* Hardware acceleration layer */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Smooth out text and rendering performance */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    
     height: 100%;
 
 
