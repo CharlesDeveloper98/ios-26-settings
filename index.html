@@ -28,13 +28,54 @@
     <div class="sheet-overlay" id="sheetOverlay">
         <div class="bottom-sheet" id="bottomSheet">
             <div class="sheet-indicator"></div>
+            
             <div class="sheet-header">
                 <h2>Settings Setup</h2>
                 <span class="close-sheet" id="closeSheet">✕</span>
             </div>
-            <div class="sheet-body" id="sheetBody">
-                <!-- Content will be added next -->
-                <p>This is the fresh start popup sheet mimicking iOS style.</p>
+
+            <!-- Page Container for Multi-Step Navigation -->
+            <div class="sheet-pages-container">
+                
+                <!-- Page 1: Welcome & App Intro -->
+                <div class="sheet-page active" id="page1">
+                    <div class="sheet-body text-center">
+                        <div class="app-icon-container">
+                            <!-- iOS Settings Style Icon Graphic -->
+                            <div class="ios-settings-icon">
+                                <span>⚙️</span>
+                            </div>
+                        </div>
+                        <h3 class="welcome-title">Welcome to iOS 26 Settings</h3>
+                        <p class="welcome-subtitle">Experience the next generation of system configuration. Redesigned with advanced fluidity, intelligent customization, and premium design.</p>
+                    </div>
+                    <!-- Bottom Right Navigation Button -->
+                    <div class="sheet-footer right">
+                        <button class="liquid-glass-btn ios-blue" id="nextPageBtn">
+                            <span class="chevron">›</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Page 2: Secondary Popup View -->
+                <div class="sheet-page" id="page2">
+                    <div class="sheet-body text-center">
+                        <div class="app-icon-container">
+                            <div class="ios-settings-icon secondary-icon">
+                                <span>✨</span>
+                            </div>
+                        </div>
+                        <h3 class="welcome-title">System Personalization</h3>
+                        <p class="welcome-subtitle">Your device is now synchronized with iOS 26 frameworks. Configure your preferences and secure your environment seamlessly.</p>
+                    </div>
+                    <!-- Bottom Left Back Button -->
+                    <div class="sheet-footer left">
+                        <button class="liquid-glass-btn" id="prevPageBtn">
+                            <span class="chevron">‹</span>
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
