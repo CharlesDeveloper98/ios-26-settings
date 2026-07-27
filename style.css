@@ -134,19 +134,6 @@ body {
     font-weight: 600;
 }
 
-.close-sheet {
-    background: rgba(255, 255, 255, 0.1);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    cursor: pointer;
-    color: #8e8e93;
-}
-
 /* Multi-page container inside sheet */
 .sheet-pages-container {
     position: relative;
@@ -164,7 +151,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 20px 24px 34px 24px;
+    padding: 10px 24px 34px 24px;
     opacity: 0;
     visibility: hidden;
     transform: translateX(40px);
@@ -183,11 +170,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .app-icon-container {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .ios-settings-icon {
@@ -222,6 +209,51 @@ body {
     max-width: 320px;
 }
 
+.profile-intro {
+    margin-bottom: 16px;
+}
+
+/* iOS Styled Input Card */
+.ios-input-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+}
+
+.input-row label {
+    width: 90px;
+    font-size: 15px;
+    color: #aeaeb2;
+    font-weight: 500;
+}
+
+.input-row input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+}
+
+.input-row input::placeholder {
+    color: #48484a;
+}
+
+.input-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin-left: 16px;
+}
+
 /* Footer & Liquid Glass Buttons */
 .sheet-footer {
     display: flex;
@@ -232,8 +264,8 @@ body {
     justify-content: flex-end;
 }
 
-.sheet-footer.left {
-    justify-content: flex-start;
+.sheet-footer.split {
+    justify-content: space-between;
 }
 
 .liquid-glass-btn {
@@ -265,6 +297,13 @@ body {
 .chevron {
     font-size: 28px;
     font-weight: 300;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.tick {
+    font-size: 22px;
+    font-weight: 600;
     color: #ffffff;
     line-height: 1;
 }
