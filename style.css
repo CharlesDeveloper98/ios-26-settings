@@ -13,7 +13,55 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+
+
+        -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+    -webkit-tap-highlight-color: transparent; /* Removes blue tap flash */
+
+    
 }
+
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap; /* Improves loading performance */
+}
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/semibold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+.page-title, .header-row h1 { font-weight: 700; font-size: 34px; margin: 0; }
+.section-title { font-weight: 600; padding: 0 20px; }
+
+    
 
 
 /* App Background Container */
