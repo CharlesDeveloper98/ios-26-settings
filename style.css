@@ -81,25 +81,15 @@ html, body {
     z-index: 10;
 }
 
-
-/* Main view when subview is open slides slightly to the left (Parallax effect) */
+/* Main settings view subtle blur and parallax push-left when subview opens */
 .settings-view.slide-left {
     transform: translateX(-30%);
     filter: blur(6px);
     pointer-events: none;
 }
 
-        
-.settings-view.active, 
-/* Subview active state: slides smoothly into view */
-.settings-subview.active {
-    transform: translateX(0);
-    filter: blur(0px);
-    pointer-events: auto;
-}
-
 .settings-subview {
-     position: absolute;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -108,12 +98,19 @@ html, body {
     flex-direction: column;
     background-color: #000000;
     will-change: transform, filter;
-    /* Starts blurred and off-screen to the right */
+    /* Hidden off-screen with subtle initial blur */
     transform: translateX(100%);
     filter: blur(6px);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
     z-index: 20;
     pointer-events: none;
+}
+
+/* Subview active state: slides in smoothly, clearing the blur */
+.settings-subview.active {
+    transform: translateX(0);
+    filter: blur(0px);
+    pointer-events: auto;
 }
 
 /* Settings Main View Layout - Fixed Scrolling & Squeezing */
