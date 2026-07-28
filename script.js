@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
 
-    // Sub-page slide navigation handlers with precise iOS blur/slide synchronization
+    // Sub-page slide navigation handlers with synchronized light blur
     displayBrightnessNav.addEventListener("click", () => {
         mainSettingsView.classList.add("slide-left");
         displayBrightnessView.classList.add("active");
