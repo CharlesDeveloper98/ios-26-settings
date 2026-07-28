@@ -11,242 +11,420 @@
     <!-- App Background / iOS Native Settings Screen -->
     <div class="app-background">
 
-        <!-- Main Scrollable Settings Content -->
-        <div class="settings-container">
-            <h1 class="main-title">Settings</h1>
+        <!-- Main View: Settings Home -->
+        <div class="settings-view active" id="mainSettingsView">
+            <div class="settings-container">
+                <h1 class="main-title">Settings</h1>
 
-            <!-- Apple Account Profile Card -->
-            <div class="settings-card profile-card-link">
-    <div class="profile-row">
-        <div class="profile-avatar">
-            <img src="assets/appleid.png" alt="Profile Avatar">
+                <!-- Apple Account Profile Card -->
+                <div class="settings-card profile-card-link">
+                    <div class="profile-row">
+                        <div class="profile-avatar">
+                            <img src="assets/appleid.png" alt="Profile Avatar">
+                        </div>
+                        <div class="profile-info">
+                            <h2 class="profile-name" id="displayProfileName">Sign in to your Apple Account</h2>
+                            <p class="profile-sub">Apple Account, iCloud and more</p>
+                        </div>
+                        <span class="chevron-icon">›</span>
+                    </div>
+                    <div class="card-divider"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Update Payment Details</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="notification-badge">1</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 1: Connectivity & System -->
+                <div class="settings-card group-card">
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <div class="setting-icon orange">✈️</div>
+                            <span class="row-label-text">Airplane Mode</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue">📶</div>
+                            <span class="row-label-text">Wi-Fi</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Not Connected</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue">ᛒ</div>
+                            <span class="row-label-text">Bluetooth</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">On</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon green">📡</div>
+                            <span class="row-label-text">Cellular</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon green">🔗</div>
+                            <span class="row-label-text">Personal Hotspot</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Off</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon green">🔋</div>
+                            <span class="row-label-text">Battery</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue-dark">🌐</div>
+                            <span class="row-label-text">VPN</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Not Connected</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 2: General & Utilities -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon grey-icon">⚙️</div><span class="row-label-text">General</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon blue">♿</div><span class="row-label-text">Accessibility</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon blue">🎯</div><span class="row-label-text">Action Button</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon gradient-siri">✨</div><span class="row-label-text">Apple Intelligence & Siri</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon grey-icon">📷</div><span class="row-label-text">Camera</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon grey-icon">🎛️</div><span class="row-label-text">Control Center</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <!-- Tappable Display & Brightness Row -->
+                    <div class="settings-row clickable" id="displayBrightnessNav">
+                        <div class="row-left"><div class="setting-icon blue">☀️</div><span class="row-label-text">Display & Brightness</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon blue">📱</div><span class="row-label-text">Home Screen & App Library</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon grey-icon">🔍</div><span class="row-label-text">Search</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon black-icon">⏳</div><span class="row-label-text">StandBy</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon cyan">🎨</div><span class="row-label-text">Wallpaper</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                </div>
+
+                <!-- Group 4: App Preferences -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon red">🔔</div><span class="row-label-text">Notifications</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon red">🔊</div><span class="row-label-text">Sounds & Haptics</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon indigo">🌙</div><span class="row-label-text">Focus</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon purple">⌛</div><span class="row-label-text">Screen Time</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                </div>
+
+                <!-- Group 5: Security & Privacy -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon green">🟢</div><span class="row-label-text">Face ID & Passcode</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon red">🚨</div><span class="row-label-text">Emergency SOS</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon blue">✋</div><span class="row-label-text">Privacy & Security</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                </div>
+
+                <!-- Group 6: Ecosystem Services -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon gradient-game">🎮</div><span class="row-label-text">Game Center</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon blue">☁️</div><span class="row-label-text">iCloud</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>               
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left"><div class="setting-icon black-icon">💳</div><span class="row-label-text">Wallet & Apple Pay</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Liquid Glass Search Bar Container -->
+            <div class="bottom-search-container">
+                <div class="search-bar-liquid">
+                    <span class="search-icon">🔍</span>
+                    <span class="search-placeholder">Search</span>
+                    <span class="mic-icon">🎙️</span>
+                </div>
+            </div>
         </div>
 
-                    <div class="profile-info">
-                        <h2 class="profile-name" id="displayProfileName">Sign in to your Apple Account</h2>
-                        <p class="profile-sub">Apple Account, iCloud and more</p>
-                    </div>
-                    <span class="chevron-icon">›</span>
+        <!-- Sub-Page View: Display & Brightness (100% accurate match to white reference images) -->
+        <div class="settings-subview" id="displayBrightnessView">
+            <!-- Navigation Header -->
+            <div class="subview-header">
+                <div class="liquid-back-btn" id="backToMainSettings">
+                    <span class="back-chevron">‹</span>
                 </div>
-                <div class="card-divider"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left">
-                        <span class="row-label-text">Update Payment Details</span>
-                    </div>
-                    <div class="row-right">
-                        <span class="notification-badge">1</span>
-                        <span class="chevron-icon">›</span>
-                    </div>
-                </div>
+                <h2 class="subview-title">Display & Brightness</h2>
             </div>
 
-            <!-- Group 1: Connectivity & System -->
-            <div class="settings-card group-card">
-                <div class="settings-row">
-                    <div class="row-left">
-                        <div class="setting-icon orange">✈️</div>
-                        <span class="row-label-text">Airplane Mode</span>
+            <!-- Subview Scrollable Content -->
+            <div class="subview-content">
+                
+                <!-- Section 1: Appearance -->
+                <div class="subview-section-label">Appearance</div>
+                <div class="settings-card appearance-card">
+                    <div class="appearance-options">
+                        <!-- Light Mode Option -->
+                        <div class="appearance-option active" id="lightModeOption">
+                            <div class="preview-screen light-preview">
+                                <div class="preview-notch"></div>
+                                <div class="preview-time">9:41</div>
+                                <div class="preview-widget"></div>
+                                <div class="preview-widget"></div>
+                            </div>
+                            <span class="appearance-text">Light</span>
+                            <div class="radio-check checked">✓</div>
+                        </div>
+                        <!-- Dark Mode Option -->
+                        <div class="appearance-option" id="darkModeOption">
+                            <div class="preview-screen dark-preview">
+                                <div class="preview-notch"></div>
+                                <div class="preview-time">9:41</div>
+                                <div class="preview-widget"></div>
+                                <div class="preview-widget"></div>
+                            </div>
+                            <span class="appearance-text">Dark</span>
+                            <div class="radio-check"></div>
+                        </div>
                     </div>
-                    <div class="row-right">
-                        <label class="ios-switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left">
-                        <div class="setting-icon blue">📶</div>
-                        <span class="row-label-text">Wi-Fi</span>
-                    </div>
-                    <div class="row-right">
-                        <span class="row-status-text">Not Connected</span>
-                        <span class="chevron-icon">›</span>
-                    </div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left">
-                        <div class="setting-icon blue">ᛒ</div>
-                        <span class="row-label-text">Bluetooth</span>
-                    </div>
-                    <div class="row-right">
-                        <span class="row-status-text">On</span>
-                        <span class="chevron-icon">›</span>
-                    </div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left">
-                        <div class="setting-icon green">📡</div>
-                        <span class="row-label-text">Cellular</span>
-                    </div>
-                    <div class="row-right">
-                        <span class="chevron-icon">›</span>
+                    <div class="card-divider"></div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">Automatic</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox" id="automaticToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
                     </div>
                 </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left">
-                        <div class="setting-icon green">🔗</div>
-                        <span class="row-label-text">Personal Hotspot</span>
-                    </div>
-                    <div class="row-right">
-                        <span class="row-status-text">Off</span>
-                        <span class="chevron-icon">›</span>
-                    </div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left">
-                        <div class="setting-icon green">🔋</div>
-                        <span class="row-label-text">Battery</span>
-                    </div>
-                    <div class="row-right">
-                        <span class="chevron-icon">›</span>
-                    </div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left">
-                        <div class="setting-icon blue-dark">🌐</div>
-                        <span class="row-label-text">VPN</span>
-                    </div>
-                    <div class="row-right">
-                        <span class="row-status-text">Not Connected</span>
-                        <span class="chevron-icon">›</span>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Group 2: General & Utilities -->
-            <div class="settings-card group-card">
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon grey-icon">⚙️</div><span class="row-label-text">General</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
+                <!-- Section 2: Text Controls -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Text Size</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">Bold Text</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon blue">♿</div><span class="row-label-text">Accessibility</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon blue">🎯</div><span class="row-label-text">Action Button</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon gradient-siri">✨</div><span class="row-label-text">Apple Intelligence & Siri</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon grey-icon">📷</div><span class="row-label-text">Camera</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon grey-icon">🎛️</div><span class="row-label-text">Control Center</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon blue">☀️</div><span class="row-label-text">Display & Brightness</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon blue">📱</div><span class="row-label-text">Home Screen & App Library</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-             
-                    <div class="row-left"><div class="setting-icon grey-icon">🔍</div><span class="row-label-text">Search</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon black-icon">⏳</div><span class="row-label-text">StandBy</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon cyan">🎨</div><span class="row-label-text">Wallpaper</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-            </div>
 
-            <!-- Group 4: App Preferences -->
-            <div class="settings-card group-card">
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon red">🔔</div><span class="row-label-text">Notifications</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
+                <!-- Section 3: Brightness & True Tone -->
+                <div class="subview-section-label">Brightness</div>
+                <div class="settings-card group-card">
+                    <div class="brightness-slider-row">
+                        <span class="sun-icon">☀️</span>
+                        <div class="slider-track-container">
+                            <input type="range" min="0" max="100" value="45" class="ios-range-slider" id="brightnessRange">
+                        </div>
+                        <span class="sun-icon large">☀️</span>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">True Tone</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-footer-note">
+                        Automatically adapt iPhone display based on ambient lighting conditions to make colors appear consistent in different environments.
+                    </div>
                 </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon red">🔊</div><span class="row-label-text">Sounds & Haptics</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon indigo">🌙</div><span class="row-label-text">Focus</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon purple">⌛</div><span class="row-label-text">Screen Time</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-            </div>
 
-            <!-- Group 5: Security & Privacy -->
-            <div class="settings-card group-card">
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon green">🟢</div><span class="row-label-text">Face ID & Passcode</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
+                <!-- Section 4: Additional Display Settings -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Night Shift</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Off</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon red">🚨</div><span class="row-label-text">Emergency SOS</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon blue">✋</div><span class="row-label-text">Privacy & Security</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-            </div>
 
-            <!-- Group 6: Ecosystem Services -->
-            <div class="settings-card group-card">
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon gradient-game">🎮</div><span class="row-label-text">Game Center</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Auto-Lock</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Never</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">Raise to Wake</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon blue">☁️</div><span class="row-label-text">iCloud</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>               
-                <div class="card-divider indent"></div>
-                <div class="settings-row clickable">
-                    <div class="row-left"><div class="setting-icon black-icon">💳</div><span class="row-label-text">Wallet & Apple Pay</span></div>
-                    <div class="row-right"><span class="chevron-icon">›</span></div>
-                </div>
-            </div>
-        </div> <!-- Closes the .settings-container here -->
 
-        <!-- Bottom Liquid Glass Search Bar Container (Now properly outside and fixed at the bottom) -->
-        <div class="bottom-search-container">
-            <div class="search-bar-liquid">
-                <span class="search-icon">🔍</span>
-                <span class="search-placeholder">Search</span>
-                <span class="mic-icon">🎙️</span>
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Always On Display</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">On</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="settings-footer-note">
+                        Always On Display dims the Lock Screen while keeping information like time, widgets, and notifications visible using minimal power.
+                    </div>
+                </div>
+
+                <div class="subview-section-label">Display</div>
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Display Zoom</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Default</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="settings-footer-note bottom-note">
+                        Choose a view for iPhone. Larger Text shows larger controls. Default shows more content.
+                    </div>
+                </div>
+
             </div>
         </div>
+
     </div> <!-- Closes the .app-background here -->
 
 
