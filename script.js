@@ -19,6 +19,48 @@ document.addEventListener("DOMContentLoaded", () => {
     const errorMsg = document.getElementById("errorMsg");
     const displayProfileName = document.getElementById("displayProfileName");
 
+    // Navigation Views Elements
+    const mainSettingsView = document.getElementById("mainSettingsView");
+    const displayBrightnessView = document.getElementById("displayBrightnessView");
+    const displayBrightnessNav = document.getElementById("displayBrightnessNav");
+    const backToMainSettings = document.getElementById("backToMainSettings");
+
+    // Display & Brightness interactive state elements
+    const lightModeOption = document.getElementById("lightModeOption");
+    const darkModeOption = document.getElementById("darkModeOption");
+
+    // Sub-page slide navigation handlers
+    displayBrightnessNav.addEventListener("click", () => {
+        mainSettingsView.classList.remove("active");
+        displayBrightnessView.classList.add("active");
+    });
+
+    backToMainSettings.addEventListener("click", () => {
+        displayBrightnessView.classList.remove("active");
+        mainSettingsView.classList.add("active");
+    });
+
+    // Appearance Light/Dark mode switcher logic matching reference
+    lightModeOption.addEventListener("click", () => {
+        lightModeOption.classList.add("active");
+        lightModeOption.querySelector(".radio-check").classList.add("checked");
+        lightModeOption.querySelector(".radio-check").textContent = "✓";
+        
+        darkModeOption.classList.remove("active");
+        darkModeOption.querySelector(".radio-check").classList.remove("checked");
+        darkModeOption.querySelector(".radio-check").textContent = "";
+    });
+
+    darkModeOption.addEventListener("click", () => {
+        darkModeOption.classList.add("active");
+        darkModeOption.querySelector(".radio-check").classList.add("checked");
+        darkModeOption.querySelector(".radio-check").textContent = "✓";
+        
+        lightModeOption.classList.remove("active");
+        lightModeOption.querySelector(".radio-check").classList.remove("checked");
+        lightModeOption.querySelector(".radio-check").textContent = "";
+    });
+
     // Load saved profile name if already stored
     const savedFirstName = localStorage.getItem("ios26_firstname");
     const savedLastName = localStorage.getItem("ios26_lastname");
