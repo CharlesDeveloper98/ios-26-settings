@@ -29,9 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
 
-        // Sub-page slide navigation handlers with instant GPU rendering
+           // Sub-page slide navigation handlers with iOS smooth blur and slide animation
     displayBrightnessNav.addEventListener("click", () => {
         mainSettingsView.classList.add("slide-left");
+        displayBrightnessView.classList.remove("active");
+        
+        // Force layout flush before applying active class for instant hardware acceleration
+        void displayBrightnessView.offsetWidth;
         displayBrightnessView.classList.add("active");
     });
 
@@ -39,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         displayBrightnessView.classList.remove("active");
         mainSettingsView.classList.remove("slide-left");
     });
+
 
 
     // Appearance Light/Dark mode switcher logic matching reference
