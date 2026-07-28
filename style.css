@@ -222,7 +222,7 @@ html, body {
 .setting-icon.red { background-color: #ff3b30; }
 .setting-icon.purple { background-color: #af52de; }
 
-/* iOS Toggle Switch - 100% Accurate Scale & Proportions */
+/* iOS Toggle Switch - 100% Accurate Native Proportion */
 .ios-switch {
     position: relative;
     display: inline-block;
@@ -239,10 +239,13 @@ html, body {
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
     background-color: #39393d;
     transition: .3s cubic-bezier(0.3, 1.2, 0.2, 1);
-    border-radius: 31px;
+    border-radius: 31px; /* Fully rounded capsule track */
 }
 
 .slider:before {
@@ -258,14 +261,15 @@ html, body {
     box-shadow: 0 3px 8px rgba(0,0,0,0.3);
 }
 
+/* When switched ON: Track turns iOS green and moves the white knob across */
 input:checked + .slider {
     background-color: #34c759;
 }
 
-/* Exact translation to match native iOS track bounds when toggled on */
 input:checked + .slider:before {
     transform: translateX(20px);
 }
+
 
 /* Bottom Liquid Glass Search Bar */
 .bottom-search-container {
