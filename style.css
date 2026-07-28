@@ -71,11 +71,11 @@ html, body {
 
 /* Settings Main View Layout */
 .settings-container {
-    padding: 16px 16px 40px 16px;
+    padding: 8px 16px 40px 16px; /* Reduced top padding to bring elements up/match layout */
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px; /* Adjusted gap between cards to match iOS spacing */
     flex: 1;
 }
 
@@ -85,8 +85,8 @@ html, body {
     letter-spacing: 0.4px;
     color: #ffffff;
     padding-left: 4px;
-    margin-top: 6px;
-    margin-bottom: 2px;
+    margin-top: 44px; /* Push down to clear the dynamic status bar area like iOS */
+    margin-bottom: 6px;
 }
 
 /* iOS 26 Super-Rounded Grouped Cards with GPU Layers */
@@ -222,7 +222,7 @@ html, body {
 .setting-icon.red { background-color: #ff3b30; }
 .setting-icon.purple { background-color: #af52de; }
 
-/* iOS Toggle Switch */
+/* iOS Toggle Switch - 100% Accurate Scale & Proportions */
 .ios-switch {
     position: relative;
     display: inline-block;
@@ -262,6 +262,7 @@ input:checked + .slider {
     background-color: #34c759;
 }
 
+/* Exact translation to match native iOS track bounds when toggled on */
 input:checked + .slider:before {
     transform: translateX(20px);
 }
