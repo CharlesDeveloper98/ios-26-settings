@@ -64,14 +64,47 @@ html, body {
     position: relative;
     display: flex;
     flex-direction: column;
-    /* Force GPU acceleration to eliminate scroll stutter and pop-in */
     transform: translateZ(0);
     will-change: transform;
+    overflow: hidden;
+}
+
+/* iOS Navigation View Architecture */
+.settings-view, .settings-subview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #000000;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 10;
+}
+
+.settings-view.active {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.settings-subview.active {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.settings-subview {
+    transform: translateX(100%);
 }
 
 /* Settings Main View Layout */
 .settings-container {
-    padding: 8px 16px 100px 16px; /* Extra bottom padding so content scrolls clear of the search bar */
+    padding: 8px 16px 100px 16px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -87,11 +120,82 @@ html, body {
     letter-spacing: 0.4px;
     color: #ffffff;
     padding-left: 4px;
-    margin-top: 44px; /* Push down to clear the dynamic status bar area like iOS */
+    margin-top: 44px;
     margin-bottom: 6px;
 }
 
-/* iOS 26 Super-Rounded Grouped Cards with GPU Layers */
+/* Subview Header with Liquid Glass Back Chevron */
+.subview-header {
+    display: flex;
+    align-items: center;
+    padding: 50px 16px 12px 16px;
+    position: relative;
+    background-color: #000;
+    flex-shrink: 0;
+}
+
+.liquid-back-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.liquid-back-btn:active {
+    transform: scale(0.9);
+}
+
+.back-chevron {
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1;
+    margin-right: 2px;
+}
+
+.subview-title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+    pointer-events: none;
+}
+
+.subview-content {
+    padding: 8px 16px 40px 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.subview-section-label {
+    font-size: 13px;
+    font-weight: 400;
+    color: #8e8e93;
+    letter-spacing: -0.1px;
+    padding-left: 16px;
+    text-transform: none;
+}
+
+/* iOS 26 Grouped Cards */
 .settings-card {
     background: rgba(28, 28, 30, 0.85);
     border-radius: 20px;
@@ -203,6 +307,161 @@ html, body {
     align-items: center;
 }
 
+/* Appearance Light/Dark Selector Card Styles */
+.appearance-options {
+    display: flex;
+    justify-content: space-around;
+    padding: 16px 12px 12px 12px;
+    gap: 16px;
+}
+
+.appearance-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px;
+    flex: 1;
+}
+
+.preview-screen {
+    width: 100%;
+    max-width: 110px;
+    height: 150px;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.appearance-option.active .preview-screen {
+    border-color: #007aff;
+}
+
+.light-preview {
+    background: linear-gradient(135deg, #f2f2f7 0%, #e5e5ea 100%);
+}
+
+.dark-preview {
+    background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+}
+
+.preview-notch {
+    width: 40px;
+    height: 8px;
+    background: #000;
+    border-radius: 4px;
+    margin: 6px auto 0 auto;
+}
+
+.dark-preview .preview-notch {
+    background: #fff;
+}
+
+.preview-time {
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    color: #000;
+    margin-top: 4px;
+}
+
+.dark-preview .preview-time {
+    color: #fff;
+}
+
+.preview-widget {
+    width: 80%;
+    height: 20px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 6px;
+    margin: 8px auto 0 auto;
+}
+
+.dark-preview .preview-widget {
+    background: rgba(255,255,255,0.1);
+}
+
+.appearance-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.radio-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #8e8e93;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: transparent;
+    transition: all 0.2s ease;
+}
+
+.radio-check.checked {
+    background-color: #007aff;
+    border-color: #007aff;
+    color: #fff;
+}
+
+/* Brightness Slider Row Styles */
+.brightness-slider-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 12px;
+}
+
+.sun-icon {
+    font-size: 14px;
+    color: #8e8e93;
+}
+
+.sun-icon.large {
+    font-size: 18px;
+}
+
+.slider-track-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.ios-range-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #39393d;
+    border-radius: 3px;
+    outline: none;
+}
+
+.ios-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+}
+
+.settings-footer-note {
+    font-size: 13px;
+    color: #8e8e93;
+    line-height: 1.4;
+    padding: 8px 16px 14px 16px;
+}
+
+.settings-footer-note.bottom-note {
+    padding-top: 0;
+}
+
 /* Setting Row Icons Styling */
 .setting-icon {
     width: 30px;
@@ -224,7 +483,7 @@ html, body {
 .setting-icon.red { background-color: #ff3b30; }
 .setting-icon.purple { background-color: #af52de; }
 
-/* iOS Toggle Switch - 100% Accurate Native Proportion */
+/* iOS Toggle Switch */
 .ios-switch {
     position: relative;
     display: inline-block;
@@ -247,7 +506,7 @@ html, body {
     bottom: 0;
     background-color: #39393d;
     transition: .3s cubic-bezier(0.3, 1.2, 0.2, 1);
-    border-radius: 31px; /* Fully rounded capsule track */
+    border-radius: 31px;
 }
 
 .slider:before {
@@ -263,7 +522,6 @@ html, body {
     box-shadow: 0 3px 8px rgba(0,0,0,0.3);
 }
 
-/* When switched ON: Track turns iOS green and moves the white knob across */
 input:checked + .slider {
     background-color: #34c759;
 }
@@ -271,7 +529,6 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(20px);
 }
-
 
 /* Bottom Liquid Glass Search Bar */
 .bottom-search-container {
