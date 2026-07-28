@@ -28,27 +28,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
-    
 
-               // Sub-page slide navigation handlers with precise iOS blur/slide synchronization
+    // Sub-page slide navigation handlers with precise iOS blur/slide synchronization
     displayBrightnessNav.addEventListener("click", () => {
-        // 1. Blur and slide main view left
         mainSettingsView.classList.add("slide-left");
-        
-        // 2. Bring subview forward, slide it in, and clear its blur smoothly
         displayBrightnessView.classList.add("active");
     });
 
     backToMainSettings.addEventListener("click", () => {
-        // 1. Blur and slide subview back out to the right
         displayBrightnessView.classList.remove("active");
-        
-        // 2. Restore main view crispness and slide it back to center
         mainSettingsView.classList.remove("slide-left");
     });
-
-
-
 
     // Appearance Light/Dark mode switcher logic matching reference
     lightModeOption.addEventListener("click", () => {
