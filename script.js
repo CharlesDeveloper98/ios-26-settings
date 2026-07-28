@@ -29,16 +29,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
 
-    // Sub-page slide navigation handlers
+        // Sub-page slide navigation handlers with instant GPU rendering
     displayBrightnessNav.addEventListener("click", () => {
-        mainSettingsView.classList.remove("active");
+        mainSettingsView.classList.add("slide-left");
         displayBrightnessView.classList.add("active");
     });
 
     backToMainSettings.addEventListener("click", () => {
         displayBrightnessView.classList.remove("active");
-        mainSettingsView.classList.add("active");
+        mainSettingsView.classList.remove("slide-left");
     });
+
 
     // Appearance Light/Dark mode switcher logic matching reference
     lightModeOption.addEventListener("click", () => {
