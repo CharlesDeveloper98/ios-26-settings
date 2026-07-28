@@ -67,7 +67,7 @@ html, body {
 }
 
 /* iOS Navigation View Architecture */
-.settings-view, .settings-subview {
+.settings-view {
     position: absolute;
     top: 0;
     left: 0;
@@ -85,7 +85,7 @@ html, body {
 /* Main view when subview is open slides slightly to the left (Parallax effect) */
 .settings-view.slide-left {
     transform: translateX(-30%);
-    filter: blur(8px);
+    filter: blur(6px);
     pointer-events: none;
 }
 
@@ -99,8 +99,20 @@ html, body {
 }
 
 .settings-subview {
+     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #000000;
+    will-change: transform, filter;
+    /* Starts blurred and off-screen to the right */
     transform: translateX(100%);
-    filter: blur(8px);
+    filter: blur(6px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    z-index: 20;
     pointer-events: none;
 }
 
