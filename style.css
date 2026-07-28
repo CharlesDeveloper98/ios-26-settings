@@ -64,9 +64,9 @@ html, body {
     position: relative;
     display: flex;
     flex-direction: column;
+    /* Force GPU acceleration to eliminate scroll stutter and pop-in */
     transform: translateZ(0);
     will-change: transform;
-    overflow: hidden;
 }
 
 /* iOS Navigation View Architecture */
