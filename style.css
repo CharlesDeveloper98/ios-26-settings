@@ -76,10 +76,8 @@ html, body {
     display: flex;
     flex-direction: column;
     background-color: #000000;
-    /* Use will-change to hint the browser for GPU hardware acceleration */
-    will-change: transform;
-    /* Smooth iOS ease-in-out cubic-bezier curve */
-    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, filter;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
     z-index: 10;
 }
 
@@ -87,6 +85,7 @@ html, body {
 /* Main view when subview is open slides slightly to the left (Parallax effect) */
 .settings-view.slide-left {
     transform: translateX(-30%);
+    filter: blur(8px);
     pointer-events: none;
 }
 
@@ -95,11 +94,13 @@ html, body {
 /* Subview active state: slides smoothly into view */
 .settings-subview.active {
     transform: translateX(0);
+    filter: blur(0px);
     pointer-events: auto;
 }
 
 .settings-subview {
     transform: translateX(100%);
+    filter: blur(8px);
     pointer-events: none;
 }
 
