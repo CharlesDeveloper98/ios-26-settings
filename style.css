@@ -12,9 +12,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-user-select: none;
@@ -58,15 +56,14 @@ html, body {
 .app-background {
     width: 100%;
     max-width: 430px;
+    height: 100dvh;
     margin: 0 auto;
-    min-height: 100%;
     background-color: #000000;
     position: relative;
     display: flex;
     flex-direction: column;
-    transform: translateZ(0);
-    will-change: transform;
     overflow: hidden;
+    transform: translateZ(0);
 }
 
 /* iOS Navigation View Architecture */
@@ -86,12 +83,7 @@ html, body {
     z-index: 10;
 }
 
-.settings-view.active {
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
-}
-
+.settings-view.active, 
 .settings-subview.active {
     transform: translateX(0);
     opacity: 1;
@@ -102,16 +94,17 @@ html, body {
     transform: translateX(100%);
 }
 
-/* Settings Main View Layout */
+/* Settings Main View Layout - Fixed Scrolling & Squeezing */
 .settings-container {
-    padding: 8px 16px 100px 16px;
+    padding: 12px 16px 120px 16px;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 12px;
     flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll; /* Forces scroll engine availability */
+    -webkit-overflow-scrolling: touch; /* Enables buttery-smooth iOS momentum scrolling */
+    overscroll-behavior-y: contain; /* Prevents rubber-band body clipping */
 }
 
 .main-title {
@@ -122,6 +115,7 @@ html, body {
     padding-left: 4px;
     margin-top: 44px;
     margin-bottom: 6px;
+    flex-shrink: 0;
 }
 
 /* Subview Header with Liquid Glass Back Chevron */
@@ -176,14 +170,15 @@ html, body {
 }
 
 .subview-content {
-    padding: 8px 16px 40px 16px;
+    padding: 8px 16px 60px 16px;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
     flex: 1;
-    overflow-y: auto;
+    overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
 }
 
 .subview-section-label {
@@ -201,7 +196,7 @@ html, body {
     border-radius: 20px;
     overflow: hidden;
     border: 0.5px solid rgba(255, 255, 255, 0.08);
-    transform: translateZ(0);
+    flex-shrink: 0; /* Prevents card squishing inside flex layouts */
 }
 
 .profile-row {
@@ -472,6 +467,7 @@ html, body {
     align-items: center;
     font-size: 15px;
     color: #fff;
+    flex-shrink: 0;
 }
 
 .setting-icon.orange { background-color: #ff9500; }
@@ -489,6 +485,7 @@ html, body {
     display: inline-block;
     width: 51px;
     height: 31px;
+    flex-shrink: 0;
 }
 
 .ios-switch input {
@@ -543,6 +540,7 @@ input:checked + .slider:before {
     z-index: 50;
     display: flex;
     justify-content: center;
+    pointer-events: none; /* Allows scrolling interactions to pass through the gradient backdrop edge */
 }
 
 .search-bar-liquid {
@@ -558,6 +556,7 @@ input:checked + .slider:before {
     color: #8e8e93;
     font-size: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    pointer-events: auto; /* Re-enables clicks/interactions explicitly on the bar itself */
 }
 
 .search-placeholder {
@@ -653,6 +652,8 @@ input:checked + .slider:before {
     visibility: hidden;
     transform: translateX(40px);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .sheet-page.active {
@@ -836,7 +837,7 @@ input:checked + .slider:before {
 
 .tick {
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 1;
     color: #ffffff;
     line-height: 1;
 }
