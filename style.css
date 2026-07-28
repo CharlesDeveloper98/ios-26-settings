@@ -20,9 +20,7 @@ body {
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     
-    /* Hardware acceleration layer */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+   
     
     /* Smooth out text and rendering performance */
     -webkit-font-smoothing: antialiased;
@@ -30,6 +28,10 @@ body {
 
     
     height: 100%;
+
+
+
+    
 
 
         -webkit-user-select: none; /* Safari */
