@@ -59,13 +59,12 @@ html, body {
     width: 100%;
     max-width: 430px;
     margin: 0 auto;
-    height: 100vh;
-    height: 100dvh;
+    min-height: 100%;
     background-color: #000000;
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /* Force GPU acceleration to eliminate scroll stutter and pop-in */
     transform: translateZ(0);
     will-change: transform;
 }
