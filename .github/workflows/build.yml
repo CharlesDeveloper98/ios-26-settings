@@ -24,7 +24,7 @@ jobs:
 
       - name: Create Cordova Project
         run: |
-          cordova create myApp com.charles.zoneplay "ZonePlay"
+          cordova create myApp com.reelcee.settings "Settings"
           rm -rf myApp/www/*
           # Copying all necessary files, assets, and standalone fonts folder to the www directory
           cp index.html myApp/www/
@@ -46,5 +46,5 @@ jobs:
       - name: Upload Finished APK
         uses: actions/upload-artifact@v4
         with:
-          name: Music-Player-APK
+          name: Settings-APK
           path: myApp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
