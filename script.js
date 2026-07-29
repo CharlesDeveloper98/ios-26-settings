@@ -30,11 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
 
-    // Theme Controller Logic with Smooth Transition Class injection
+        // Theme Controller Logic with Smooth Transition Class injection
     const htmlElement = document.documentElement;
 
     function setTheme(theme) {
-        // Prevent layout calculation locks during transition
+        // Prevent layout calculation locks and enable buttery-smooth transition
         htmlElement.classList.add("theme-transitioning");
         htmlElement.setAttribute("data-theme", theme);
         localStorage.setItem("ios26_theme", theme);
@@ -57,10 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
             lightModeOption.querySelector(".radio-check").textContent = "";
         }
 
+        // Clean up transition hooks right after the animation completes to free CPU cycles
         setTimeout(() => {
             htmlElement.classList.remove("theme-transitioning");
-        }, 350);
+        }, 400);
     }
+
 
     // Initialize Theme State from Storage or System
     const savedTheme = localStorage.getItem("ios26_theme");
