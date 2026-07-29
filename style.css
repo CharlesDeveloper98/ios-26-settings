@@ -40,11 +40,20 @@
 
 /* Optimized Performance Transition Layer to Eliminate Stutter */
 body, .app-background, .settings-view, .settings-subview, .settings-card, .search-bar-liquid, .bottom-search-container, .bottom-sheet {
-    transition: background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                color 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                border-color 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     will-change: background-color, color;
 }
+
+/* Smooth transition applied ONLY when the theme-transitioning class is active */
+html.theme-transitioning *, 
+html.theme-transitioning *:before, 
+html.theme-transitioning *:after {
+    transition: background-color 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                color 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                border-color 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    pointer-events: none !important; /* Prevents layout jitter and accidental touches during paint */
+}
+
 
 html, body {
     background-color: var(--bg-app);
@@ -59,6 +68,7 @@ html, body {
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    transform: translateZ(0); /* Forces GPU hardware acceleration layer */
 }
 
 @font-face {
