@@ -57,10 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
             lightModeOption.querySelector(".radio-check").textContent = "";
         }
 
-        // Clean up transition hooks right after the animation completes to free CPU cycles
-        setTimeout(() => {
-            htmlElement.classList.remove("theme-transitioning");
-        }, 400);
+            // Clean up transition hooks matching the faster 250ms speed
+    setTimeout(() => {
+        htmlElement.classList.remove("theme-transitioning");
+    }, 250);
+
     }
 
 
