@@ -30,11 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
 
-        // Theme Controller Logic with Smooth Transition Class injection
+           // Theme Controller Logic with Smooth Transition Class injection
     const htmlElement = document.documentElement;
 
     function setTheme(theme) {
-        // Prevent layout calculation locks and enable buttery-smooth transition
         htmlElement.classList.add("theme-transitioning");
         htmlElement.setAttribute("data-theme", theme);
         localStorage.setItem("ios26_theme", theme);
@@ -57,13 +56,18 @@ document.addEventListener("DOMContentLoaded", () => {
             lightModeOption.querySelector(".radio-check").textContent = "";
         }
 
-            // Clean up transition hooks matching the faster 250ms speed
-    setTimeout(() => {
-        htmlElement.classList.remove("theme-transitioning");
-    }, 250);
-
+        setTimeout(() => {
+            htmlElement.classList.remove("theme-transitioning");
+        }, 250);
     }
 
+    // Robust function to check system preference compatible with WebViews/APKs
+    function getSystemTheme() {
+        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+            return "light";
+        }
+        return "dark";
+    }
 
     // Initialize Theme State from Storage or System
     const savedTheme = localStorage.getItem("ios26_theme");
@@ -72,8 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     automaticToggle.checked = savedAutomatic;
 
     if (savedAutomatic) {
-        const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        setTheme(systemPrefersDark ? "dark" : "light");
+        setTheme(getSystemTheme());
     } else if (savedTheme) {
         setTheme(savedTheme);
     } else {
@@ -104,17 +107,27 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("ios26_automatic", isAutomatic);
 
         if (isAutomatic) {
-            const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            setTheme(systemPrefersDark ? "dark" : "light");
+            setTheme(getSystemTheme());
         }
     });
 
-    // Listen to system theme changes if automatic is enabled
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-        if (automaticToggle.checked) {
-            setTheme(e.matches ? "dark" : "light");
-        }
-    });
+    // Listen to system theme changes dynamically
+    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    if (darkModeMediaQuery.addEventListener) {
+        darkModeMediaQuery.addEventListener("change", (e) => {
+            if (automaticToggle.checked) {
+                setTheme(e.matches ? "dark" : "light");
+            }
+        });
+    } else if (darkModeMediaQuery.addListener) {
+        // Fallback for older WebView engines inside specific APK builders
+        darkModeMediaQuery.addListener((e) => {
+            if (automaticToggle.checked) {
+                setTheme(e.matches ? "dark" : "light");
+            }
+        });
+    }
+
 
     // Sub-page slide navigation handlers with precise iOS blur/slide synchronization
     displayBrightnessNav.addEventListener("click", () => {
