@@ -421,3 +421,24 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 .chevron { font-size: 28px; font-weight: 300; color: #ffffff; line-height: 1; }
 .tick { font-size: 22px; font-weight: 1; color: #ffffff; line-height: 1; }
+
+
+/* iOS Bold Text System State */
+html.bold-text-enabled body {
+    font-weight: 500;
+}
+
+html.bold-text-enabled .row-label-text,
+html.bold-text-enabled .row-status-text,
+html.bold-text-enabled .appearance-text,
+html.bold-text-enabled .subview-section-label,
+html.bold-text-enabled .settings-footer-note {
+    font-weight: 600;
+}
+
+html.bold-text-enabled .main-title,
+html.bold-text-enabled .profile-name,
+html.bold-text-enabled .subview-title {
+    font-weight: 800;
+}
+
