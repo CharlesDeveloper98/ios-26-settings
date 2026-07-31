@@ -42,10 +42,12 @@ jobs:
           cp -r assets/ myApp/www/
           cp -r fonts/ myApp/www/
 
-      - name: Setup Android Platform
+      - name: Setup Android Platform & Dark Mode Plugin
         run: |
           cd myApp
           cordova platform add android
+          # This plugin bridges Android system UI mode to the WebView so prefers-color-scheme works properly
+          cordova plugin add cordova-plugin-android-dark-mode-support
 
       - name: Compile APK
         run: |
