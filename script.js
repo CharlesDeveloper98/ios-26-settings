@@ -100,25 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isAutomatic) setTheme(getSystemTheme());
     });
 
-    // Bold Text interactive state
-    const boldTextToggle = document.getElementById("boldTextToggle");
-    const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
-
-    boldTextToggle.checked = savedBoldText;
-    if (savedBoldText) {
-        htmlElement.classList.add("bold-text-enabled");
-    }
-
-    boldTextToggle.addEventListener("change", () => {
-        const isBold = boldTextToggle.checked;
-        localStorage.setItem("ios26_boldtext", isBold);
-        if (isBold) {
-            htmlElement.classList.add("bold-text-enabled");
-        } else {
-            htmlElement.classList.remove("bold-text-enabled");
-        }
-    });
-
     // Sub-page sliding navigation with instant execution
     displayBrightnessNav.addEventListener("click", () => {
         requestAnimationFrame(() => {
