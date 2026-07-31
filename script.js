@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const sheetOverlay = document.getElementById("sheetOverlay");
     const sheetTitle = document.getElementById("sheetTitle");
     
@@ -30,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
 
-    // Theme Controller Logic with Smooth Transition Class injection
     const htmlElement = document.documentElement;
 
     function setTheme(theme) {
@@ -58,21 +56,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             htmlElement.classList.remove("theme-transitioning");
-        }, 250);
+        }, 200);
     }
 
-    // Hardened system theme detector for Android APK WebViews
     function getSystemTheme() {
-        if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-            return "light";
-        }
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            return "dark";
-        }
-        return "light"; // Safe fallback preventing forced dark locks
+        if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+        return "light";
     }
 
-    // Initialize Theme State from Storage or System
     const savedTheme = localStorage.getItem("ios26_theme");
     const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
     
@@ -86,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTheme("dark");
     }
 
-    // Light Mode Click Handler
     lightModeOption.addEventListener("click", () => {
         if (automaticToggle.checked) {
             automaticToggle.checked = false;
@@ -95,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTheme("light");
     });
 
-    // Dark Mode Click Handler
     darkModeOption.addEventListener("click", () => {
         if (automaticToggle.checked) {
             automaticToggle.checked = false;
@@ -104,65 +94,38 @@ document.addEventListener("DOMContentLoaded", () => {
         setTheme("dark");
     });
 
-    // Automatic Toggle Handler
     automaticToggle.addEventListener("change", () => {
         const isAutomatic = automaticToggle.checked;
         localStorage.setItem("ios26_automatic", isAutomatic);
-
-        if (isAutomatic) {
-            setTheme(getSystemTheme());
-        }
+        if (isAutomatic) setTheme(getSystemTheme());
     });
 
-    // Dynamic listeners for system theme changes while app is running
-    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const lightModeMediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-
-    if (darkModeMediaQuery.addEventListener) {
-        darkModeMediaQuery.addEventListener("change", (e) => {
-            if (automaticToggle.checked) {
-                setTheme(e.matches ? "dark" : "light");
-            }
-        });
-        lightModeMediaQuery.addEventListener("change", (e) => {
-            if (automaticToggle.checked) {
-                setTheme(e.matches ? "light" : "dark");
-            }
-        });
-    } else if (darkModeMediaQuery.addListener) {
-        // Fallback compatibility for older Android WebViews
-        darkModeMediaQuery.addListener((e) => {
-            if (automaticToggle.checked) {
-                setTheme(e.matches ? "dark" : "light");
-            }
-        });
-    }
-
-    // Sub-page slide navigation handlers with precise iOS blur/slide synchronization
+    // Sub-page sliding navigation with instant execution
     displayBrightnessNav.addEventListener("click", () => {
-        mainSettingsView.classList.add("slide-left");
-        displayBrightnessView.classList.add("active");
+        requestAnimationFrame(() => {
+            mainSettingsView.classList.add("slide-left");
+            displayBrightnessView.classList.add("active");
+        });
     });
 
     backToMainSettings.addEventListener("click", () => {
-        displayBrightnessView.classList.remove("active");
-        mainSettingsView.classList.remove("slide-left");
+        requestAnimationFrame(() => {
+            displayBrightnessView.classList.remove("active");
+            mainSettingsView.classList.remove("slide-left");
+        });
     });
 
-    // Load saved profile name if already stored
     const savedFirstName = localStorage.getItem("ios26_firstname");
     const savedLastName = localStorage.getItem("ios26_lastname");
     if (savedFirstName || savedLastName) {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
-    // Check if it's the user's first time opening the app
     const hasOpenedBefore = localStorage.getItem("ios26_installed");
-
     if (!hasOpenedBefore) {
         setTimeout(() => {
             openSheet();
-        }, 500);
+        }, 400);
         localStorage.setItem("ios26_installed", "true");
     }
 
@@ -234,9 +197,5 @@ document.addEventListener("DOMContentLoaded", () => {
         displayProfileName.textContent = `${fName} ${lName}`.trim();
 
         closeSheet();
-    });
-
-    sheetOverlay.addEventListener("click", (e) => {
-        e.stopPropagation();
     });
 });
