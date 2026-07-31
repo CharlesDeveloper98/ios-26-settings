@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
 
-           // Theme Controller Logic with Smooth Transition Class injection
+    // Theme Controller Logic with Smooth Transition Class injection
     const htmlElement = document.documentElement;
 
     function setTheme(theme) {
@@ -61,12 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 250);
     }
 
-    // Robust function to check system preference compatible with WebViews/APKs
+    // Hardened system theme detector for Android APK WebViews
     function getSystemTheme() {
-        if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+        if (window.matchMedia("(prefers-color-scheme: light)").matches) {
             return "light";
         }
-        return "dark";
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            return "dark";
+        }
+        return "light"; // Safe fallback preventing forced dark locks
     }
 
     // Initialize Theme State from Storage or System
@@ -111,23 +114,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Listen to system theme changes dynamically
+    // Dynamic listeners for system theme changes while app is running
     const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const lightModeMediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+
     if (darkModeMediaQuery.addEventListener) {
         darkModeMediaQuery.addEventListener("change", (e) => {
             if (automaticToggle.checked) {
                 setTheme(e.matches ? "dark" : "light");
             }
         });
+        lightModeMediaQuery.addEventListener("change", (e) => {
+            if (automaticToggle.checked) {
+                setTheme(e.matches ? "light" : "dark");
+            }
+        });
     } else if (darkModeMediaQuery.addListener) {
-        // Fallback for older WebView engines inside specific APK builders
+        // Fallback compatibility for older Android WebViews
         darkModeMediaQuery.addListener((e) => {
             if (automaticToggle.checked) {
                 setTheme(e.matches ? "dark" : "light");
             }
         });
     }
-
 
     // Sub-page slide navigation handlers with precise iOS blur/slide synchronization
     displayBrightnessNav.addEventListener("click", () => {
