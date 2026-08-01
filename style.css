@@ -587,8 +587,8 @@ html.bold-text-enabled .subview-title {
 }
 
 .chevron-icon img {
-    width: 7px;
-    height: 12px;
+    width: 10px;
+    height: 18px;
     object-fit: contain;
     display: block;
     opacity: 0.45;
@@ -602,8 +602,8 @@ html.bold-text-enabled .subview-title {
 }
 
 .back-chevron img {
-    width: 10px;
-    height: 16px;
+    width: 16px;
+    height: 22px;
     object-fit: contain;
     display: block;
 }
