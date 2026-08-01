@@ -33,6 +33,103 @@ document.addEventListener("DOMContentLoaded", () => {
     const batteryLevelFill = document.getElementById("batteryLevelFill");
     const lastChargedText = document.getElementById("lastChargedText");
 
+      // --- Real-Time iOS App Activity Tracker Engine ---
+
+// System activity app list simulation data
+const systemApps = [
+    { id: "settings", name: "Settings", icon: "assets/general.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 6 },
+    { id: "safari", name: "Safari", icon: "assets/search.png", color: "blue", screenSec: 45, bgSec: 15, usagePct: 3 },
+    { id: "display", name: "Display & Home", icon: "assets/display.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 2 },
+    { id: "siri", name: "Siri & Intelligence", icon: "assets/siri.png", color: "gradient-siri", screenSec: 10, bgSec: 120, usagePct: 1 }
+];
+
+let appStartTime = Date.now();
+let lastActiveTimestamp = Date.now();
+let isAppVisible = !document.hidden;
+
+function formatUsageTime(seconds) {
+    if (seconds < 60) return `${seconds}s`;
+    const mins = Math.floor(seconds / 60);
+    if (mins < 60) return `${mins}m`;
+    const hrs = Math.floor(mins / 60);
+    return `${hrs}h ${mins % 60}m`;
+}
+
+function renderActivityList() {
+    const container = document.getElementById("appActivityListContainer");
+    if (!container) return;
+
+    // Sort apps by usage percentage descending
+    const sortedApps = [...systemApps].sort((a, b) => b.usagePct - a.usagePct);
+
+    container.innerHTML = sortedApps.map((app, index) => {
+        const isDivider = index < sortedApps.length - 1;
+        const subText = app.screenSec > 0 
+            ? `On screen: ${formatUsageTime(app.screenSec)}` 
+            : `Background: ${formatUsageTime(app.bgSec)}`;
+
+        return `
+            <div class="settings-row clickable">
+                <div class="row-left">
+                    <div class="setting-icon ${app.color}">
+                        <img src="${app.icon}" alt="${app.name}" onerror="this.style.display='none'">
+                    </div>
+                    <div class="row-text-stack">
+                        <span class="row-label-text">${app.name}</span>
+                        <span class="row-sub-label">${subText}</span>
+                    </div>
+                </div>
+                <div class="row-right">
+                    <span class="row-status-text">${app.usagePct}%</span>
+                    <span class="chevron-icon">›</span>
+                </div>
+            </div>
+            ${isDivider ? '<div class="card-divider indent"></div>' : ''}
+        `;
+    }).join('');
+}
+
+// Track real screen & background time as user interacts with the app
+setInterval(() => {
+    const now = Date.now();
+    const elapsedSec = Math.floor((now - lastActiveTimestamp) / 1000);
+
+    if (elapsedSec >= 1) {
+        lastActiveTimestamp = now;
+        
+        // Find Settings entry
+        const settingsApp = systemApps.find(a => a.id === "settings");
+        if (settingsApp) {
+            if (isAppVisible) {
+                settingsApp.screenSec += elapsedSec;
+            } else {
+                settingsApp.bgSec += elapsedSec;
+            }
+
+            // Recalculate relative usage percentage dynamically
+            const totalSec = systemApps.reduce((acc, a) => acc + a.screenSec + a.bgSec, 0);
+            systemApps.forEach(app => {
+                const appTotal = app.screenSec + app.bgSec;
+                app.usagePct = Math.max(1, Math.round((appTotal / totalSec) * 12));
+            });
+        }
+
+        renderActivityList();
+    }
+}, 1000);
+
+// Page Visibility Listener (detects when user leaves/returns to tab/app)
+document.addEventListener("visibilitychange", () => {
+    isAppVisible = !document.hidden;
+    lastActiveTimestamp = Date.now();
+});
+
+// Initial Render
+renderActivityList();
+
+
+   
+
     // Precise Battery Tracking Engine (iOS 26 Style)
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
