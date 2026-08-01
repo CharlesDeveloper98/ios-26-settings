@@ -459,7 +459,8 @@
     </div>
 
        
-                 <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
+               
+        <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
         <div class="settings-subview" id="batteryView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromBattery">
@@ -481,7 +482,7 @@
                     </div>
                 </div>
 
-                <!-- Daily Usage Section -->
+                <!-- Daily Usage + App and System Activity Combined Section -->
                 <div class="subview-section-label">Daily Usage</div>
                 <div class="settings-card group-card battery-usage-card">
                     <div class="battery-usage-header-text" id="batteryUsageDesc">
@@ -516,54 +517,56 @@
                         <span class="legend-dot"></span> <span class="legend-text">All Day</span>
                         <span class="legend-dot active-dot"></span> <span class="legend-text" id="chartTimeLegend">Daily by 7:16 PM</span>
                     </div>
-                </div>
 
-                <!-- App and System Activity Section -->
-                <div class="subview-section-label">App and System Activity</div>
-                <div class="settings-card group-card" id="appActivityListContainer">
-                    <!-- Dynamically populated or mapped user activity rows -->
-                    <div class="settings-row clickable">
-                        <div class="row-left">
-                            <div class="setting-icon green"><img src="assets/wifi.png" alt="App"></div>
-                            <span class="row-label-text" id="recentApp1Name">Find My</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="row-status-text" id="recentApp1Val">7%</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
-                    </div>
-                    <div class="card-divider indent"></div>
-                    <div class="settings-row clickable">
-                        <div class="row-left">
-                            <div class="setting-icon orange"><img src="assets/homescreen.png" alt="Home"></div>
-                            <div class="row-text-stack">
-                                <span class="row-label-text">Home</span>
-                                <span class="row-sub-label">Background: 1m</span>
+                    <!-- Seamless Integration of App & System Activity inside the same container -->
+                    <div class="card-divider" style="margin-top: 20px; margin-bottom: 0;"></div>
+                    <div class="subview-section-label" style="padding: 16px 16px 8px 16px; margin: 0;">App and System Activity</div>
+                    
+                    <div id="appActivityListContainer">
+                        <!-- Dynamically populated or mapped user activity rows -->
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <div class="setting-icon green"><img src="assets/wifi.png" alt="App"></div>
+                                <span class="row-label-text" id="recentApp1Name">Find My</span>
+                            </div>
+                            <div class="row-right">
+                                <span class="row-status-text" id="recentApp1Val">7%</span>
+                                <span class="chevron-icon">›</span>
                             </div>
                         </div>
-                        <div class="row-right">
-                            <span class="row-status-text">2%</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
-                    </div>
-                    <div class="card-divider indent"></div>
-                    <div class="settings-row clickable">
-                        <div class="row-left">
-                            <div class="setting-icon grey-icon"><img src="assets/wallet.png" alt="Wallet"></div>
-                            <div class="row-text-stack">
-                                <span class="row-label-text">Wallet</span>
-                                <span class="row-sub-label">On screen: 1m</span>
+                        <div class="card-divider indent"></div>
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <div class="setting-icon orange"><img src="assets/homescreen.png" alt="Home"></div>
+                                <div class="row-text-stack">
+                                    <span class="row-label-text">Home</span>
+                                    <span class="row-sub-label">Background: 1m</span>
+                                </div>
+                            </div>
+                            <div class="row-right">
+                                <span class="row-status-text">2%</span>
+                                <span class="chevron-icon">›</span>
                             </div>
                         </div>
-                        <div class="row-right">
-                            <span class="row-status-text">1%</span>
-                            <span class="chevron-icon">›</span>
+                        <div class="card-divider indent"></div>
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <div class="setting-icon grey-icon"><img src="assets/wallet.png" alt="Wallet"></div>
+                                <div class="row-text-stack">
+                                    <span class="row-label-text">Wallet</span>
+                                    <span class="row-sub-label">On screen: 1m</span>
+                                </div>
+                            </div>
+                            <div class="row-right">
+                                <span class="row-status-text">1%</span>
+                                <span class="chevron-icon">›</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-divider"></div>
-                    <div class="settings-row clickable view-all-row">
-                        <div class="row-left"><span class="row-label-text blue-text">View All Battery Usage</span></div>
-                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                        <div class="card-divider"></div>
+                        <div class="settings-row clickable view-all-row">
+                            <div class="row-left"><span class="row-label-text blue-text">View All Battery Usage</span></div>
+                            <div class="row-right"><span class="chevron-icon">›</span></div>
+                        </div>
                     </div>
                 </div>
 
