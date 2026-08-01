@@ -460,7 +460,9 @@
 
        
           
-                    <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
+                   
+                            
+           <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
         <div class="settings-subview" id="batteryView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromBattery">
@@ -482,98 +484,94 @@
                     </div>
                 </div>
 
-                <!-- Combined Unified Container with proper internal padding -->
-                <div class="settings-card group-card master-battery-container">
+                <!-- Single Master Grouped Card Container for Daily Usage + Activity + View All -->
+                <div class="subview-section-label">Daily Usage</div>
+                <div class="settings-card group-card master-battery-card">
                     
-                    <!-- Daily Usage Section inside the container -->
-                    <div class="master-section-wrapper">
-                        <div class="subview-section-label embedded-label">Daily Usage</div>
-                        <div class="battery-usage-inner-block">
-                            <div class="battery-usage-header-text" id="batteryUsageDesc">
-                                You're using less battery today than you usually do by 7:16 PM.
+                    <!-- Daily Usage Content Block -->
+                    <div class="battery-usage-inner-block">
+                        <div class="battery-usage-header-text" id="batteryUsageDesc">
+                            You're using less battery today than you usually do by 7:16 PM.
+                        </div>
+                        <div class="battery-stats-row">
+                            <div class="stat-group">
+                                <span class="stat-label">Average</span>
+                                <span class="stat-value">14%</span>
                             </div>
-                            <div class="battery-stats-row">
-                                <div class="stat-group">
-                                    <span class="stat-label">Average</span>
-                                    <span class="stat-value">14%</span>
-                                </div>
-                                <div class="stat-group">
-                                    <span class="stat-label today-color">Today</span>
-                                    <span class="stat-value today-color" id="todayStatValue">10%</span>
-                                </div>
+                            <div class="stat-group">
+                                <span class="stat-label today-color">Today</span>
+                                <span class="stat-value today-color" id="todayStatValue">10%</span>
                             </div>
+                        </div>
 
-                            <!-- Usage Bars Chart Simulation -->
-                            <div class="battery-chart-container">
-                                <div class="average-line"><span>Average</span></div>
-                                <div class="chart-bars-flex">
-                                    <div class="chart-bar-col"><div class="bar-fill" style="height: 30%;"></div><span class="day-label">S</span></div>
-                                    <div class="chart-bar-col"><div class="bar-fill" style="height: 45%;"></div><span class="day-label">M</span></div>
-                                    <div class="chart-bar-col"><div class="bar-fill" style="height: 25%;"></div><span class="day-label">T</span></div>
-                                    <div class="chart-bar-col"><div class="bar-fill" style="height: 55%;"></div><span class="day-label">W</span></div>
-                                    <div class="chart-bar-col"><div class="bar-fill" style="height: 75%;"></div><span class="day-label">T</span></div>
-                                    <div class="chart-bar-col"><div class="bar-fill" style="height: 90%;"></div><span class="day-label">F</span></div>
-                                    <div class="chart-bar-col"><div class="bar-fill" style="height: 85%;"></div><span class="day-label">S</span></div>
-                                    <div class="chart-bar-col active"><div class="bar-fill active-fill" style="height: 40%;"></div><span class="day-label active-day">S</span></div>
+                        <!-- Usage Bars Chart Simulation -->
+                        <div class="battery-chart-container">
+                            <div class="average-line"><span>Average</span></div>
+                            <div class="chart-bars-flex">
+                                <div class="chart-bar-col"><div class="bar-fill" style="height: 30%;"></div><span class="day-label">S</span></div>
+                                <div class="chart-bar-col"><div class="bar-fill" style="height: 45%;"></div><span class="day-label">M</span></div>
+                                <div class="chart-bar-col"><div class="bar-fill" style="height: 25%;"></div><span class="day-label">T</span></div>
+                                <div class="chart-bar-col"><div class="bar-fill" style="height: 55%;"></div><span class="day-label">W</span></div>
+                                <div class="chart-bar-col"><div class="bar-fill" style="height: 75%;"></div><span class="day-label">T</span></div>
+                                <div class="chart-bar-col"><div class="bar-fill" style="height: 90%;"></div><span class="day-label">F</span></div>
+                                <div class="chart-bar-col"><div class="bar-fill" style="height: 85%;"></div><span class="day-label">S</span></div>
+                                <div class="chart-bar-col active"><div class="bar-fill active-fill" style="height: 40%;"></div><span class="day-label active-day">S</span></div>
+                            </div>
+                        </div>
+                        <div class="chart-legend-row">
+                            <span class="legend-dot"></span> <span class="legend-text">All Day</span>
+                            <span class="legend-dot active-dot"></span> <span class="legend-text" id="chartTimeLegend">Daily by 7:16 PM</span>
+                        </div>
+                    </div>
+
+                    <div class="card-divider full-divider"></div>
+
+                    <!-- App and System Activity Header & Rows inside same container -->
+                    <div class="embedded-section-title">App and System Activity</div>
+                    <div id="appActivityListContainer">
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <div class="setting-icon green"><img src="assets/wifi.png" alt="App"></div>
+                                <span class="row-label-text" id="recentApp1Name">Find My</span>
+                            </div>
+                            <div class="row-right">
+                                <span class="row-status-text" id="recentApp1Val">7%</span>
+                                <span class="chevron-icon">›</span>
+                            </div>
+                        </div>
+                        <div class="card-divider indent"></div>
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <div class="setting-icon orange"><img src="assets/homescreen.png" alt="Home"></div>
+                                <div class="row-text-stack">
+                                    <span class="row-label-text">Home</span>
+                                    <span class="row-sub-label">Background: 1m</span>
                                 </div>
                             </div>
-                            <div class="chart-legend-row">
-                                <span class="legend-dot"></span> <span class="legend-text">All Day</span>
-                                <span class="legend-dot active-dot"></span> <span class="legend-text" id="chartTimeLegend">Daily by 7:16 PM</span>
+                            <div class="row-right">
+                                <span class="row-status-text">2%</span>
+                                <span class="chevron-icon">›</span>
+                            </div>
+                        </div>
+                        <div class="card-divider indent"></div>
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <div class="setting-icon grey-icon"><img src="assets/wallet.png" alt="Wallet"></div>
+                                <div class="row-text-stack">
+                                    <span class="row-label-text">Wallet</span>
+                                    <span class="row-sub-label">On screen: 1m</span>
+                                </div>
+                            </div>
+                            <div class="row-right">
+                                <span class="row-status-text">1%</span>
+                                <span class="chevron-icon">›</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card-divider"></div>
+                    <div class="card-divider full-divider"></div>
 
-                    <!-- App and System Activity Section inside the container -->
-                    <div class="master-section-wrapper">
-                        <div class="subview-section-label embedded-label">App and System Activity</div>
-                        <div id="appActivityListContainer">
-                            <div class="settings-row clickable">
-                                <div class="row-left">
-                                    <div class="setting-icon green"><img src="assets/wifi.png" alt="App"></div>
-                                    <span class="row-label-text" id="recentApp1Name">Find My</span>
-                                </div>
-                                <div class="row-right">
-                                    <span class="row-status-text" id="recentApp1Val">7%</span>
-                                    <span class="chevron-icon">›</span>
-                                </div>
-                            </div>
-                            <div class="card-divider indent"></div>
-                            <div class="settings-row clickable">
-                                <div class="row-left">
-                                    <div class="setting-icon orange"><img src="assets/homescreen.png" alt="Home"></div>
-                                    <div class="row-text-stack">
-                                        <span class="row-label-text">Home</span>
-                                        <span class="row-sub-label">Background: 1m</span>
-                                    </div>
-                                </div>
-                                <div class="row-right">
-                                    <span class="row-status-text">2%</span>
-                                    <span class="chevron-icon">›</span>
-                                </div>
-                            </div>
-                            <div class="card-divider indent"></div>
-                            <div class="settings-row clickable">
-                                <div class="row-left">
-                                    <div class="setting-icon grey-icon"><img src="assets/wallet.png" alt="Wallet"></div>
-                                    <div class="row-text-stack">
-                                        <span class="row-label-text">Wallet</span>
-                                        <span class="row-sub-label">On screen: 1m</span>
-                                    </div>
-                                </div>
-                                <div class="row-right">
-                                    <span class="row-status-text">1%</span>
-                                    <span class="chevron-icon">›</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-divider"></div>
-
-                    <!-- View All Battery Usage Row inside the container -->
+                    <!-- View All Battery Usage Row inside same container -->
                     <div class="settings-row clickable view-all-row-embedded">
                         <div class="row-left"><span class="row-label-text blue-text">View All Battery Usage</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
@@ -581,7 +579,7 @@
 
                 </div>
 
-                <!-- Bottom Battery Health Options -->
+                <!-- Bottom Battery Health Options Grouped Card -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left"><span class="row-label-text">Battery Health</span></div>
@@ -610,7 +608,7 @@
                 </div>
             </div>
         </div>
-   
+
                                
                
     
