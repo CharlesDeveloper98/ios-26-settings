@@ -50,16 +50,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 return `${Math.floor(hours / 24)}d ago`;
             }
 
-            function updateBatteryUI() {
+                        function updateBatteryUI() {
                 const currentPercent = Math.round(battery.level * 100);
                 batteryPercentText.textContent = `${currentPercent}%`;
                 mainBatteryStatusText.textContent = `${currentPercent}%`;
                 batteryLevelFill.style.width = `${currentPercent}%`;
 
+                // Remove all previous color states
+                batteryLevelFill.classList.remove("color-green", "color-normal", "color-yellow", "color-red");
+
+                // Apply iOS color rules dynamically
+                if (currentPercent === 100) {
+                    batteryLevelFill.classList.add("color-green");
+                } else if (currentPercent >= 21 && currentPercent <= 99) {
+                    batteryLevelFill.classList.add("color-normal");
+                } else if (currentPercent >= 16 && currentPercent <= 20) {
+                    batteryLevelFill.classList.add("color-yellow");
+                } else if (currentPercent <= 15) {
+                    batteryLevelFill.classList.add("color-red");
+                }
+
                 // Display dynamic last charged info
                 const timeAgoString = formatTimeAgo(lastUnpluggedTime);
                 lastChargedText.textContent = `Last Charged to ${lastUnpluggedPercent}%: ${timeAgoString}`;
             }
+
 
             // Detect when cable is unplugged or charging state shifts
             battery.addEventListener('chargingchange', () => {
