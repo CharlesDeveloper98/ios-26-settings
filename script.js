@@ -33,108 +33,92 @@ document.addEventListener("DOMContentLoaded", () => {
     const batteryLevelFill = document.getElementById("batteryLevelFill");
     const lastChargedText = document.getElementById("lastChargedText");
 
-      // --- Real-Time iOS App Activity Tracker Engine ---
+    // --- Real-Time iOS App Activity Tracker Engine ---
+    const systemApps = [
+        { id: "display", name: "Display & Home", icon: "assets/home.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 5 },
+        { id: "settings", name: "Settings", icon: "assets/settings.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 3 },
+        { id: "siri", name: "Siri & Intelligence", icon: "assets/siri.png", color: "gradient-siri", screenSec: 10, bgSec: 120, usagePct: 2 },
+        { id: "safari", name: "Safari", icon: "assets/safari.png", color: "blue", screenSec: 45, bgSec: 15, usagePct: 1 }
+    ];
 
-// System activity app list simulation data
-const systemApps = [
-    { id: "display", name: "Display & Home", icon: "assets/home.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 5 },
-    { id: "settings", name: "Settings", icon: "assets/settings.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 3 },
-    { id: "siri", name: "Siri & Intelligence", icon: "assets/siri.png", color: "gradient-siri", screenSec: 10, bgSec: 120, usagePct: 2 },
-    { id: "safari", name: "Safari", icon: "assets/safari.png", color: "blue", screenSec: 45, bgSec: 15, usagePct: 1 }
-];
+    let lastActiveTimestamp = Date.now();
+    let isAppVisible = !document.hidden;
 
-
-let appStartTime = Date.now();
-let lastActiveTimestamp = Date.now();
-let isAppVisible = !document.hidden;
-
-function formatUsageTime(seconds) {
-    if (seconds < 60) return `${seconds}s`;
-    const mins = Math.floor(seconds / 60);
-    if (mins < 60) return `${mins}m`;
-    const hrs = Math.floor(mins / 60);
-    return `${hrs}h ${mins % 60}m`;
-}
-
-function renderActivityList() {
-    const container = document.getElementById("appActivityListContainer");
-    if (!container) return;
-
-    // Sort apps by usage percentage descending
-    const sortedApps = [...systemApps].sort((a, b) => b.usagePct - a.usagePct);
-
-    container.innerHTML = sortedApps.map((app, index) => {
-        const isDivider = index < sortedApps.length - 1;
-        const subText = app.screenSec > 0 
-            ? `On screen: ${formatUsageTime(app.screenSec)}` 
-            : `Background: ${formatUsageTime(app.bgSec)}`;
-
-        return `
-            <div class="settings-row clickable">
-                <div class="row-left">
-                    <div class="setting-icon ${app.color}">
-                        <img src="${app.icon}" alt="${app.name}" onerror="this.style.display='none'">
-                    </div>
-                    <div class="row-text-stack">
-                        <span class="row-label-text">${app.name}</span>
-                        <span class="row-sub-label">${subText}</span>
-                    </div>
-                </div>
-                <div class="row-right">
-                    <span class="row-status-text">${app.usagePct}%</span>
-                    <span class="chevron-icon">›</span>
-                </div>
-            </div>
-            ${isDivider ? '<div class="card-divider indent"></div>' : ''}
-        `;
-    }).join('');
-}
-
-// Track real screen & background time as user interacts with the app
-setInterval(() => {
-    const now = Date.now();
-    const elapsedSec = Math.floor((now - lastActiveTimestamp) / 1000);
-
-    if (elapsedSec >= 1) {
-        lastActiveTimestamp = now;
-        
-        // Find Settings entry
-        const settingsApp = systemApps.find(a => a.id === "settings");
-        if (settingsApp) {
-            if (isAppVisible) {
-                settingsApp.screenSec += elapsedSec;
-            } else {
-                settingsApp.bgSec += elapsedSec;
-            }
-
-            // Recalculate relative usage percentage dynamically
-            const totalSec = systemApps.reduce((acc, a) => acc + a.screenSec + a.bgSec, 0);
-            systemApps.forEach(app => {
-                const appTotal = app.screenSec + app.bgSec;
-                app.usagePct = Math.max(1, Math.round((appTotal / totalSec) * 12));
-            });
-        }
-
-        renderActivityList();
+    function formatUsageTime(seconds) {
+        if (seconds < 60) return `${seconds}s`;
+        const mins = Math.floor(seconds / 60);
+        if (mins < 60) return `${mins}m`;
+        const hrs = Math.floor(mins / 60);
+        return `${hrs}h ${mins % 60}m`;
     }
-}, 1000);
 
-// Page Visibility Listener (detects when user leaves/returns to tab/app)
-document.addEventListener("visibilitychange", () => {
-    isAppVisible = !document.hidden;
-    lastActiveTimestamp = Date.now();
-});
+    function renderActivityList() {
+        const container = document.getElementById("appActivityListContainer");
+        if (!container) return;
 
-// Initial Render
-renderActivityList();
+        const sortedApps = [...systemApps].sort((a, b) => b.usagePct - a.usagePct);
 
+        container.innerHTML = sortedApps.map((app, index) => {
+            const isDivider = index < sortedApps.length - 1;
+            const subText = app.screenSec > 0 
+                ? `On screen: ${formatUsageTime(app.screenSec)}` 
+                : `Background: ${formatUsageTime(app.bgSec)}`;
 
-   
+            return `
+                <div class="settings-row clickable">
+                    <div class="row-left">
+                        <div class="setting-icon ${app.color}">
+                            <img src="${app.icon}" alt="${app.name}" onerror="this.style.display='none'">
+                        </div>
+                        <div class="row-text-stack">
+                            <span class="row-label-text">${app.name}</span>
+                            <span class="row-sub-label">${subText}</span>
+                        </div>
+                    </div>
+                    <div class="row-right">
+                        <span class="row-status-text">${app.usagePct}%</span>
+                        <span class="chevron-icon">›</span>
+                    </div>
+                </div>
+                ${isDivider ? '<div class="card-divider indent"></div>' : ''}
+            `;
+        }).join('');
+    }
 
-   // Precise Battery Tracking Engine (iOS 26 Style - Fixed Unplug Logic)
+    setInterval(() => {
+        const now = Date.now();
+        const elapsedSec = Math.floor((now - lastActiveTimestamp) / 1000);
+
+        if (elapsedSec >= 1) {
+            lastActiveTimestamp = now;
+            const settingsApp = systemApps.find(a => a.id === "settings");
+            if (settingsApp) {
+                if (isAppVisible) {
+                    settingsApp.screenSec += elapsedSec;
+                } else {
+                    settingsApp.bgSec += elapsedSec;
+                }
+
+                const totalSec = systemApps.reduce((acc, a) => acc + a.screenSec + a.bgSec, 0);
+                systemApps.forEach(app => {
+                    const appTotal = app.screenSec + app.bgSec;
+                    app.usagePct = Math.max(1, Math.round((appTotal / totalSec) * 12));
+                });
+            }
+            renderActivityList();
+        }
+    }, 1000);
+
+    document.addEventListener("visibilitychange", () => {
+        isAppVisible = !document.hidden;
+        lastActiveTimestamp = Date.now();
+    });
+
+    renderActivityList();
+
+    // Precise Battery Tracking Engine (iOS 26 Style - Fixed Unplug Logic)
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
-            // Only pull from localStorage; if none exists, keep it blank or default gracefully
             let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
             let lastUnpluggedTime = localStorage.getItem("ios26_last_unplugged_time") ? parseInt(localStorage.getItem("ios26_last_unplugged_time")) : null;
             let wasCharging = battery.charging;
@@ -150,16 +134,14 @@ renderActivityList();
                 return `${Math.floor(hours / 24)}d ago`;
             }
 
-                        function updateBatteryUI() {
+            function updateBatteryUI() {
                 const currentPercent = Math.round(battery.level * 100);
                 batteryPercentText.textContent = `${currentPercent}%`;
                 mainBatteryStatusText.textContent = `${currentPercent}%`;
                 batteryLevelFill.style.width = `${currentPercent}%`;
 
-                // Remove all previous color states
                 batteryLevelFill.classList.remove("color-green", "color-normal", "color-yellow", "color-red");
 
-                // Apply iOS color rules dynamically
                 if (currentPercent === 100) {
                     batteryLevelFill.classList.add("color-green");
                 } else if (currentPercent >= 21 && currentPercent <= 99) {
@@ -170,7 +152,6 @@ renderActivityList();
                     batteryLevelFill.classList.add("color-red");
                 }
 
-                // Display dynamic last charged info only if an actual unplug event occurred
                 if (lastUnpluggedPercent && lastUnpluggedTime) {
                     const timeAgoString = formatTimeAgo(lastUnpluggedTime);
                     lastChargedText.textContent = `Last Charged to ${lastUnpluggedPercent}%: ${timeAgoString}`;
@@ -179,9 +160,7 @@ renderActivityList();
                 }
             }
 
-            // Detect when cable is unplugged or charging state shifts
             battery.addEventListener('chargingchange', () => {
-                // Check if it transitioned from charging (true) to not charging (false)
                 if (wasCharging && !battery.charging) {
                     lastUnpluggedPercent = Math.round(battery.level * 100);
                     lastUnpluggedTime = Date.now();
@@ -195,10 +174,7 @@ renderActivityList();
 
             battery.addEventListener('levelchange', updateBatteryUI);
 
-            // Initial call
             updateBatteryUI();
-
-            // Refresh time string every 30 seconds
             setInterval(updateBatteryUI, 30000);
         });
     } else {
@@ -336,12 +312,12 @@ renderActivityList();
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
-    const hasOpenedBefore = localStorage.getItem("ios26_installed");
-    if (!hasOpenedBefore) {
+    // Setup Flow Popup Logic (Loops until checkmark is clicked)
+    const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
+    if (!isSetupFinished) {
         setTimeout(() => {
             openSheet();
         }, 400);
-        localStorage.setItem("ios26_installed", "true");
     }
 
     function openSheet() {
@@ -409,6 +385,10 @@ renderActivityList();
 
         localStorage.setItem("ios26_firstname", fName);
         localStorage.setItem("ios26_lastname", lName);
+        
+        // Mark setup as completely finished so popup stops appearing
+        localStorage.setItem("ios26_setup_completed", "true");
+
         displayProfileName.textContent = `${fName} ${lName}`.trim();
 
         closeSheet();
