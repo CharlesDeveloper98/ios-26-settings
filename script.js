@@ -336,36 +336,29 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "";
     }
 
-        function goToPage(pageNumber) {
+           function goToPage(pageNumber) {
         const pages = [page1, page2, page3];
         const targetPage = pages[pageNumber - 1];
         const activePage = document.querySelector('.setup-page.active');
         
         if (activePage === targetPage) return;
 
-        // Determine direction for iOS sliding physics
         const activePageNumber = activePage ? parseInt(activePage.id.replace('page', '')) : 1;
         const isForward = pageNumber > activePageNumber;
 
-        pages.forEach(p => {
-            p.classList.remove("active", "slide-out-left", "slide-in-right", "slide-out-right", "slide-in-left");
-        });
+        // Use requestAnimationFrame to guarantee silky-smooth hardware acceleration sync
+        requestAnimationFrame(() => {
+            pages.forEach(p => {
+                p.classList.remove("active", "slide-out-left", "slide-in-right", "slide-out-right", "slide-in-left");
+            });
 
-        if (activePage) {
-            if (isForward) {
-                activePage.classList.add("slide-out-left");
-            } else {
-                activePage.classList.add("slide-out-right");
+            if (activePage) {
+                activePage.classList.add(isForward ? "slide-out-left" : "slide-out-right");
             }
-        }
 
-        if (isForward) {
-            targetPage.classList.add("slide-in-right");
-        } else {
-            targetPage.classList.add("slide-in-left");
-        }
-
-        targetPage.classList.add("active");
+            targetPage.classList.add(isForward ? "slide-in-right" : "slide-in-left");
+            targetPage.classList.add("active");
+        });
 
         if (pageNumber === 1) {
             sheetTitle.textContent = "Settings Setup";
@@ -376,6 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
             validateInputs();
         }
     }
+
 
 
     function validateInputs() {
