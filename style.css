@@ -219,6 +219,43 @@ html, body {
 .row-status-text { font-size: 15px; color: var(--text-sub); }
 .chevron-icon { font-size: 20px; color: var(--text-sub); font-weight: 400; }
 
+
+.row-text-stack { display: flex; flex-direction: column; gap: 2px; }
+.row-sub-label { font-size: 12px; color: var(--text-sub); }
+
+/* Battery Subview specific layouts */
+.battery-top-card { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+.battery-main-header { display: flex; justify-content: space-between; align-items: center; }
+.battery-percent-value { font-size: 38px; font-weight: 700; color: var(--text-main); line-height: 1; }
+.battery-info-icon { font-size: 18px; color: var(--text-sub); cursor: pointer; }
+.battery-charged-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 4px; }
+.battery-level-bar-container { width: 100%; height: 8px; background: rgba(128,128,128,0.2); border-radius: 4px; overflow: hidden; }
+.battery-level-fill { height: 100%; background: #34c759; border-radius: 4px; transition: width 0.4s ease; }
+
+.battery-usage-card { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.battery-usage-header-text { font-size: 14px; color: var(--text-main); line-height: 1.4; font-weight: 400; }
+.battery-stats-row { display: flex; gap: 32px; }
+.stat-group { display: flex; flex-direction: column; gap: 2px; }
+.stat-label { font-size: 12px; color: var(--text-sub); }
+.stat-label.today-color { color: #007aff; font-weight: 500; }
+.stat-value { font-size: 20px; font-weight: 600; color: var(--text-main); }
+.stat-value.today-color { color: #007aff; }
+
+.battery-chart-container { position: relative; height: 110px; width: 100%; margin-top: 8px; display: flex; flex-direction: column; justify-content: flex-end; }
+.average-line { position: absolute; top: 40%; left: 0; width: 100%; border-top: 1px dashed var(--text-sub); display: flex; justify-content: flex-end; }
+.average-line span { font-size: 10px; color: var(--text-sub); transform: translateY(-12px); background: var(--bg-card); padding-left: 4px; }
+.chart-bars-flex { display: flex; justify-content: space-between; align-items: flex-end; height: 90px; padding: 0 4px; }
+.chart-bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 8px; flex: 1; }
+.bar-fill { width: 100%; background: rgba(128,128,128,0.25); border-radius: 3px; }
+.bar-fill.active-fill { background: #007aff; }
+.day-label { font-size: 11px; color: var(--text-sub); }
+.day-label.active-day { color: #007aff; font-weight: 600; }
+
+.chart-legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub); margin-top: 4px; }
+.legend-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(128,128,128,0.5); }
+.legend-dot.active-dot { background: #007aff; margin-left: 8px; }
+
+
 .notification-badge {
     background-color: #ff3b30; color: #fff; font-size: 13px; font-weight: 600;
     width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
