@@ -33,72 +33,60 @@ document.addEventListener("DOMContentLoaded", () => {
     const batteryLevelFill = document.getElementById("batteryLevelFill");
     const lastChargedText = document.getElementById("lastChargedText");
 
-    // Dynamic User Stats Binding with 100% Accurate Unplugged Charge Tracking
-if (navigator.getBattery) {
-    navigator.getBattery().then(battery => {
-        let wasCharging = battery.charging;
+    // Precise Battery Tracking Engine (iOS 26 Style)
+    if (navigator.getBattery) {
+        navigator.getBattery().then(battery => {
+            let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct") || Math.round(battery.level * 100);
+            let lastUnpluggedTime = localStorage.getItem("ios26_last_unplugged_time") ? parseInt(localStorage.getItem("ios26_last_unplugged_time")) : Date.now();
+            let wasCharging = battery.charging;
 
-        function formatUnpluggedTime(timestamp) {
-            const now = new Date();
-            const unplugDate = new Date(timestamp);
-            const diffMs = now - unplugDate;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMins / 60);
+            function formatTimeAgo(timestamp) {
+                const seconds = Math.floor((Date.now() - timestamp) / 1000);
+                if (seconds < 60) return "Just now";
+                const minutes = Math.floor(seconds / 60);
+                if (minutes < 60) return `${minutes}m ago`;
+                const hours = Math.floor(minutes / 60);
+                if (hours < 24) return `${hours}h ago`;
+                return `${Math.floor(hours / 24)}d ago`;
+            }
 
-            // Format time string e.g. "6:36 AM"
-            const timeString = unplugDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+            function updateBatteryUI() {
+                const currentPercent = Math.round(battery.level * 100);
+                batteryPercentText.textContent = `${currentPercent}%`;
+                mainBatteryStatusText.textContent = `${currentPercent}%`;
+                batteryLevelFill.style.width = `${currentPercent}%`;
 
-            if (diffMins < 1) {
-                return "Just now";
-            } else if (diffMins < 60) {
-                return `${diffMins}m ago`;
-            } else if (diffHours < 24 && unplugDate.getDate() === now.getDate()) {
-                return timeString;
-            } else {
-                // Check if it was yesterday
-                const yesterday = new Date(now);
-                yesterday.setDate(yesterday.getDate() - 1);
-                if (unplugDate.getDate() === yesterday.getDate()) {
-                    return `yesterday by ${timeString}`;
-                } else {
-                    return `${unplugDate.toLocaleDateString()} by ${timeString}`;
+                // Display dynamic last charged info
+                const timeAgoString = formatTimeAgo(lastUnpluggedTime);
+                lastChargedText.textContent = `Last Charged to ${lastUnpluggedPercent}%: ${timeAgoString}`;
+            }
+
+            // Detect when cable is unplugged or charging state shifts
+            battery.addEventListener('chargingchange', () => {
+                if (wasCharging && !battery.charging) {
+                    // Phone was just unplugged! Capture current level and time.
+                    lastUnpluggedPercent = Math.round(battery.level * 100);
+                    lastUnpluggedTime = Date.now();
+                    
+                    localStorage.setItem("ios26_last_unplugged_pct", lastUnpluggedPercent);
+                    localStorage.setItem("ios26_last_unplugged_time", lastUnpluggedTime);
                 }
-            }
-        }
+                wasCharging = battery.charging;
+                updateBatteryUI();
+            });
 
-        function updateBatteryUI() {
-            const levelPercent = Math.round(battery.level * 100);
-            batteryPercentText.textContent = `${levelPercent}%`;
-            mainBatteryStatusText.textContent = `${levelPercent}%`;
-            batteryLevelFill.style.width = `${levelPercent}%`;
+            battery.addEventListener('levelchange', updateBatteryUI);
 
-            // Retrieve saved unplug stats or fallback to current state
-            let lastChargedPercent = localStorage.getItem("ios26_last_charged_pct") || levelPercent;
-            let lastUnpluggedTime = localStorage.getItem("ios26_unplugged_time") || Date.now();
-
-            const formattedTime = formatUnpluggedTime(parseInt(lastUnpluggedTime, 10));
-            lastChargedText.textContent = `Last Charged to ${lastChargedPercent}%: ${formattedTime}`;
-        }
-
-        // Monitor when the charger is disconnected
-        battery.addEventListener('chargingchange', () => {
-            if (wasCharging && !battery.charging) {
-                // Phone was just unplugged! Capture exact level and time.
-                const currentLevel = Math.round(battery.level * 100);
-                localStorage.setItem("ios26_last_charged_pct", currentLevel);
-                localStorage.setItem("ios26_unplugged_time", Date.now());
-            }
-            wasCharging = battery.charging;
+            // Initial call
             updateBatteryUI();
+
+            // Refresh time string every 30 seconds so "Xm ago" increments naturally
+            setInterval(updateBatteryUI, 30000);
         });
-
-        battery.addEventListener('levelchange', updateBatteryUI);
-        
-        // Initial call to render saved state on load
-        updateBatteryUI();
-    });
-}
-
+    } else {
+        // Fallback for browsers lacking native Battery API support
+        lastChargedText.textContent = `Last Charged to 45%: Just now`;
+    }
 
     // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
