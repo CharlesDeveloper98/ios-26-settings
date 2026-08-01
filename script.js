@@ -320,11 +320,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 400);
     }
 
-    function openSheet() {
+        function openSheet() {
         sheetOverlay.classList.add("active");
         document.body.style.overflow = "hidden";
-        goToPage(1);
+        
+        // Force layout tick to ensure smooth liquid glass bubble slide-up entrance
+        requestAnimationFrame(() => {
+            goToPage(1);
+        });
     }
+
 
     function closeSheet() {
         sheetOverlay.classList.remove("active");
