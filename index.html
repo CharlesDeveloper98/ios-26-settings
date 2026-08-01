@@ -116,7 +116,10 @@
                         </div>
                     </div>
                     <div class="card-divider indent"></div>
-                    <div class="settings-row clickable">
+
+                    
+                     <!-- Tappable Battery Nav -->
+                    <div class="settings-row clickable" id="batteryNav">
                         <div class="row-left">
                             <div class="setting-icon green">
                                 <img src="assets/battery.png" alt="Battery">
@@ -124,6 +127,7 @@
                             <span class="row-label-text">Battery</span>
                         </div>
                         <div class="row-right">
+                            <span class="row-status-text" id="mainBatteryStatusText">88%</span>
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
@@ -132,8 +136,6 @@
                         <div class="row-left">
                             <div class="setting-icon blue-dark">
                                 <img src="assets/vpn.png" alt="VPN">
-                            </div>
-                            <span class="row-label-text">VPN</span>
                         </div>
                         <div class="row-right">
                             <span class="row-status-text">Not Connected</span>
