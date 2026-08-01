@@ -472,6 +472,30 @@ input:checked + .slider:before { transform: translateX(20px); }
 .tick { font-size: 22px; font-weight: 1; color: #ffffff; line-height: 1; }
 
 
+.master-battery-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.battery-usage-inner-block {
+    padding: 16px 16px 12px 16px;
+}
+
+.embedded-section-title {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-sub);
+    letter-spacing: -0.1px;
+    padding: 16px 16px 8px 16px;
+}
+
+.card-divider.full-divider {
+    margin-left: 0;
+    width: 100%;
+}
+
+
+
 /* iOS Bold Text System State */
 html.bold-text-enabled body {
     font-weight: 500;
