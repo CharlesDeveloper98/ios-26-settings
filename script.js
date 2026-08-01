@@ -37,11 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // System activity app list simulation data
 const systemApps = [
-    { id: "settings", name: "Settings", icon: "assets/general.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 6 },
-    { id: "safari", name: "Safari", icon: "assets/search.png", color: "blue", screenSec: 45, bgSec: 15, usagePct: 3 },
-    { id: "display", name: "Display & Home", icon: "assets/display.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 2 },
-    { id: "siri", name: "Siri & Intelligence", icon: "assets/siri.png", color: "gradient-siri", screenSec: 10, bgSec: 120, usagePct: 1 }
+    { id: "display", name: "Display & Home", icon: "assets/display.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 5 },
+    { id: "settings", name: "Settings", icon: "assets/general.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 3 },
+    { id: "siri", name: "Siri & Intelligence", icon: "assets/siri.png", color: "gradient-siri", screenSec: 10, bgSec: 120, usagePct: 2 },
+    { id: "safari", name: "Safari", icon: "assets/search.png", color: "blue", screenSec: 45, bgSec: 15, usagePct: 1 }
 ];
+
 
 let appStartTime = Date.now();
 let lastActiveTimestamp = Date.now();
