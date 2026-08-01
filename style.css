@@ -173,7 +173,6 @@ html, body {
 
 .liquid-back-btn:active { transform: scale(0.9); }
 
-.back-chevron { font-size: 24px; font-weight: 400; color: var(--text-main); line-height: 1; margin-right: 2px; }
 
 .subview-title {
     position: absolute; left: 0; right: 0; text-align: center;
@@ -579,26 +578,45 @@ html.bold-text-enabled .subview-title {
     border-radius: 8px;
 }
 
-/* Chevron Icon Sizing & Alignment for iOS 26 Style */
+/* iOS 26 Chevron Icon Sizing & Theme-Adaptive Styling */
+.chevron-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
 .chevron-icon img {
-    width: 12px;
-    height: 20px;
+    width: 7px;
+    height: 12px;
     object-fit: contain;
     display: block;
-    opacity: 0.85;
+    opacity: 0.45;
+    transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+.back-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .back-chevron img {
-    width: 16px;
+    width: 10px;
     height: 16px;
     object-fit: contain;
     display: block;
 }
 
-.chevron-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Light Theme Chevron Styling */
+[data-theme="light"] .chevron-icon img {
+    filter: brightness(0);
+    opacity: 0.35;
 }
 
-
+/* Dark Theme Chevron Styling */
+[data-theme="dark"] .chevron-icon img,
+:root:not([data-theme="light"]) .chevron-icon img {
+    filter: brightness(0) invert(1);
+    opacity: 0.4;
+}
