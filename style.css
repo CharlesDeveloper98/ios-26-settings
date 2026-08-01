@@ -534,3 +534,12 @@ html.bold-text-enabled .profile-name,
 html.bold-text-enabled .subview-title {
     font-weight: 800;
 }
+
+
+/* Dynamic Battery Level Colors */
+.battery-level-fill.color-green { background-color: #34c759 !important; }
+.battery-level-fill.color-normal { background-color: #ffffff !important; }
+[data-theme="light"] .battery-level-fill.color-normal { background-color: #000000 !important; }
+.battery-level-fill.color-yellow { background-color: #ffcc00 !important; }
+.battery-level-fill.color-red { background-color: #ff453a !important; }
+
