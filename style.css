@@ -478,7 +478,28 @@ input:checked + .slider:before { transform: translateX(20px); }
 }
 
 .battery-usage-inner-block {
-    padding: 16px 16px 12px 16px;
+    padding: 20px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.battery-chart-container {
+    position: relative;
+    height: 140px; /* Increased height to give the graph bars breathing room */
+    width: 100%;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.chart-bars-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 110px; /* Expanded vertical column area for bars */
+    padding: 0 4px;
 }
 
 .embedded-section-title {
@@ -486,9 +507,8 @@ input:checked + .slider:before { transform: translateX(20px); }
     font-weight: 400;
     color: var(--text-sub);
     letter-spacing: -0.1px;
-    padding: 16px 16px 8px 16px;
+    padding: 20px 16px 8px 16px; /* Balanced spacing above the activity list */
 }
-
 .card-divider.full-divider {
     margin-left: 0;
     width: 100%;
