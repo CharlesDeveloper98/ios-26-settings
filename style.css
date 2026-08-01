@@ -579,4 +579,25 @@ html.bold-text-enabled .subview-title {
     border-radius: 8px;
 }
 
+/* Chevron Icon Sizing & Alignment to match iOS System standards */
+.chevron-icon img {
+    width: 8px;
+    height: 13px;
+    object-fit: contain;
+    display: block;
+    opacity: 0.6;
+}
+
+.back-chevron img {
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+    display: block;
+}
+
+.chevron-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
