@@ -24,6 +24,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
+    // Battery View Elements
+    const batteryNav = document.getElementById("batteryNav");
+    const batteryView = document.getElementById("batteryView");
+    const backToMainFromBattery = document.getElementById("backToMainFromBattery");
+    const batteryPercentText = document.getElementById("batteryPercentText");
+    const mainBatteryStatusText = document.getElementById("mainBatteryStatusText");
+    const batteryLevelFill = document.getElementById("batteryLevelFill");
+    const lastChargedText = document.getElementById("lastChargedText");
+
+    // Dynamic User Stats Binding
+    if (navigator.getBattery) {
+        navigator.getBattery().then(battery => {
+            function updateBatteryUI() {
+                const levelPercent = Math.round(battery.level * 100);
+                batteryPercentText.textContent = `${levelPercent}%`;
+                mainBatteryStatusText.textContent = `${levelPercent}%`;
+                batteryLevelFill.style.width = `${levelPercent}%`;
+                lastChargedText.textContent = `Last Charged to ${levelPercent}%: Just now`;
+            }
+            updateBatteryUI();
+            battery.addEventListener('levelchange', updateBatteryUI);
+        });
+    }
+
     // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
@@ -119,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Sub-page sliding navigation with instant execution
+    // Sub-page sliding navigation: Display & Brightness
     displayBrightnessNav.addEventListener("click", () => {
         requestAnimationFrame(() => {
             mainSettingsView.classList.add("slide-left");
@@ -130,6 +154,21 @@ document.addEventListener("DOMContentLoaded", () => {
     backToMainSettings.addEventListener("click", () => {
         requestAnimationFrame(() => {
             displayBrightnessView.classList.remove("active");
+            mainSettingsView.classList.remove("slide-left");
+        });
+    });
+
+    // Sub-page sliding navigation: Battery
+    batteryNav.addEventListener("click", () => {
+        requestAnimationFrame(() => {
+            mainSettingsView.classList.add("slide-left");
+            batteryView.classList.add("active");
+        });
+    });
+
+    backToMainFromBattery.addEventListener("click", () => {
+        requestAnimationFrame(() => {
+            batteryView.classList.remove("active");
             mainSettingsView.classList.remove("slide-left");
         });
     });
