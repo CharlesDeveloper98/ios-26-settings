@@ -459,7 +459,8 @@
     </div>
 
 
-            <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
+                             
+        <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
         <div class="settings-subview" id="batteryView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromBattery">
@@ -481,12 +482,13 @@
                     </div>
                 </div>
 
-                <!-- Daily Usage Section & View All Combined in One Container -->
+                <!-- Daily Usage Section -->
                 <div class="subview-section-label">Daily Usage</div>
                 <div class="settings-card group-card battery-usage-card">
                     <div class="battery-usage-header-text" id="batteryUsageDesc">
                         You're using less battery today than you usually do by 7:16 PM.
                     </div>
+                    
                     <div class="battery-stats-row">
                         <div class="stat-group">
                             <span class="stat-label">Average</span>
@@ -498,7 +500,7 @@
                         </div>
                     </div>
 
-                    <!-- Usage Bars Chart Simulation -->
+                    <!-- Usage Bars Chart Simulation (Positioned correctly below stats like reference) -->
                     <div class="battery-chart-container">
                         <div class="average-line"><span>Average</span></div>
                         <div class="chart-bars-flex">
@@ -512,25 +514,16 @@
                             <div class="chart-bar-col active"><div class="bar-fill active-fill" style="height: 40%;"></div><span class="day-label active-day">S</span></div>
                         </div>
                     </div>
+                    
                     <div class="chart-legend-row">
                         <span class="legend-dot"></span> <span class="legend-text">All Day</span>
                         <span class="legend-dot active-dot"></span> <span class="legend-text" id="chartTimeLegend">Daily by 7:16 PM</span>
-                    </div>
-
-                    <!-- Integrated Card Divider -->
-                    <div class="card-divider"></div>
-
-                    <!-- Integrated "View All Battery Usage" Row -->
-                    <div class="settings-row clickable view-all-row-integrated">
-                        <div class="row-left"><span class="row-label-text blue-text">View All Battery Usage</span></div>
-                        <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
                 </div>
 
                 <!-- App and System Activity Section -->
                 <div class="subview-section-label">App and System Activity</div>
                 <div class="settings-card group-card" id="appActivityListContainer">
-                    <!-- Dynamically populated or mapped user activity rows -->
                     <div class="settings-row clickable">
                         <div class="row-left">
                             <div class="setting-icon green"><img src="assets/wifi.png" alt="App"></div>
@@ -571,6 +564,11 @@
                     </div>
                 </div>
 
+                <div class="settings-row clickable settings-card group-card view-all-row">
+                    <div class="row-left"><span class="row-label-text blue-text">View All Battery Usage</span></div>
+                    <div class="row-right"><span class="chevron-icon">›</span></div>
+                </div>
+
                 <!-- Bottom Battery Health Options -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
@@ -600,7 +598,6 @@
                 </div>
             </div>
         </div>
-
 
     
 
