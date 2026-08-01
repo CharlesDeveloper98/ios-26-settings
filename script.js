@@ -116,9 +116,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderActivityList();
 
-        // Precise Battery Tracking Engine (iOS 26 Style - Background-Resilient Fix)
+    // Precise Battery Tracking Engine (iOS 26 Style - Fixed Unplug Logic)
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
+            let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
+            let lastUnpluggedTime = localStorage.getItem("ios26_last_unplugged_time") ? parseInt(localStorage.getItem("ios26_last_unplugged_time")) : null;
+            let wasCharging = battery.charging;
+
             function formatTimeAgo(timestamp) {
                 if (!timestamp) return null;
                 const seconds = Math.floor((Date.now() - timestamp) / 1000);
@@ -148,9 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     batteryLevelFill.classList.add("color-red");
                 }
 
-                const lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
-                const lastUnpluggedTime = localStorage.getItem("ios26_last_unplugged_time") ? parseInt(localStorage.getItem("ios26_last_unplugged_time")) : null;
-
                 if (lastUnpluggedPercent && lastUnpluggedTime) {
                     const timeAgoString = formatTimeAgo(lastUnpluggedTime);
                     lastChargedText.textContent = `Last Charged to ${lastUnpluggedPercent}%: ${timeAgoString}`;
@@ -159,43 +160,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            // Core check handler to record state transitions accurately across sleep/locks
-            let previousChargingState = battery.charging;
-
-            function checkUnplugEvent() {
-                const currentCharging = battery.charging;
-                // If it was charging previously, but now it's not -> Unplugged event occurred!
-                if (previousChargingState && !currentCharging) {
-                    const unpluggedPercent = Math.round(battery.level * 100);
-                    const unpluggedTime = Date.now();
+            battery.addEventListener('chargingchange', () => {
+                if (wasCharging && !battery.charging) {
+                    lastUnpluggedPercent = Math.round(battery.level * 100);
+                    lastUnpluggedTime = Date.now();
                     
-                    localStorage.setItem("ios26_last_unplugged_pct", unpluggedPercent);
-                    localStorage.setItem("ios26_last_unplugged_time", unpluggedTime);
+                    localStorage.setItem("ios26_last_unplugged_pct", lastUnpluggedPercent);
+                    localStorage.setItem("ios26_last_unplugged_time", lastUnpluggedTime);
                 }
-                previousChargingState = currentCharging;
+                wasCharging = battery.charging;
                 updateBatteryUI();
-            }
+            });
 
-            // Listen to standard browser battery change events
-            battery.addEventListener('chargingchange', checkUnplugEvent);
             battery.addEventListener('levelchange', updateBatteryUI);
 
-            // Re-evaluate state immediately when user unlocks phone or switches back to Settings app
-            document.addEventListener("visibilitychange", () => {
-                if (!document.hidden) {
-                    checkUnplugEvent();
-                }
-            });
-            window.addEventListener("focus", checkUnplugEvent);
-
-            // Initial run
-            checkUnplugEvent();
+            updateBatteryUI();
             setInterval(updateBatteryUI, 30000);
         });
     } else {
         lastChargedText.textContent = `Last Charged: Not supported`;
     }
-
 
     // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
