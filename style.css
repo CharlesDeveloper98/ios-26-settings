@@ -543,3 +543,15 @@ html.bold-text-enabled .subview-title {
 .battery-level-fill.color-yellow { background-color: #ffcc00 !important; }
 .battery-level-fill.color-red { background-color: #ff453a !important; }
 
+
+/* Fallback protection for setting icons */
+.setting-icon img[src=""], 
+.setting-icon img:not([src]) {
+    opacity: 0;
+}
+.setting-icon {
+    background-size: cover;
+    background-position: center;
+}
+
+
