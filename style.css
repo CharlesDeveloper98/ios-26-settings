@@ -344,11 +344,51 @@ input:checked + .slider:before { transform: translateX(20px); }
     position: absolute; bottom: 0; left: 0; width: 100%;
     padding: 10px 16px 24px 16px; background: var(--search-gradient); z-index: 50; display: flex; justify-content: center; pointer-events: none;
 }
-.search-bar-liquid {
-    background: var(--search-bg); border: 0.5px solid var(--search-border); border-radius: 24px;
-    height: 50px; width: 100%; display: flex; align-items: center; padding: 0 16px; gap: 10px; color: var(--text-sub); font-size: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); pointer-events: auto;
+
+
+/* --- Liquid Glass Effect Engine (From Tutorial) --- */
+.liquidglass-wrapper {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
 }
+
+.liquidglass-effect {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(3px);
+    filter: url(#glass-distortion);
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.liquidglass-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 16px;
+    gap: 10px;
+}
+
+/* --- Integrated Search Bar Liquid Style --- */
+.search-bar-liquid {
+    background: var(--search-bg);
+    border: 0.5px solid var(--search-border);
+    border-radius: 24px;
+    height: 50px;
+    width: 100%;
+    color: var(--text-sub);
+    font-size: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    pointer-events: auto;
+}
+
+
+
 .search-placeholder { flex-grow: 1; color: var(--text-sub); }
 
 
