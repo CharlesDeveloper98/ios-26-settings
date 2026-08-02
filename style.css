@@ -352,26 +352,30 @@ input:checked + .slider:before { transform: translateX(20px); }
 .search-placeholder { flex-grow: 1; color: var(--text-sub); }
 
 
-/* Precise Sizing & Dynamic Theme Color Matching for Search & Mic Icons */
-.search-icon-img, 
-.mic-icon-img {
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px;
-    min-height: 20px;
+/* Separate Sizing Rules to Balance Internal PNG Padding */
+.search-icon-img {
+    width: 18px !important;
+    height: 18px !important;
     object-fit: contain;
     flex-shrink: 0;
     display: inline-block;
 }
 
-/* Light Theme: match dark sub-text/icon color */
+.mic-icon-img {
+    width: 21px !important;
+    height: 21px !important;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+/* Dynamic Theme Color Matching for Light & Dark Themes */
 [data-theme="light"] .search-icon-img,
 [data-theme="light"] .mic-icon-img {
     filter: brightness(0) saturate(100%) invert(35%) sepia(9%) saturate(417%) hue-rotate(169deg) brightness(92%) contrast(88%);
     opacity: 0.65;
 }
 
-/* Dark Theme: match bright white/light-gray sub-text/icon color */
 [data-theme="dark"] .search-icon-img,
 [data-theme="dark"] .mic-icon-img,
 :root:not([data-theme="light"]) .search-icon-img,
@@ -379,6 +383,7 @@ input:checked + .slider:before { transform: translateX(20px); }
     filter: brightness(0) invert(1);
     opacity: 0.6;
 }
+
 
 
 
