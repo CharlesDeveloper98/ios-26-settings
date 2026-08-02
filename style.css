@@ -666,3 +666,49 @@ html.bold-text-enabled .subview-title {
 }
 
 
+/* --- iOS Style Sticky Blur Navigation Header --- */
+.settings-nav-bar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    background: rgba(242, 242, 247, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Active state triggered when scrolled */
+.settings-nav-bar.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.nav-title-container {
+    text-align: center;
+}
+
+.sticky-nav-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-main, #000);
+    letter-spacing: -0.4px;
+}
+
+/* Dark mode adjustment */
+[data-theme="dark"] .settings-nav-bar {
+    background: rgba(28, 28, 30, 0.75);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .sticky-nav-title {
+    color: #fff;
+}
