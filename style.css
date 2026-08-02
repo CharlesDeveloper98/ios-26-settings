@@ -162,6 +162,63 @@ html, body {
     position: relative; background-color: var(--bg-subview); flex-shrink: 0; z-index: 5;
 }
 
+
+/* Battery Page Layout Fixes */
+.battery-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.daily-usage-section .usage-summary-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-background);
+  border-radius: 12px;
+  padding: 16px;
+  /* Prevents text lines from squishing or vertical-only stacking bugs */
+  white-space: normal; 
+}
+
+.usage-graph-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+
+
+.settings-header {
+  /* Remove any solid or block background color */
+  background-color: rgba(255, 255, 255, 0.75); /* Use 0.15 to 0.2 for dark mode */
+  
+  /* Apply subtle iOS-style blur */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  /* Clear out harsh block borders or heavy shadows */
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+  box-shadow: none; 
+}
+
+
+        
+/* Main Settings Page: Sticky Header Enabled */
+.settings-main-view .settings-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Sub-pages: Normal Flow Header */
+.settings-sub-page .settings-header {
+  position: static; /* Removes sticky positioning */
+}
+
+
+
 .liquid-back-btn {
     width: 34px; height: 34px; border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
