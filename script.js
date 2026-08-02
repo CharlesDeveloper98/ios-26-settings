@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
+    // General View Elements
+    const generalNav = document.getElementById("generalNav");
+    const generalView = document.getElementById("generalView");
+    const backToMainFromGeneral = document.getElementById("backToMainFromGeneral");
+
     // Battery View Elements
     const batteryNav = document.getElementById("batteryNav");
     const batteryView = document.getElementById("batteryView");
@@ -136,27 +141,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
             function updateBatteryUI() {
                 const currentPercent = Math.round(battery.level * 100);
-                batteryPercentText.textContent = `${currentPercent}%`;
-                mainBatteryStatusText.textContent = `${currentPercent}%`;
-                batteryLevelFill.style.width = `${currentPercent}%`;
+                if (batteryPercentText) batteryPercentText.textContent = `${currentPercent}%`;
+                if (mainBatteryStatusText) mainBatteryStatusText.textContent = `${currentPercent}%`;
+                if (batteryLevelFill) batteryLevelFill.style.width = `${currentPercent}%`;
 
-                batteryLevelFill.classList.remove("color-green", "color-normal", "color-yellow", "color-red");
+                if (batteryLevelFill) {
+                    batteryLevelFill.classList.remove("color-green", "color-normal", "color-yellow", "color-red");
 
-                if (currentPercent === 100) {
-                    batteryLevelFill.classList.add("color-green");
-                } else if (currentPercent >= 21 && currentPercent <= 99) {
-                    batteryLevelFill.classList.add("color-normal");
-                } else if (currentPercent >= 16 && currentPercent <= 20) {
-                    batteryLevelFill.classList.add("color-yellow");
-                } else if (currentPercent <= 15) {
-                    batteryLevelFill.classList.add("color-red");
+                    if (currentPercent === 100) {
+                        batteryLevelFill.classList.add("color-green");
+                    } else if (currentPercent >= 21 && currentPercent <= 99) {
+                        batteryLevelFill.classList.add("color-normal");
+                    } else if (currentPercent >= 16 && currentPercent <= 20) {
+                        batteryLevelFill.classList.add("color-yellow");
+                    } else if (currentPercent <= 15) {
+                        batteryLevelFill.classList.add("color-red");
+                    }
                 }
 
-                if (lastUnpluggedPercent && lastUnpluggedTime) {
-                    const timeAgoString = formatTimeAgo(lastUnpluggedTime);
-                    lastChargedText.textContent = `Last Charged to ${lastUnpluggedPercent}%: ${timeAgoString}`;
-                } else {
-                    lastChargedText.textContent = `Last Charged: Not available yet`;
+                if (lastChargedText) {
+                    if (lastUnpluggedPercent && lastUnpluggedTime) {
+                        const timeAgoString = formatTimeAgo(lastUnpluggedTime);
+                        lastChargedText.textContent = `Last Charged to ${lastUnpluggedPercent}%: ${timeAgoString}`;
+                    } else {
+                        lastChargedText.textContent = `Last Charged: Not available yet`;
+                    }
                 }
             }
 
@@ -178,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setInterval(updateBatteryUI, 30000);
         });
     } else {
-        lastChargedText.textContent = `Last Charged: Not supported`;
+        if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
     // Display & Brightness interactive state elements
@@ -193,22 +202,24 @@ document.addEventListener("DOMContentLoaded", () => {
         htmlElement.setAttribute("data-theme", theme);
         localStorage.setItem("ios26_theme", theme);
 
-        if (theme === "light") {
-            lightModeOption.classList.add("active");
-            lightModeOption.querySelector(".radio-check").classList.add("checked");
-            lightModeOption.querySelector(".radio-check").textContent = "✓";
-            
-            darkModeOption.classList.remove("active");
-            darkModeOption.querySelector(".radio-check").classList.remove("checked");
-            darkModeOption.querySelector(".radio-check").textContent = "";
-        } else {
-            darkModeOption.classList.add("active");
-            darkModeOption.querySelector(".radio-check").classList.add("checked");
-            darkModeOption.querySelector(".radio-check").textContent = "✓";
-            
-            lightModeOption.classList.remove("active");
-            lightModeOption.querySelector(".radio-check").classList.remove("checked");
-            lightModeOption.querySelector(".radio-check").textContent = "";
+        if (lightModeOption && darkModeOption) {
+            if (theme === "light") {
+                lightModeOption.classList.add("active");
+                lightModeOption.querySelector(".radio-check").classList.add("checked");
+                lightModeOption.querySelector(".radio-check").textContent = "✓";
+                
+                darkModeOption.classList.remove("active");
+                darkModeOption.querySelector(".radio-check").classList.remove("checked");
+                darkModeOption.querySelector(".radio-check").textContent = "";
+            } else {
+                darkModeOption.classList.add("active");
+                darkModeOption.querySelector(".radio-check").classList.add("checked");
+                darkModeOption.querySelector(".radio-check").textContent = "✓";
+                
+                lightModeOption.classList.remove("active");
+                lightModeOption.querySelector(".radio-check").classList.remove("checked");
+                lightModeOption.querySelector(".radio-check").textContent = "";
+            }
         }
 
         setTimeout(() => {
@@ -225,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem("ios26_theme");
     const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
     
-    automaticToggle.checked = savedAutomatic;
+    if (automaticToggle) automaticToggle.checked = savedAutomatic;
 
     if (savedAutomatic) {
         setTheme(getSystemTheme());
@@ -235,121 +246,150 @@ document.addEventListener("DOMContentLoaded", () => {
         setTheme("dark");
     }
 
-    lightModeOption.addEventListener("click", () => {
-        if (automaticToggle.checked) {
-            automaticToggle.checked = false;
-            localStorage.setItem("ios26_automatic", "false");
-        }
-        setTheme("light");
-    });
+    if (lightModeOption) {
+        lightModeOption.addEventListener("click", () => {
+            if (automaticToggle && automaticToggle.checked) {
+                automaticToggle.checked = false;
+                localStorage.setItem("ios26_automatic", "false");
+            }
+            setTheme("light");
+        });
+    }
 
-    darkModeOption.addEventListener("click", () => {
-        if (automaticToggle.checked) {
-            automaticToggle.checked = false;
-            localStorage.setItem("ios26_automatic", "false");
-        }
-        setTheme("dark");
-    });
+    if (darkModeOption) {
+        darkModeOption.addEventListener("click", () => {
+            if (automaticToggle && automaticToggle.checked) {
+                automaticToggle.checked = false;
+                localStorage.setItem("ios26_automatic", "false");
+            }
+            setTheme("dark");
+        });
+    }
 
-    automaticToggle.addEventListener("change", () => {
-        const isAutomatic = automaticToggle.checked;
-        localStorage.setItem("ios26_automatic", isAutomatic);
-        if (isAutomatic) setTheme(getSystemTheme());
-    });
+    if (automaticToggle) {
+        automaticToggle.addEventListener("change", () => {
+            const isAutomatic = automaticToggle.checked;
+            localStorage.setItem("ios26_automatic", isAutomatic);
+            if (isAutomatic) setTheme(getSystemTheme());
+        });
+    }
 
     // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
     const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
 
-    boldTextToggle.checked = savedBoldText;
-    if (savedBoldText) {
-        htmlElement.classList.add("bold-text-enabled");
+    if (boldTextToggle) {
+        boldTextToggle.checked = savedBoldText;
+        if (savedBoldText) {
+            htmlElement.classList.add("bold-text-enabled");
+        }
+
+        boldTextToggle.addEventListener("change", () => {
+            const isBold = boldTextToggle.checked;
+            localStorage.setItem("ios26_boldtext", isBold);
+            if (isBold) {
+                htmlElement.classList.add("bold-text-enabled");
+            } else {
+                htmlElement.classList.remove("bold-text-enabled");
+            }
+        });
     }
 
-    boldTextToggle.addEventListener("change", () => {
-        const isBold = boldTextToggle.checked;
-        localStorage.setItem("ios26_boldtext", isBold);
-        if (isBold) {
-            htmlElement.classList.add("bold-text-enabled");
-        } else {
-            htmlElement.classList.remove("bold-text-enabled");
-        }
-    });
+    // Sub-page sliding navigation: General
+    if (generalNav && generalView && backToMainFromGeneral) {
+        generalNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                generalView.classList.add("active");
+            });
+        });
+
+        backToMainFromGeneral.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                generalView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
 
     // Sub-page sliding navigation: Display & Brightness
-    displayBrightnessNav.addEventListener("click", () => {
-        requestAnimationFrame(() => {
-            mainSettingsView.classList.add("slide-left");
-            displayBrightnessView.classList.add("active");
+    if (displayBrightnessNav && displayBrightnessView && backToMainSettings) {
+        displayBrightnessNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                displayBrightnessView.classList.add("active");
+            });
         });
-    });
 
-    backToMainSettings.addEventListener("click", () => {
-        requestAnimationFrame(() => {
-            displayBrightnessView.classList.remove("active");
-            mainSettingsView.classList.remove("slide-left");
+        backToMainSettings.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                displayBrightnessView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
         });
-    });
+    }
 
     // Sub-page sliding navigation: Battery
-    batteryNav.addEventListener("click", () => {
-        requestAnimationFrame(() => {
-            mainSettingsView.classList.add("slide-left");
-            batteryView.classList.add("active");
+    if (batteryNav && batteryView && backToMainFromBattery) {
+        batteryNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                batteryView.classList.add("active");
+            });
         });
-    });
 
-    backToMainFromBattery.addEventListener("click", () => {
-        requestAnimationFrame(() => {
-            batteryView.classList.remove("active");
-            mainSettingsView.classList.remove("slide-left");
+        backToMainFromBattery.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                batteryView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
         });
-    });
+    }
 
     const savedFirstName = localStorage.getItem("ios26_firstname");
     const savedLastName = localStorage.getItem("ios26_lastname");
-    if (savedFirstName || savedLastName) {
+    if ((savedFirstName || savedLastName) && displayProfileName) {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
     // Setup Flow Popup Logic (Loops until checkmark is clicked)
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
-    if (!isSetupFinished) {
+    if (!isSetupFinished && sheetOverlay) {
         setTimeout(() => {
             openSheet();
         }, 400);
     }
 
-        function openSheet() {
+    function openSheet() {
+        if (!sheetOverlay) return;
         sheetOverlay.classList.add("active");
         document.body.style.overflow = "hidden";
         
-        // Force layout tick to ensure smooth liquid glass bubble slide-up entrance
         requestAnimationFrame(() => {
             goToPage(1);
         });
     }
 
-
     function closeSheet() {
+        if (!sheetOverlay) return;
         sheetOverlay.classList.remove("active");
         document.body.style.overflow = "";
     }
 
-           function goToPage(pageNumber) {
+    function goToPage(pageNumber) {
         const pages = [page1, page2, page3];
         const targetPage = pages[pageNumber - 1];
-        const activePage = document.querySelector('.setup-page.active');
+        if (!targetPage) return;
         
+        const activePage = document.querySelector('.setup-page.active');
         if (activePage === targetPage) return;
 
         const activePageNumber = activePage ? parseInt(activePage.id.replace('page', '')) : 1;
         const isForward = pageNumber > activePageNumber;
 
-        // Use requestAnimationFrame to guarantee silky-smooth hardware acceleration sync
         requestAnimationFrame(() => {
             pages.forEach(p => {
-                p.classList.remove("active", "slide-out-left", "slide-in-right", "slide-out-right", "slide-in-left");
+                if (p) p.classList.remove("active", "slide-out-left", "slide-in-right", "slide-out-right", "slide-in-left");
             });
 
             if (activePage) {
@@ -360,60 +400,65 @@ document.addEventListener("DOMContentLoaded", () => {
             targetPage.classList.add("active");
         });
 
-        if (pageNumber === 1) {
-            sheetTitle.textContent = "Settings Setup";
-        } else if (pageNumber === 2) {
-            sheetTitle.textContent = "System Personalization";
-        } else if (pageNumber === 3) {
-            sheetTitle.textContent = "Profile Setup";
-            validateInputs();
+        if (sheetTitle) {
+            if (pageNumber === 1) {
+                sheetTitle.textContent = "Settings Setup";
+            } else if (pageNumber === 2) {
+                sheetTitle.textContent = "System Personalization";
+            } else if (pageNumber === 3) {
+                sheetTitle.textContent = "Profile Setup";
+                validateInputs();
+            }
         }
     }
 
-
-
     function validateInputs() {
+        if (!firstNameInput || !lastNameInput || !finishBtn) return;
         const fName = firstNameInput.value.trim();
         const lName = lastNameInput.value.trim();
 
         if (fName !== "" || lName !== "") {
             finishBtn.classList.remove("disabled");
             finishBtn.classList.add("ios-blue");
-            errorMsg.classList.remove("visible");
+            if (errorMsg) errorMsg.classList.remove("visible");
         } else {
             finishBtn.classList.add("disabled");
             finishBtn.classList.remove("ios-blue");
         }
     }
 
-    firstNameInput.addEventListener("input", validateInputs);
-    lastNameInput.addEventListener("input", validateInputs);
+    if (firstNameInput) firstNameInput.addEventListener("input", validateInputs);
+    if (lastNameInput) lastNameInput.addEventListener("input", validateInputs);
 
-    toPage2Btn.addEventListener("click", () => goToPage(2));
-    toPage1Btn.addEventListener("click", () => goToPage(1));
-    toPage3Btn.addEventListener("click", () => goToPage(3));
-    toPage2BtnFrom3.addEventListener("click", () => goToPage(2));
+    if (toPage2Btn) toPage2Btn.addEventListener("click", () => goToPage(2));
+    if (toPage1Btn) toPage1Btn.addEventListener("click", () => goToPage(1));
+    if (toPage3Btn) toPage3Btn.addEventListener("click", () => goToPage(3));
+    if (toPage2BtnFrom3) toPage2BtnFrom3.addEventListener("click", () => goToPage(2));
 
-    finishBtn.addEventListener("click", () => {
-        const fName = firstNameInput.value.trim();
-        const lName = lastNameInput.value.trim();
+    if (finishBtn) {
+        finishBtn.addEventListener("click", () => {
+            const fName = firstNameInput ? firstNameInput.value.trim() : "";
+            const lName = lastNameInput ? lastNameInput.value.trim() : "";
 
-        if (fName === "" && lName === "") {
-            profileCard.classList.remove("shake");
-            void profileCard.offsetWidth;
-            profileCard.classList.add("shake");
-            errorMsg.classList.add("visible");
-            return;
-        }
+            if (fName === "" && lName === "") {
+                if (profileCard) {
+                    profileCard.classList.remove("shake");
+                    void profileCard.offsetWidth;
+                    profileCard.classList.add("shake");
+                }
+                if (errorMsg) errorMsg.classList.add("visible");
+                return;
+            }
 
-        localStorage.setItem("ios26_firstname", fName);
-        localStorage.setItem("ios26_lastname", lName);
-        
-        // Mark setup as completely finished so popup stops appearing
-        localStorage.setItem("ios26_setup_completed", "true");
+            localStorage.setItem("ios26_firstname", fName);
+            localStorage.setItem("ios26_lastname", lName);
+            localStorage.setItem("ios26_setup_completed", "true");
 
-        displayProfileName.textContent = `${fName} ${lName}`.trim();
+            if (displayProfileName) {
+                displayProfileName.textContent = `${fName} ${lName}`.trim();
+            }
 
-        closeSheet();
-    });
+            closeSheet();
+        });
+    }
 });
