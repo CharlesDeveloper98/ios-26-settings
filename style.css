@@ -35,7 +35,19 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'MyCustomFont', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body, .app-background, .settings-view, .settings-subview {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html.theme-transitioning *, 
+html.theme-transitioning *:before, 
+html.theme-transitioning *:after {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
+    pointer-events: none !important;
 }
 
 html, body {
@@ -47,6 +59,38 @@ html, body {
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/semibold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('/fonts/bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
 }
 
 /* App Background Container */
@@ -84,15 +128,17 @@ html, body {
 .settings-subview {
     position: absolute;
     top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex; flex-direction: column;
+    width: 100%; 
+    height: 100%;
+    display: flex; 
+    flex-direction: column;
     background-color: var(--bg-subview);
     transform: translate3d(100%, 0, 0);
     will-change: transform;
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     z-index: 20;
     pointer-events: none;
-    overflow: hidden;
+    overflow: hidden; /* Contains child layout flow */
 }
 
 .settings-subview.active {
@@ -108,116 +154,14 @@ html, body {
 
 .main-title {
     font-size: 34px; font-weight: 700; letter-spacing: 0.4px;
-    color: var(--text-main); padding-left: 4px; margin-top: 16px; margin-bottom: 6px; flex-shrink: 0;
-}
-
-/* --- iOS Style Sticky Blur Navigation Header --- */
-.settings-nav-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 54px;
-    padding-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    background: rgba(242, 242, 247, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 0.5px solid rgba(0, 0, 0, 0.15);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-.settings-nav-bar.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.nav-title-container {
-    text-align: center;
-}
-
-.sticky-nav-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-main, #000);
-    letter-spacing: -0.4px;
-}
-
-[data-theme="dark"] .settings-nav-bar {
-    background: rgba(28, 28, 30, 0.75);
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="dark"] .sticky-nav-title {
-    color: #fff;
+    color: var(--text-main); padding-left: 4px; margin-top: 44px; margin-bottom: 6px; flex-shrink: 0;
 }
 
 .subview-header {
     display: flex; align-items: center; padding: 50px 16px 12px 16px;
-    position: relative; background-color: var(--bg-subview); flex-shrink: 0; z-index: 5;
+    position: relative; background-color: var(--bg-subview); flex-shrink: 0;
+    z-index: 5;
 }
-
-
-/* Battery Page Layout Fixes */
-.battery-page {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px;
-}
-
-.daily-usage-section .usage-summary-card {
-  display: flex;
-  flex-direction: column;
-  background: var(--card-background);
-  border-radius: 12px;
-  padding: 16px;
-  /* Prevents text lines from squishing or vertical-only stacking bugs */
-  white-space: normal; 
-}
-
-.usage-graph-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-
-
-.settings-header {
-  /* Remove any solid or block background color */
-  background-color: rgba(255, 255, 255, 0.75); /* Use 0.15 to 0.2 for dark mode */
-  
-  /* Apply subtle iOS-style blur */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  
-  /* Clear out harsh block borders or heavy shadows */
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-  box-shadow: none; 
-}
-
-
-        
-/* Main Settings Page: Sticky Header Enabled */
-.settings-main-view .settings-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-/* Sub-pages: Normal Flow Header */
-.settings-sub-page .settings-header {
-  position: static; /* Removes sticky positioning */
-}
-
-
 
 .liquid-back-btn {
     width: 34px; height: 34px; border-radius: 50%;
@@ -228,6 +172,7 @@ html, body {
 }
 
 .liquid-back-btn:active { transform: scale(0.9); }
+
 .back-chevron { font-size: 24px; font-weight: 400; color: var(--text-main); line-height: 1; margin-right: 2px; }
 
 .subview-title {
@@ -235,10 +180,17 @@ html, body {
     font-size: 17px; font-weight: 600; color: var(--text-main); letter-spacing: -0.2px; pointer-events: none;
 }
 
+/* Fixed subview content scrolling and squeeze bug */
 .subview-content {
     padding: 8px 16px 100px 16px; 
-    width: 100%; display: flex; flex-direction: column; gap: 16px; 
-    flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0;
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 16px; 
+    flex: 1 1 auto;
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
+    min-height: 0; /* Critical for flex child scroll containers */
 }
 
 .subview-section-label { font-size: 13px; font-weight: 400; color: var(--text-sub); letter-spacing: -0.1px; padding-left: 16px; flex-shrink: 0; }
@@ -258,7 +210,6 @@ html, body {
 
 .card-divider { height: 0.5px; background: var(--divider-color); margin-left: 16px; flex-shrink: 0; }
 .card-divider.indent { margin-left: 54px; }
-.card-divider.full-divider { margin-left: 0; width: 100%; }
 
 .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; flex-shrink: 0; }
 .settings-row.clickable { cursor: pointer; }
@@ -268,8 +219,42 @@ html, body {
 .row-status-text { font-size: 15px; color: var(--text-sub); }
 .chevron-icon { font-size: 20px; color: var(--text-sub); font-weight: 400; }
 
+
 .row-text-stack { display: flex; flex-direction: column; gap: 2px; }
 .row-sub-label { font-size: 12px; color: var(--text-sub); }
+
+/* Battery Subview specific layouts */
+.battery-top-card { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+.battery-main-header { display: flex; justify-content: space-between; align-items: center; }
+.battery-percent-value { font-size: 38px; font-weight: 700; color: var(--text-main); line-height: 1; }
+.battery-info-icon { font-size: 18px; color: var(--text-sub); cursor: pointer; }
+.battery-charged-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 4px; }
+.battery-level-bar-container { width: 100%; height: 8px; background: rgba(128,128,128,0.2); border-radius: 4px; overflow: hidden; }
+.battery-level-fill { height: 100%; background: #34c759; border-radius: 4px; transition: width 0.4s ease; }
+
+.battery-usage-card { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.battery-usage-header-text { font-size: 14px; color: var(--text-main); line-height: 1.4; font-weight: 400; }
+.battery-stats-row { display: flex; gap: 32px; }
+.stat-group { display: flex; flex-direction: column; gap: 2px; }
+.stat-label { font-size: 12px; color: var(--text-sub); }
+.stat-label.today-color { color: #007aff; font-weight: 500; }
+.stat-value { font-size: 20px; font-weight: 600; color: var(--text-main); }
+.stat-value.today-color { color: #007aff; }
+
+.battery-chart-container { position: relative; height: 110px; width: 100%; margin-top: 8px; display: flex; flex-direction: column; justify-content: flex-end; }
+.average-line { position: absolute; top: 40%; left: 0; width: 100%; border-top: 1px dashed var(--text-sub); display: flex; justify-content: flex-end; }
+.average-line span { font-size: 10px; color: var(--text-sub); transform: translateY(-12px); background: var(--bg-card); padding-left: 4px; }
+.chart-bars-flex { display: flex; justify-content: space-between; align-items: flex-end; height: 90px; padding: 0 4px; }
+.chart-bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 8px; flex: 1; }
+.bar-fill { width: 100%; background: rgba(128,128,128,0.25); border-radius: 3px; }
+.bar-fill.active-fill { background: #007aff; }
+.day-label { font-size: 11px; color: var(--text-sub); }
+.day-label.active-day { color: #007aff; font-weight: 600; }
+
+.chart-legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub); margin-top: 4px; }
+.legend-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(128,128,128,0.5); }
+.legend-dot.active-dot { background: #007aff; margin-left: 8px; }
+
 
 .notification-badge {
     background-color: #ff3b30; color: #fff; font-size: 13px; font-weight: 600;
@@ -301,7 +286,7 @@ html, body {
 }
 .radio-check.checked { background-color: #007aff; border-color: #007aff; color: #fff; }
 
-/* Slider & Toggles */
+/* Slider */
 .brightness-slider-row { display: flex; align-items: center; padding: 14px 16px; gap: 12px; flex-shrink: 0; }
 .sun-icon { font-size: 14px; color: var(--text-sub); }
 .sun-icon.large { font-size: 18px; }
@@ -317,13 +302,30 @@ html, body {
 .settings-footer-note { font-size: 13px; color: var(--text-sub); line-height: 1.4; padding: 8px 16px 14px 16px; flex-shrink: 0; }
 .settings-footer-note.bottom-note { padding-top: 0; }
 
+/* Setting Icons */
 .setting-icon {
     width: 28px; height: 28px; border-radius: 6px; display: flex; justify-content: center; align-items: center;
     font-size: 14px; color: #fff; flex-shrink: 0; overflow: hidden; position: relative;
-    background: transparent !important;
 }
-.setting-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+.setting-icon img { width: 70%; height: 70%; object-fit: contain; }
 
+[data-theme="dark"] .setting-icon.orange, :root:not([data-theme="light"]) .setting-icon.orange { background-color: #ff9500; }
+[data-theme="dark"] .setting-icon.blue, :root:not([data-theme="light"]) .setting-icon.blue { background-color: #007aff; }
+[data-theme="dark"] .setting-icon.green, :root:not([data-theme="light"]) .setting-icon.green { background-color: #34c759; }
+[data-theme="dark"] .setting-icon.blue-dark, :root:not([data-theme="light"]) .setting-icon.blue-dark { background-color: #5856d6; }
+[data-theme="dark"] .setting-icon.grey-icon, :root:not([data-theme="light"]) .setting-icon.grey-icon { background-color: #8e8e93; }
+[data-theme="dark"] .setting-icon.red, :root:not([data-theme="light"]) .setting-icon.red { background-color: #ff3b30; }
+[data-theme="dark"] .setting-icon.purple, :root:not([data-theme="light"]) .setting-icon.purple { background-color: #af52de; }
+
+[data-theme="light"] .setting-icon.orange { background-color: #ff9500; }
+[data-theme="light"] .setting-icon.blue { background-color: #007aff; }
+[data-theme="light"] .setting-icon.green { background-color: #34c759; }
+[data-theme="light"] .setting-icon.blue-dark { background-color: #5856d6; }
+[data-theme="light"] .setting-icon.grey-icon { background-color: #8e8e93; }
+[data-theme="light"] .setting-icon.red { background-color: #ff3b30; }
+[data-theme="light"] .setting-icon.purple { background-color: #af52de; }
+
+/* iOS Toggle Switch */
 .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; }
 .ios-switch input { opacity: 0; width: 0; height: 0; }
 .slider {
@@ -337,89 +339,197 @@ html, body {
 input:checked + .slider { background-color: #34c759; }
 input:checked + .slider:before { transform: translateX(20px); }
 
-/* Bottom Search Container & Liquid Glass */
+/* Bottom Search Container */
 .bottom-search-container {
     position: absolute; bottom: 0; left: 0; width: 100%;
     padding: 10px 16px 24px 16px; background: var(--search-gradient); z-index: 50; display: flex; justify-content: center; pointer-events: none;
 }
 
+
+/* --- Perfect Liquid Glass Search Bar Engine --- */
 .liquidglass-wrapper {
-    position: relative; overflow: hidden; border-radius: 28px; transform: translateZ(0); isolation: isolate;
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    transform: translateZ(0);
+    isolation: isolate;
 }
 
 .liquidglass-effect {
-    position: absolute; inset: 0; border-radius: inherit;
-    backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%);
-    filter: url(#glass-distortion); z-index: 1; pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    filter: url(#glass-distortion);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .liquidglass-content {
-    position: relative; z-index: 2; display: flex; align-items: center; width: 100%; height: 100%; padding: 0 18px; gap: 12px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 18px;
+    gap: 12px;
 }
 
 .search-bar-liquid {
-    background: rgba(40, 40, 44, 0.45); border: 0.5px solid rgba(255, 255, 255, 0.18);
-    border-radius: 28px; height: 52px; width: 100%; color: var(--text-sub); font-size: 16px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2); pointer-events: auto;
+    background: rgba(40, 40, 44, 0.45);
+    border: 0.5px solid rgba(255, 255, 255, 0.18);
+    border-radius: 28px;
+    height: 52px;
+    width: 100%;
+    color: var(--text-sub);
+    font-size: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    pointer-events: auto;
 }
 
 [data-theme="light"] .search-bar-liquid {
-    background: rgba(255, 255, 255, 0.55); border: 0.5px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.55);
+    border: 0.5px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-.search-placeholder { flex-grow: 1; color: var(--text-sub); }
-.search-icon-img { width: 18px !important; height: 18px !important; object-fit: contain; flex-shrink: 0; }
-.mic-icon-img { width: 21px !important; height: 21px !important; object-fit: contain; flex-shrink: 0; }
 
-[data-theme="light"] .search-icon-img, [data-theme="light"] .mic-icon-img {
-    filter: brightness(0) saturate(100%) invert(35%) sepia(9%) saturate(417%) hue-rotate(169deg) brightness(92%) contrast(88%); opacity: 0.65;
+
+
+
+.search-placeholder { flex-grow: 1; color: var(--text-sub); }
+
+
+/* Separate Sizing Rules to Balance Internal PNG Padding */
+.search-icon-img {
+    width: 18px !important;
+    height: 18px !important;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: inline-block;
 }
-[data-theme="dark"] .search-icon-img, [data-theme="dark"] .mic-icon-img {
-    filter: brightness(0) invert(1); opacity: 0.6;
+
+.mic-icon-img {
+    width: 21px !important;
+    height: 21px !important;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: inline-block;
 }
+
+/* Dynamic Theme Color Matching for Light & Dark Themes */
+[data-theme="light"] .search-icon-img,
+[data-theme="light"] .mic-icon-img {
+    filter: brightness(0) saturate(100%) invert(35%) sepia(9%) saturate(417%) hue-rotate(169deg) brightness(92%) contrast(88%);
+    opacity: 0.65;
+}
+
+[data-theme="dark"] .search-icon-img,
+[data-theme="dark"] .mic-icon-img,
+:root:not([data-theme="light"]) .search-icon-img,
+:root:not([data-theme="light"]) .mic-icon-img {
+    filter: brightness(0) invert(1);
+    opacity: 0.6;
+}
+
+
+
+
 
 /* Sheet Overlay */
 .sheet-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-    z-index: 100; display: flex; align-items: flex-end; opacity: 0; visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 100;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s;
 }
-.sheet-overlay.active { opacity: 1; visibility: visible; }
 
-.bottom-sheet {
-    width: 100%; height: 85%; background: rgba(28, 28, 30, 0.75);
-    backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-top-left-radius: 32px; border-top-right-radius: 32px; border-top: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column;
-    transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;
+.sheet-overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
-.sheet-overlay.active .bottom-sheet { transform: translateY(0); }
 
-.sheet-indicator { width: 36px; height: 5px; background: rgba(255, 255, 255, 0.3); border-radius: 3px; align-self: center; margin-top: 10px; flex-shrink: 0; }
+.sheet-container {
+    transform: translateY(100%) scale(0.95);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Liquid Glass Bubble Effect */
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.sheet-overlay.active .sheet-container {
+    transform: translateY(0) scale(1);
+}
+
+/* Liquid Glass Bottom Sheet */
+.bottom-sheet {
+    width: 100%;
+    height: 85%;
+    background: rgba(28, 28, 30, 0.75);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border-top-left-radius: 32px;
+    border-top-right-radius: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.sheet-overlay.active .bottom-sheet {
+    transform: translateY(0);
+}
+
+
+.sheet-indicator {
+    width: 36px; height: 5px; background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px; align-self: center; margin-top: 10px; flex-shrink: 0;
+}
+
 .sheet-header { padding: 16px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
 .sheet-header h2 { font-size: 18px; font-weight: 600; color: var(--text-main); }
 
 .sheet-pages-container { position: relative; width: 100%; flex-grow: 1; overflow: hidden; }
+
 .sheet-page {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; flex-direction: column; justify-content: space-between; padding: 10px 24px 34px 24px;
     opacity: 0; visibility: hidden; transform: translate3d(30px, 0, 0);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; -webkit-overflow-scrolling: touch;
 }
+
 .sheet-page.active { opacity: 1; visibility: visible; transform: translate3d(0, 0, 0); }
 
 .text-center { text-align: center; display: flex; flex-direction: column; align-items: center; padding-top: 10px; }
 .app-icon-container { margin-bottom: 20px; }
+
 .ios-settings-icon {
     width: 76px; height: 76px; background: linear-gradient(135deg, #3a3a3c 0%, #1c1c1e 100%);
     border-radius: 18px; display: flex; justify-content: center; align-items: center; font-size: 38px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); border: 0.5px solid rgba(255, 255, 255, 0.15);
 }
+
 .secondary-icon { background: linear-gradient(135deg, #007aff 0%, #0056b3 100%); }
 .welcome-title { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
 .welcome-subtitle { font-size: 15px; line-height: 1.5; color: var(--text-sub); max-width: 320px; }
+.profile-intro { margin-bottom: 12px; }
 
 .ios-input-card {
     background: rgba(128, 128, 128, 0.08); border: 1px solid var(--divider-color); border-radius: 16px; overflow: hidden; margin-top: 4px;
@@ -427,6 +537,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 .input-row { display: flex; align-items: center; padding: 14px 16px; }
 .input-row label { width: 90px; font-size: 15px; color: var(--text-sub); font-weight: 500; }
 .input-row input { flex-grow: 1; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none; }
+.input-row input::placeholder { color: #48484a; }
 .input-divider { height: 1px; background: var(--divider-color); margin-left: 16px; }
 
 .error-msg-container { margin-top: 10px; padding: 0 4px; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.25s ease; }
@@ -459,13 +570,99 @@ input:checked + .slider:before { transform: translateX(20px); }
 .chevron { font-size: 28px; font-weight: 300; color: #ffffff; line-height: 1; }
 .tick { font-size: 22px; font-weight: 1; color: #ffffff; line-height: 1; }
 
-/* Bold System State */
-html.bold-text-enabled body { font-weight: 500; }
+
+.master-battery-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.battery-usage-inner-block {
+    padding: 20px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.battery-chart-container {
+    position: relative;
+    height: 140px; /* Increased height to give the graph bars breathing room */
+    width: 100%;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.chart-bars-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 110px; /* Expanded vertical column area for bars */
+    padding: 0 4px;
+}
+
+.embedded-section-title {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-sub);
+    letter-spacing: -0.1px;
+    padding: 20px 16px 8px 16px; /* Balanced spacing above the activity list */
+}
+.card-divider.full-divider {
+    margin-left: 0;
+    width: 100%;
+}
+
+
+
+/* iOS Bold Text System State */
+html.bold-text-enabled body {
+    font-weight: 500;
+}
+
 html.bold-text-enabled .row-label-text,
 html.bold-text-enabled .row-status-text,
 html.bold-text-enabled .appearance-text,
 html.bold-text-enabled .subview-section-label,
-html.bold-text-enabled .settings-footer-note { font-weight: 600; }
+html.bold-text-enabled .settings-footer-note {
+    font-weight: 600;
+}
+
 html.bold-text-enabled .main-title,
 html.bold-text-enabled .profile-name,
-html.bold-text-enabled .subview-title { font-weight: 800; }
+html.bold-text-enabled .subview-title {
+    font-weight: 800;
+}
+
+
+/* Dynamic Battery Level Colors */
+.battery-level-fill.color-green { background-color: #34c759 !important; }
+.battery-level-fill.color-normal { background-color: #ffffff !important; }
+[data-theme="light"] .battery-level-fill.color-normal { background-color: #000000 !important; }
+.battery-level-fill.color-yellow { background-color: #ffcc00 !important; }
+.battery-level-fill.color-red { background-color: #ff453a !important; }
+
+
+/* Fallback protection for setting icons */
+.setting-icon img[src=""], 
+.setting-icon img:not([src]) {
+    opacity: 0;
+}
+.setting-icon {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-radius: 8px; /* Match iOS squircle curve */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.setting-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
