@@ -24,6 +24,94 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
+
+
+        // --- Wi-Fi Sub-System & State Engine ---
+    const wifiNav = document.getElementById("wifiNav");
+    const wifiView = document.getElementById("wifiView");
+    const backToMainFromWifi = document.getElementById("backToMainFromWifi");
+    const wifiToggle = document.getElementById("wifiToggle");
+    const mainWifiStatusText = document.getElementById("mainWifiStatusText");
+    const wifiDynamicContentWrapper = document.getElementById("wifiDynamicContentWrapper");
+    const connectedNetworkCard = document.getElementById("connectedNetworkCard");
+    const connectedNetworkName = document.getElementById("connectedNetworkName");
+    const scannedNetworkNameText = document.getElementById("scannedNetworkNameText");
+
+    // Load saved Wi-Fi state or default to ON with sample network
+    let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
+    let connectedSsid = localStorage.getItem("ios26_connected_ssid") || "ZTE_2.4G_Cezx2G";
+
+    if (wifiToggle) wifiToggle.checked = isWifiOn;
+
+    function updateWifiStateUI() {
+        if (!isWifiOn) {
+            if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
+            if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
+            localStorage.setItem("ios26_wifi_on", "false");
+        } else {
+            if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
+            localStorage.setItem("ios26_wifi_on", "true");
+
+            if (connectedSsid && connectedSsid !== "None") {
+                if (mainWifiStatusText) mainWifiStatusText.textContent = connectedSsid;
+                if (connectedNetworkCard) connectedNetworkCard.style.display = "block";
+                if (connectedNetworkName) connectedNetworkName.textContent = connectedSsid;
+            } else {
+                if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
+                if (connectedNetworkCard) connectedNetworkCard.style.display = "none";
+            }
+        }
+    }
+
+    // Read real network environment if available via Network Information API
+    if (navigator.connection || navigator.wifi) {
+        // Fallback simulation mirroring real system connection attributes if available
+        setTimeout(() => {
+            if (isWifiOn && navigator.connection) {
+                // If connection type is wifi/ethernet or general active connection
+                const type = navigator.connection.effectiveType;
+                if (type && type.includes('wifi')) {
+                    connectedSsid = "Home_Network_5G";
+                    updateWifiStateUI();
+                }
+            }
+        }, 1000);
+    }
+
+    // Dynamic Network Scans simulation for the "Networks" section
+    if (scannedNetworkNameText) {
+        // Detect available local connection names or show nearby scan results
+        scannedNetworkNameText.textContent = connectedSsid !== "Guest_WiFi" ? "Guest_WiFi" : "Office_Secure_WiFi";
+    }
+
+    if (wifiToggle) {
+        wifiToggle.addEventListener("change", () => {
+            isWifiOn = wifiToggle.checked;
+            updateWifiStateUI();
+        });
+    }
+
+    updateWifiStateUI();
+
+    // Wi-Fi Subview Navigation Slide Bindings
+    if (wifiNav && wifiView && backToMainFromWifi) {
+        wifiNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                wifiView.classList.add("active");
+            });
+        });
+
+        backToMainFromWifi.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                wifiView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
+
+    
+    
     // General View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
