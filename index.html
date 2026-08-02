@@ -727,6 +727,124 @@
             </div>
         </div>
 
+
+
+                <!-- Sub-Page View: Wi-Fi -->
+        <div class="settings-subview" id="wifiView">
+            <div class="subview-header">
+                <div class="liquid-back-btn" id="backToMainFromWifi">
+                    <span class="back-chevron">‹</span>
+                </div>
+                <h2 class="subview-title">Wi-Fi</h2>
+                <div class="subview-header-right-btn" id="wifiEditBtn">Edit</div>
+            </div>
+
+            <div class="subview-content">
+                <!-- Hero Header Card -->
+                <div class="settings-card wifi-hero-card">
+                    <div class="wifi-hero-icon-container">
+                        <img src="assets/wifid.png" alt="Wi-Fi">
+                    </div>
+                    <div class="wifi-hero-text-block">
+                        <div class="wifi-hero-title">Wi-Fi</div>
+                        <div class="wifi-hero-subtitle">
+                            Connect to Wi-Fi, view available networks, and manage settings for joining networks and nearby hotspots. <span class="blue-link">Learn more...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toggle Row Card -->
+                <div class="settings-card group-card">
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">Wi-Fi</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox" id="wifiToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collapsible Content Wrapper (Animated on Toggle) -->
+                <div id="wifiDynamicContentWrapper" class="wifi-collapsible-wrapper">
+                    <!-- Connected Network Section -->
+                    <div class="settings-card group-card" id="connectedNetworkCard">
+                        <div class="settings-row clickable">
+                            <div class="row-left wifi-connected-left">
+                                <span class="wifi-check-icon">✓</span>
+                                <span class="row-label-text" id="connectedNetworkName">ZTE_2.4G_Cezx2G</span>
+                            </div>
+                            <div class="row-right wifi-row-icons">
+                                <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
+                                <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
+                                <img src="assets/info.png" alt="Info" class="wifi-meta-icon" id="wifiInfoBtn">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Networks Section -->
+                    <div class="subview-section-label">Networks</div>
+                    <div class="settings-card group-card" id="networksCardContainer">
+                        <div class="settings-row clickable" id="availableNetworkRow">
+                            <div class="row-left">
+                                <span class="row-label-text" id="scannedNetworkNameText">Scanning networks...</span>
+                            </div>
+                            <div class="row-right">
+                                <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
+                                <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
+                            </div>
+                        </div>
+                        <div class="card-divider indent"></div>
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <span class="row-label-text">Other...</span>
+                            </div>
+                            <div class="row-right">
+                                <span class="chevron-icon">›</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Wi-Fi Options -->
+                    <div class="settings-card group-card">
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <span class="row-label-text">Ask to Join Networks</span>
+                            </div>
+                            <div class="row-right">
+                                <span class="row-status-text">Notify</span>
+                                <span class="chevron-icon">›</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-footer-note">
+                        Known networks will be joined automatically. If no known networks are available, you will be notified of available networks.
+                    </div>
+
+                    <div class="settings-card group-card">
+                        <div class="settings-row clickable">
+                            <div class="row-left">
+                                <span class="row-label-text">Auto-Join Hotspot</span>
+                            </div>
+                            <div class="row-right">
+                                <span class="row-status-text">Ask to Join</span>
+                                <span class="chevron-icon">›</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-footer-note bottom-note">
+                        Allow this device to automatically discover nearby personal hotspots when no Wi-Fi network is available.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
+
     </div>
 
     <!-- Bottom Sheet Modal with Liquid Glass Effect -->
