@@ -352,6 +352,25 @@ input:checked + .slider:before { transform: translateX(20px); }
 .search-placeholder { flex-grow: 1; color: var(--text-sub); }
 
 
+/* Local Icon Styling & Perfect Container Matching */
+.search-icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.mic-icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 0.7;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+
 /* Sheet Overlay */
 .sheet-overlay {
     position: absolute;
