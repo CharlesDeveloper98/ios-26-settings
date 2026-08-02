@@ -729,17 +729,19 @@
 
 
 
-                <!-- Sub-Page View: Wi-Fi -->
+            
+                    
+        <!-- Sub-Page View: Wi-Fi -->
         <div class="settings-subview" id="wifiView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromWifi">
                     <span class="back-chevron">‹</span>
                 </div>
                 <h2 class="subview-title">Wi-Fi</h2>
-                <div class="subview-header-right-btn" id="wifiEditBtn">Edit</div>
+                <div class="liquid-edit-btn" id="wifiEditBtn">Edit</div>
             </div>
 
-            <div class="subview-content">
+            <div class="subview-content wifi-subview-content">
                 <!-- Hero Header Card -->
                 <div class="settings-card wifi-hero-card">
                     <div class="wifi-hero-icon-container">
@@ -770,7 +772,7 @@
 
                 <!-- Collapsible Content Wrapper (Animated on Toggle) -->
                 <div id="wifiDynamicContentWrapper" class="wifi-collapsible-wrapper">
-                    <!-- Connected Network Section -->
+                    <!-- Connected Network Section (Dynamically shown/hidden based on connection) -->
                     <div class="settings-card group-card" id="connectedNetworkCard">
                         <div class="settings-row clickable">
                             <div class="row-left wifi-connected-left">
@@ -780,7 +782,7 @@
                             <div class="row-right wifi-row-icons">
                                 <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
                                 <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
-                                <img src="assets/info.png" alt="Info" class="wifi-meta-icon" id="wifiInfoBtn">
+                                <div class="wifi-info-badge" id="wifiInfoBtn">i</div>
                             </div>
                         </div>
                     </div>
@@ -841,6 +843,7 @@
                 </div>
             </div>
         </div>
+
 
 
         
