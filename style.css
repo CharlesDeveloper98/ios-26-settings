@@ -352,22 +352,22 @@ input:checked + .slider:before { transform: translateX(20px); }
 .search-placeholder { flex-grow: 1; color: var(--text-sub); }
 
 
-/* Exact Sizing & Dynamic Theme Color Matching for PNG Icons */
+/* Perfectly Matched Search & Microphone Icon Sizing */
 .search-icon-img, 
 .mic-icon-img {
-    width: 17px;
-    height: 17px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
     flex-shrink: 0;
-    opacity: 0.65;
-    /* Automatically turns black icons white in Dark Theme */
-    filter: brightness(0) invert(0); 
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* Light Theme: match dark sub-text/icon color */
 [data-theme="light"] .search-icon-img,
 [data-theme="light"] .mic-icon-img {
     filter: brightness(0) saturate(100%) invert(35%) sepia(9%) saturate(417%) hue-rotate(169deg) brightness(92%) contrast(88%);
+    opacity: 0.65;
 }
 
 /* Dark Theme: match bright white/light-gray sub-text/icon color */
@@ -378,6 +378,7 @@ input:checked + .slider:before { transform: translateX(20px); }
     filter: brightness(0) invert(1);
     opacity: 0.6;
 }
+
 
 
 /* Sheet Overlay */
