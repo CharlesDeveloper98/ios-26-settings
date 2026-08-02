@@ -346,22 +346,22 @@ input:checked + .slider:before { transform: translateX(20px); }
 }
 
 
-/* --- Refined Liquid Glass Effect Engine --- */
+/* --- Perfect Liquid Glass Search Bar Engine --- */
 .liquidglass-wrapper {
     position: relative;
     overflow: hidden;
-    border-radius: 24px;
-    transition: all 0.4s ease;
+    border-radius: 28px;
+    transform: translateZ(0);
+    isolation: isolate;
 }
 
 .liquidglass-effect {
     position: absolute;
-    inset: -4px; /* Expands the filter container past the edges to eliminate rough clipping */
-    border-radius: inherit; /* Perfectly matches the 24px pill shape */
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    inset: 0;
+    border-radius: inherit;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
     filter: url(#glass-distortion);
-    overflow: hidden;
     z-index: 1;
     pointer-events: none;
 }
@@ -373,22 +373,28 @@ input:checked + .slider:before { transform: translateX(20px); }
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 0 16px;
-    gap: 10px;
+    padding: 0 18px;
+    gap: 12px;
 }
 
-/* --- Search Bar Container Styling --- */
 .search-bar-liquid {
-    background: var(--search-bg);
-    border: 0.5px solid var(--search-border);
-    border-radius: 24px;
-    height: 50px;
+    background: rgba(40, 40, 44, 0.45);
+    border: 0.5px solid rgba(255, 255, 255, 0.18);
+    border-radius: 28px;
+    height: 52px;
     width: 100%;
     color: var(--text-sub);
     font-size: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     pointer-events: auto;
 }
+
+[data-theme="light"] .search-bar-liquid {
+    background: rgba(255, 255, 255, 0.55);
+    border: 0.5px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
 
 
 
