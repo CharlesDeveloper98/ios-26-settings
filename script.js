@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
-    // --- Real System Wi-Fi State Engine ---
+    // --- Refined Real System Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -33,61 +33,90 @@ document.addEventListener("DOMContentLoaded", () => {
     const wifiDynamicContentWrapper = document.getElementById("wifiDynamicContentWrapper");
     const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
+    const scannedNetworkContainer = document.getElementById("scannedNetworkContainer");
     const scannedNetworkNameText = document.getElementById("scannedNetworkNameText");
+    const otherNetworkTrigger = document.getElementById("otherNetworkTrigger");
+    const extendedNetworksList = document.getElementById("extendedNetworksList");
 
     let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
-    
     if (wifiToggle) wifiToggle.checked = isWifiOn;
 
     function getRealSystemConnectionState() {
-        // Read actual browser network availability status
         const isOnline = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         
         if (!isOnline) {
-            return { connected: false, ssid: null };
+            return { connected: false, ssid: null, availableNetworks: [] };
         }
 
-        // If connection info is available, determine if wireless/cellular or explicit wifi label exists
+        // Check if device is running on cellular data
         if (connection) {
             const type = connection.type || connection.effectiveType;
-            if (type === 'cellular' || type === 'slow-2g' || type === '2g' || type === '3g') {
-                return { connected: false, ssid: null }; // Not on Wi-Fi
+            if (['cellular', 'slow-2g', '2g', '3g', '4g'].includes(type) && !connection.wifi) {
+                // If it's strictly a mobile network type without explicit wifi flag, treat as disconnected from Wi-Fi
+                if (type === 'cellular') {
+                    return { connected: false, ssid: null, availableNetworks: ["Guest_WiFi", "Office_Secure_WiFi"] };
+                }
             }
         }
 
-        // Fallback to active local session or default connected name if online
+        // Retrieve saved or detected SSID name
         let activeSsid = localStorage.getItem("ios26_connected_ssid");
-        if (activeSsid === undefined || activeSsid === null) {
-            activeSsid = "ZTE_2.4G_Cezx2G"; // Default active simulation
+        if (!activeSsid) {
+            activeSsid = "ZTE_2.4G_Cezx2G"; // Default simulated active local system connection
+            localStorage.setItem("ios26_connected_ssid", activeSsid);
         }
-        return { connected: true, ssid: activeSsid };
+
+        return { 
+            connected: true, 
+            ssid: activeSsid, 
+            availableNetworks: ["Guest_WiFi", "Home_5G_Network", "Public_Access_WiFi"] 
+        };
     }
 
     function updateWifiStateUI() {
+        const sysState = getRealSystemConnectionState();
+
         if (!isWifiOn) {
+            // Wi-Fi is turned OFF
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
+            if (connectedNetworkCard) {
+                connectedNetworkCard.style.display = "none";
+                connectedNetworkCard.classList.remove("animate-fade-in");
+            }
+            if (extendedNetworksList) extendedNetworksList.style.maxHeight = "0px";
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
+            // Wi-Fi is turned ON
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
-            const sysState = getRealSystemConnectionState();
-
             if (sysState.connected && sysState.ssid) {
+                // Connected state
                 if (mainWifiStatusText) mainWifiStatusText.textContent = sysState.ssid;
-                if (connectedNetworkCard) connectedNetworkCard.style.display = "block";
+                if (connectedNetworkCard) {
+                    connectedNetworkCard.style.display = "block";
+                    setTimeout(() => connectedNetworkCard.classList.add("animate-fade-in"), 10);
+                }
                 if (connectedNetworkName) connectedNetworkName.textContent = sysState.ssid;
             } else {
-                // When toggle is ON but no Wi-Fi network connection exists: hide the selected wifi section block
+                // Disconnected state while toggle is ON
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
-                if (connectedNetworkCard) connectedNetworkCard.style.display = "none";
+                if (connectedNetworkCard) {
+                    connectedNetworkCard.style.display = "none";
+                    connectedNetworkCard.classList.remove("animate-fade-in");
+                }
+            }
+
+            // Render available scanned networks dynamically
+            if (scannedNetworkNameText && sysState.availableNetworks.length > 0) {
+                scannedNetworkNameText.textContent = sysState.availableNetworks[0];
             }
         }
     }
 
-    // Listen to real network changes from the device OS/browser
+    // Listen to network status modifications
     window.addEventListener('online', updateWifiStateUI);
     window.addEventListener('offline', updateWifiStateUI);
 
@@ -98,16 +127,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Initialize state evaluation on load
-    updateWifiStateUI();
-
-    // Scan simulation for nearby networks list
-    if (scannedNetworkNameText) {
-        const sysState = getRealSystemConnectionState();
-        scannedNetworkNameText.textContent = sysState.ssid !== "Guest_WiFi" ? "Guest_WiFi" : "Office_Secure_WiFi";
+    // "Other..." expansion toggle with downward fluid animation
+    if (otherNetworkTrigger && extendedNetworksList) {
+        otherNetworkTrigger.addEventListener("click", () => {
+            const isExpanded = extendedNetworksList.classList.toggle("expanded");
+            if (isExpanded) {
+                extendedNetworksList.style.maxHeight = extendedNetworksList.scrollHeight + "px";
+            } else {
+                extendedNetworksList.style.maxHeight = "0px";
+            }
+        });
     }
 
-    // Wi-Fi Navigation Slide Bindings
+    updateWifiStateUI();
+
+    // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
         wifiNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -124,9 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    
-    
     // General View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
@@ -224,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderActivityList();
 
-    // Precise Battery Tracking Engine (iOS 26 Style - Fixed Unplug Logic)
+    // Precise Battery Tracking Engine
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
             let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
@@ -285,7 +316,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             battery.addEventListener('levelchange', updateBatteryUI);
-
             updateBatteryUI();
             setInterval(updateBatteryUI, 30000);
         });
@@ -297,7 +327,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
-
     const htmlElement = document.documentElement;
 
     function setTheme(theme) {
@@ -383,9 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (boldTextToggle) {
         boldTextToggle.checked = savedBoldText;
-        if (savedBoldText) {
-            htmlElement.classList.add("bold-text-enabled");
-        }
+        if (savedBoldText) htmlElement.classList.add("bold-text-enabled");
 
         boldTextToggle.addEventListener("change", () => {
             const isBold = boldTextToggle.checked;
@@ -398,7 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Sub-page sliding navigation: General
+    // Sub-page sliding navigations
     if (generalNav && generalView && backToMainFromGeneral) {
         generalNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -415,7 +442,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Sub-page sliding navigation: Display & Brightness
     if (displayBrightnessNav && displayBrightnessView && backToMainSettings) {
         displayBrightnessNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -432,7 +458,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Sub-page sliding navigation: Battery
     if (batteryNav && batteryView && backToMainFromBattery) {
         batteryNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -455,22 +480,17 @@ document.addEventListener("DOMContentLoaded", () => {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
-    // Setup Flow Popup Logic (Loops until checkmark is clicked)
+    // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
     if (!isSetupFinished && sheetOverlay) {
-        setTimeout(() => {
-            openSheet();
-        }, 400);
+        setTimeout(() => openSheet(), 400);
     }
 
     function openSheet() {
         if (!sheetOverlay) return;
         sheetOverlay.classList.add("active");
         document.body.style.overflow = "hidden";
-        
-        requestAnimationFrame(() => {
-            goToPage(1);
-        });
+        requestAnimationFrame(() => goToPage(1));
     }
 
     function closeSheet() {
@@ -504,11 +524,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (sheetTitle) {
-            if (pageNumber === 1) {
-                sheetTitle.textContent = "Settings Setup";
-            } else if (pageNumber === 2) {
-                sheetTitle.textContent = "System Personalization";
-            } else if (pageNumber === 3) {
+            if (pageNumber === 1) sheetTitle.textContent = "Settings Setup";
+            else if (pageNumber === 2) sheetTitle.textContent = "System Personalization";
+            else if (pageNumber === 3) {
                 sheetTitle.textContent = "Profile Setup";
                 validateInputs();
             }
