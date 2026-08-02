@@ -44,53 +44,52 @@
 
                 <!-- Group 1: Connectivity & System -->
                 <div class="settings-card group-card">
-    <div class="settings-row">
-        <div class="row-left">
-            <div class="setting-icon orange">
-                <img src="assets/airplane.png" alt="Airplane Mode">
-            </div>
-            <span class="row-label-text">Airplane Mode</span>
-        </div>    <div class="row-right">
-        <label class="ios-switch">
-            <input type="checkbox">
-            <span class="slider"></span>
-        </label>
-    </div>
-</div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <div class="setting-icon orange">
+                                <img src="assets/airplane.png" alt="Airplane Mode">
+                            </div>
+                            <span class="row-label-text">Airplane Mode</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
 
-<div class="card-divider indent"></div>
+                    <div class="card-divider indent"></div>
 
-<div class="settings-row clickable">
-    <div class="row-left">
-        <div class="setting-icon blue">
-            <img src="assets/wifi.png" alt="Wi-Fi">
-        </div>
-        <span class="row-label-text">Wi-Fi</span>
-    </div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue">
+                                <img src="assets/wifi.png" alt="Wi-Fi">
+                            </div>
+                            <span class="row-label-text">Wi-Fi</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Not Connected</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
 
-    <div class="row-right">
-        <span class="row-status-text">Not Connected</span>
-        <span class="chevron-icon">›</span>
-    </div>
-</div>
+                    <div class="card-divider indent"></div>
 
-<div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue">
+                                <img src="assets/bluetooth.png" alt="Bluetooth">
+                            </div>
+                            <span class="row-label-text">Bluetooth</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">On</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
 
-<div class="settings-row clickable">
-    <div class="row-left">
-        <div class="setting-icon blue">
-            <img src="assets/bluetooth.png" alt="Bluetooth">
-        </div>
-        <span class="row-label-text">Bluetooth</span>
-    </div>
-
-    <div class="row-right">
-        <span class="row-status-text">On</span>
-        <span class="chevron-icon">›</span>
-    </div>
-</div>
-
-         <div class="card-divider indent"></div>
+                    <div class="card-divider indent"></div>
                     <div class="settings-row clickable">
                         <div class="row-left">
                             <div class="setting-icon green">
@@ -117,8 +116,7 @@
                     </div>
                     <div class="card-divider indent"></div>
 
-                    
-                     <!-- Tappable Battery Nav -->
+                    <!-- Tappable Battery Nav -->
                     <div class="settings-row clickable" id="batteryNav">
                         <div class="row-left">
                             <div class="setting-icon green">
@@ -131,12 +129,12 @@
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
-                    
                 </div>
 
                 <!-- Group 2: General & Utilities -->
                 <div class="settings-card group-card">
-                    <div class="settings-row clickable">
+                    <!-- Tappable General Row added back -->
+                    <div class="settings-row clickable" id="generalNav">
                         <div class="row-left"><div class="setting-icon grey-icon"><img src="assets/general.png" alt="General"></div><span class="row-label-text">General</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
@@ -252,50 +250,39 @@
                     </div>
                 </div>
 
-
-
-<!-- Group 7: Apps -->
+                <!-- Group 7: Apps -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left"><div class="setting-icon green"><img src="assets/apps.png" alt="Apps"></div><span class="row-label-text">Apps</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
-                   
                 </div>
-
-               
             </div>
       
-                    
-
-           <!-- Bottom Liquid Glass Search Bar Container -->
-<div class="bottom-search-container">
-    <div class="liquidglass-wrapper search-bar-liquid">
-        <div class="liquidglass-effect"></div>
-        <div class="liquidglass-content">
-            <img src="assets/search.png" alt="Search" class="search-icon-img">
-            <span class="search-placeholder">Search</span>
-            <img src="assets/microphone.png" alt="Microphone" class="mic-icon-img">
+            <!-- Bottom Liquid Glass Search Bar Container -->
+            <div class="bottom-search-container">
+                <div class="liquidglass-wrapper search-bar-liquid">
+                    <div class="liquidglass-effect"></div>
+                    <div class="liquidglass-content">
+                        <img src="assets/search.png" alt="Search" class="search-icon-img">
+                        <span class="search-placeholder">Search</span>
+                        <img src="assets/microphone.png" alt="Microphone" class="mic-icon-img">
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
-</div>
 
-<!-- SVG Distortion Filter for Liquid Glass Effect -->
-<svg style="display: none; width: 0; height: 0;">
-    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="2" result="turbulence" />
-        <feGaussianBlur in="turbulence" stdDeviation="2" result="softMap" />
-        <feDisplacementMap in="SourceGraphic" in2="softMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="output" />
-    </filter>
-</svg>
-
-
-
+        <!-- SVG Distortion Filter for Liquid Glass Effect -->
+        <svg style="display: none; width: 0; height: 0;">
+            <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="2" result="turbulence" />
+                <feGaussianBlur in="turbulence" stdDeviation="2" result="softMap" />
+                <feDisplacementMap in="SourceGraphic" in2="softMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="output" />
+            </filter>
+        </svg>
 
         <!-- Sub-Page View: Display & Brightness -->
         <div class="settings-subview" id="displayBrightnessView">
-            <!-- Navigation Header -->
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainSettings">
                     <span class="back-chevron">‹</span>
@@ -303,14 +290,11 @@
                 <h2 class="subview-title">Display & Brightness</h2>
             </div>
 
-            <!-- Subview Scrollable Content -->
             <div class="subview-content">
-                
                 <!-- Section 1: Appearance -->
                 <div class="subview-section-label">Appearance</div>
                 <div class="settings-card appearance-card">
                     <div class="appearance-options">
-                        <!-- Light Mode Option -->
                         <div class="appearance-option" id="lightModeOption">
                             <div class="preview-screen light-preview">
                                 <div class="preview-notch"></div>
@@ -321,7 +305,6 @@
                             <span class="appearance-text">Light</span>
                             <div class="radio-check"></div>
                         </div>
-                        <!-- Dark Mode Option -->
                         <div class="appearance-option" id="darkModeOption">
                             <div class="preview-screen dark-preview">
                                 <div class="preview-notch"></div>
@@ -358,7 +341,7 @@
                         </div>
                     </div>
                     <div class="card-divider indent"></div>
-                                        <div class="settings-row">
+                    <div class="settings-row">
                         <div class="row-left">
                             <span class="row-label-text">Bold Text</span>
                         </div>
@@ -368,7 +351,7 @@
                                 <span class="slider"></span>
                             </label>
                         </div>
-                                        </div>
+                    </div>
                 </div>
 
                 <!-- Section 3: Brightness & True Tone -->
@@ -465,11 +448,10 @@
                 <div class="settings-footer-note bottom-note">
                     Choose a view for iPhone. Larger Text shows larger controls. Default shows more content.
                 </div>
-
             </div>
         </div>
 
-        <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
+        <!-- Sub-Page View: Battery -->
         <div class="settings-subview" id="batteryView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromBattery">
@@ -479,7 +461,6 @@
             </div>
 
             <div class="subview-content">
-                <!-- Top Main Percentage Card -->
                 <div class="settings-card battery-top-card">
                     <div class="battery-main-header">
                         <span class="battery-percent-value" id="batteryPercentText">88%</span>
@@ -491,11 +472,8 @@
                     </div>
                 </div>
 
-                <!-- Single Master Grouped Card Container for Daily Usage + Activity + View All -->
                 <div class="subview-section-label">Daily Usage</div>
                 <div class="settings-card group-card master-battery-card">
-                    
-                    <!-- Daily Usage Content Block -->
                     <div class="battery-usage-inner-block">
                         <div class="battery-usage-header-text" id="batteryUsageDesc">
                             You're using less battery today than you usually do by 7:16 PM.
@@ -511,7 +489,6 @@
                             </div>
                         </div>
 
-                        <!-- Usage Bars Chart Simulation -->
                         <div class="battery-chart-container">
                             <div class="average-line"><span>Average</span></div>
                             <div class="chart-bars-flex">
@@ -533,24 +510,17 @@
 
                     <div class="card-divider full-divider"></div>
 
-                    <!-- App and System Activity Header & Dynamic Container -->
                     <div class="embedded-section-title">App and System Activity</div>
-                    <div id="appActivityListContainer">
-                        <!-- Dynamically populated and shuffled by JavaScript -->
-                    </div>
-
+                    <div id="appActivityListContainer"></div>
 
                     <div class="card-divider full-divider"></div>
 
-                    <!-- View All Battery Usage Row inside same container -->
                     <div class="settings-row clickable view-all-row-embedded">
                         <div class="row-left"><span class="row-label-text blue-text">View All Battery Usage</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
-
                 </div>
 
-                <!-- Bottom Battery Health Options Grouped Card -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left"><span class="row-label-text">Battery Health</span></div>
@@ -590,7 +560,6 @@
             </div>
 
             <div class="subview-content">
-                <!-- General Hero Banner Card with Local assets/settings.png Icon -->
                 <div class="settings-card general-hero-card">
                     <div class="general-hero-icon-container">
                         <img src="assets/settings.png" alt="General Settings">
@@ -601,7 +570,6 @@
                     </div>
                 </div>
 
-                <!-- Group 1: Device Information Options -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -628,7 +596,6 @@
                     </div>
                 </div>
 
-                <!-- Group 2: AppleCare & Warranty -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -639,7 +606,6 @@
                     </div>
                 </div>
 
-                <!-- Group 3: Connectivity & Sharing -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -682,7 +648,6 @@
                     </div>
                 </div>
 
-                <!-- Group 4: System Preferences & Tools -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -741,7 +706,6 @@
                     </div>
                 </div>
 
-                <!-- Group 5: TV Provider -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -751,7 +715,6 @@
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
                 </div>
-
             </div>
         </div>
 
