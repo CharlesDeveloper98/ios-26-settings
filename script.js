@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderActivityList();
 
-    // Precise Battery Tracking Engine (iOS 26 Style - Fixed Unplug Logic)
+    // Precise Battery Tracking Engine
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
             let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
@@ -173,7 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             battery.addEventListener('levelchange', updateBatteryUI);
-
             updateBatteryUI();
             setInterval(updateBatteryUI, 30000);
         });
@@ -185,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
-
     const htmlElement = document.documentElement;
 
     function setTheme(theme) {
@@ -257,30 +255,27 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isAutomatic) setTheme(getSystemTheme());
     });
 
+    // --- Sticky Header Scroll Observer Fix ---
+    const mainHeader = document.querySelector('.settings-large-header');
+    const navBar = document.querySelector('.settings-nav-bar');
+    const settingsContainer = document.getElementById('settingsContainer');
 
-
-    const mainHeader = document.querySelector('.settings-large-header'); // Or your main title element
-const navBar = document.querySelector('.settings-nav-bar');
-
-if (mainHeader && navBar) {
-    const observer = new IntersectionObserver(
-        ([entry]) => {
-            // When the large header leaves the top view, show the sticky nav title
-            if (!entry.isIntersecting) {
-                navBar.classList.add('visible');
-            } else {
-                navBar.classList.remove('visible');
+    if (mainHeader && navBar && settingsContainer) {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) {
+                    navBar.classList.add('visible');
+                } else {
+                    navBar.classList.remove('visible');
+                }
+            },
+            {
+                root: settingsContainer,
+                threshold: 0
             }
-        },
-        { threshold: 0 }
-    );
-
-    observer.observe(mainHeader);
-}
-
-
-
-    
+        );
+        observer.observe(mainHeader);
+    }
 
     // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
@@ -337,7 +332,7 @@ if (mainHeader && navBar) {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
-    // Setup Flow Popup Logic (Loops until checkmark is clicked)
+    // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
     if (!isSetupFinished) {
         setTimeout(() => {
@@ -345,33 +340,29 @@ if (mainHeader && navBar) {
         }, 400);
     }
 
-        function openSheet() {
+    function openSheet() {
         sheetOverlay.classList.add("active");
         document.body.style.overflow = "hidden";
-        
-        // Force layout tick to ensure smooth liquid glass bubble slide-up entrance
         requestAnimationFrame(() => {
             goToPage(1);
         });
     }
-
 
     function closeSheet() {
         sheetOverlay.classList.remove("active");
         document.body.style.overflow = "";
     }
 
-           function goToPage(pageNumber) {
+    function goToPage(pageNumber) {
         const pages = [page1, page2, page3];
         const targetPage = pages[pageNumber - 1];
-        const activePage = document.querySelector('.setup-page.active');
+        const activePage = document.querySelector('.sheet-page.active');
         
         if (activePage === targetPage) return;
 
         const activePageNumber = activePage ? parseInt(activePage.id.replace('page', '')) : 1;
         const isForward = pageNumber > activePageNumber;
 
-        // Use requestAnimationFrame to guarantee silky-smooth hardware acceleration sync
         requestAnimationFrame(() => {
             pages.forEach(p => {
                 p.classList.remove("active", "slide-out-left", "slide-in-right", "slide-out-right", "slide-in-left");
@@ -394,8 +385,6 @@ if (mainHeader && navBar) {
             validateInputs();
         }
     }
-
-
 
     function validateInputs() {
         const fName = firstNameInput.value.trim();
@@ -433,12 +422,9 @@ if (mainHeader && navBar) {
 
         localStorage.setItem("ios26_firstname", fName);
         localStorage.setItem("ios26_lastname", lName);
-        
-        // Mark setup as completely finished so popup stops appearing
         localStorage.setItem("ios26_setup_completed", "true");
 
         displayProfileName.textContent = `${fName} ${lName}`.trim();
-
         closeSheet();
     });
 });
