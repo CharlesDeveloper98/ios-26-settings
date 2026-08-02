@@ -666,3 +666,47 @@ html.bold-text-enabled .subview-title {
 }
 
 
+/* General Hero Card Top Layout (100% Accurate iOS Style) */
+.general-hero-card {
+    padding: 28px 20px 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--bg-card);
+    border-radius: 20px;
+    margin-bottom: 4px;
+}
+
+.general-hero-icon-container {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.general-hero-icon-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.general-hero-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+}
+
+.general-hero-subtitle {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-sub);
+    max-width: 330px;
+}
+
