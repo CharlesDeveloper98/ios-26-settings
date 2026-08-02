@@ -24,9 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
-
-
-        // --- Wi-Fi Sub-System & State Engine ---
+    // --- Real System Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -37,11 +35,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const connectedNetworkName = document.getElementById("connectedNetworkName");
     const scannedNetworkNameText = document.getElementById("scannedNetworkNameText");
 
-    // Load saved Wi-Fi state or default to ON with sample network
     let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
-    let connectedSsid = localStorage.getItem("ios26_connected_ssid") || "ZTE_2.4G_Cezx2G";
-
+    
     if (wifiToggle) wifiToggle.checked = isWifiOn;
+
+    function getRealSystemConnectionState() {
+        // Read actual browser network availability status
+        const isOnline = navigator.onLine;
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        
+        if (!isOnline) {
+            return { connected: false, ssid: null };
+        }
+
+        // If connection info is available, determine if wireless/cellular or explicit wifi label exists
+        if (connection) {
+            const type = connection.type || connection.effectiveType;
+            if (type === 'cellular' || type === 'slow-2g' || type === '2g' || type === '3g') {
+                return { connected: false, ssid: null }; // Not on Wi-Fi
+            }
+        }
+
+        // Fallback to active local session or default connected name if online
+        let activeSsid = localStorage.getItem("ios26_connected_ssid");
+        if (activeSsid === undefined || activeSsid === null) {
+            activeSsid = "ZTE_2.4G_Cezx2G"; // Default active simulation
+        }
+        return { connected: true, ssid: activeSsid };
+    }
 
     function updateWifiStateUI() {
         if (!isWifiOn) {
@@ -52,37 +73,23 @@ document.addEventListener("DOMContentLoaded", () => {
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
-            if (connectedSsid && connectedSsid !== "None") {
-                if (mainWifiStatusText) mainWifiStatusText.textContent = connectedSsid;
+            const sysState = getRealSystemConnectionState();
+
+            if (sysState.connected && sysState.ssid) {
+                if (mainWifiStatusText) mainWifiStatusText.textContent = sysState.ssid;
                 if (connectedNetworkCard) connectedNetworkCard.style.display = "block";
-                if (connectedNetworkName) connectedNetworkName.textContent = connectedSsid;
+                if (connectedNetworkName) connectedNetworkName.textContent = sysState.ssid;
             } else {
+                // When toggle is ON but no Wi-Fi network connection exists: hide the selected wifi section block
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
                 if (connectedNetworkCard) connectedNetworkCard.style.display = "none";
             }
         }
     }
 
-    // Read real network environment if available via Network Information API
-    if (navigator.connection || navigator.wifi) {
-        // Fallback simulation mirroring real system connection attributes if available
-        setTimeout(() => {
-            if (isWifiOn && navigator.connection) {
-                // If connection type is wifi/ethernet or general active connection
-                const type = navigator.connection.effectiveType;
-                if (type && type.includes('wifi')) {
-                    connectedSsid = "Home_Network_5G";
-                    updateWifiStateUI();
-                }
-            }
-        }, 1000);
-    }
-
-    // Dynamic Network Scans simulation for the "Networks" section
-    if (scannedNetworkNameText) {
-        // Detect available local connection names or show nearby scan results
-        scannedNetworkNameText.textContent = connectedSsid !== "Guest_WiFi" ? "Guest_WiFi" : "Office_Secure_WiFi";
-    }
+    // Listen to real network changes from the device OS/browser
+    window.addEventListener('online', updateWifiStateUI);
+    window.addEventListener('offline', updateWifiStateUI);
 
     if (wifiToggle) {
         wifiToggle.addEventListener("change", () => {
@@ -91,9 +98,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Initialize state evaluation on load
     updateWifiStateUI();
 
-    // Wi-Fi Subview Navigation Slide Bindings
+    // Scan simulation for nearby networks list
+    if (scannedNetworkNameText) {
+        const sysState = getRealSystemConnectionState();
+        scannedNetworkNameText.textContent = sysState.ssid !== "Guest_WiFi" ? "Guest_WiFi" : "Office_Secure_WiFi";
+    }
+
+    // Wi-Fi Navigation Slide Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
         wifiNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -109,6 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+});
+
 
     
     
