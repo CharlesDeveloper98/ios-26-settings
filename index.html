@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                     <!-- Group 1: Connectivity & System -->
+      <!-- Group 1: Connectivity & System -->
                 <div class="settings-card group-card">
     <div class="settings-row">
         <div class="row-left">
@@ -264,13 +264,27 @@
 
            <!-- Bottom Liquid Glass Search Bar Container -->
 <div class="bottom-search-container">
-    <div class="search-bar-liquid">
-        <img src="assets/search.png" alt="Search" class="search-icon-img">
-        <span class="search-placeholder">Search</span>
-        <img src="assets/microphone.png" alt="Microphone" class="mic-icon-img">
+    <div class="liquidglass-wrapper search-bar-liquid">
+        <div class="liquidglass-effect"></div>
+        <div class="liquidglass-content">
+            <img src="assets/search.png" alt="Search" class="search-icon-img">
+            <span class="search-placeholder">Search</span>
+            <img src="assets/microphone.png" alt="Microphone" class="mic-icon-img">
+        </div>
+    </div>
     </div>
 </div>
-        </div>
+
+<!-- SVG Distortion Filter for Liquid Glass Effect -->
+<svg style="display: none; width: 0; height: 0;">
+    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="2" result="turbulence" />
+        <feGaussianBlur in="turbulence" stdDeviation="2" result="softMap" />
+        <feDisplacementMap in="SourceGraphic" in2="softMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="output" />
+    </filter>
+</svg>
+
+
 
 
         <!-- Sub-Page View: Display & Brightness -->
@@ -661,4 +675,6 @@
     <script src="script.js"></script>
 </body>
 </html>
-                  
+
+                            
+        
