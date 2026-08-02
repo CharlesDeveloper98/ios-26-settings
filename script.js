@@ -257,6 +257,31 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isAutomatic) setTheme(getSystemTheme());
     });
 
+
+
+    const mainHeader = document.querySelector('.settings-large-header'); // Or your main title element
+const navBar = document.querySelector('.settings-nav-bar');
+
+if (mainHeader && navBar) {
+    const observer = new IntersectionObserver(
+        ([entry]) => {
+            // When the large header leaves the top view, show the sticky nav title
+            if (!entry.isIntersecting) {
+                navBar.classList.add('visible');
+            } else {
+                navBar.classList.remove('visible');
+            }
+        },
+        { threshold: 0 }
+    );
+
+    observer.observe(mainHeader);
+}
+
+
+
+    
+
     // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
     const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
