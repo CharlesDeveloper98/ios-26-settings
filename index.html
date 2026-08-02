@@ -22,8 +22,8 @@
         
         <!-- Main View: Settings Home -->
         <div class="settings-view active" id="mainSettingsView">
-            <div class="settings-container">
-                <h1 class="main-title">Settings</h1>
+            <div class="settings-container" id="settingsContainer">
+                <h1 class="main-title settings-large-header">Settings</h1>
 
                 <!-- Apple Account Profile Card -->
                 <div class="settings-card profile-card-link">
@@ -51,53 +51,52 @@
 
                 <!-- Group 1: Connectivity & System -->
                 <div class="settings-card group-card">
-    <div class="settings-row">
-        <div class="row-left">
-            <div class="setting-icon orange">
-                <img src="assets/airplane.png" alt="Airplane Mode">
-            </div>
-            <span class="row-label-text">Airplane Mode</span>
-        </div>    <div class="row-right">
-        <label class="ios-switch">
-            <input type="checkbox">
-            <span class="slider"></span>
-        </label>
-    </div>
-</div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <div class="setting-icon orange">
+                                <img src="assets/airplane.png" alt="Airplane Mode">
+                            </div>
+                            <span class="row-label-text">Airplane Mode</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
 
-<div class="card-divider indent"></div>
+                    <div class="card-divider indent"></div>
 
-<div class="settings-row clickable">
-    <div class="row-left">
-        <div class="setting-icon blue">
-            <img src="assets/wifi.png" alt="Wi-Fi">
-        </div>
-        <span class="row-label-text">Wi-Fi</span>
-    </div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue">
+                                <img src="assets/wifi.png" alt="Wi-Fi">
+                            </div>
+                            <span class="row-label-text">Wi-Fi</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Not Connected</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
 
-    <div class="row-right">
-        <span class="row-status-text">Not Connected</span>
-        <span class="chevron-icon">›</span>
-    </div>
-</div>
+                    <div class="card-divider indent"></div>
 
-<div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue">
+                                <img src="assets/bluetooth.png" alt="Bluetooth">
+                            </div>
+                            <span class="row-label-text">Bluetooth</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">On</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
 
-<div class="settings-row clickable">
-    <div class="row-left">
-        <div class="setting-icon blue">
-            <img src="assets/bluetooth.png" alt="Bluetooth">
-        </div>
-        <span class="row-label-text">Bluetooth</span>
-    </div>
-
-    <div class="row-right">
-        <span class="row-status-text">On</span>
-        <span class="chevron-icon">›</span>
-    </div>
-</div>
-
-         <div class="card-divider indent"></div>
+                    <div class="card-divider indent"></div>
                     <div class="settings-row clickable">
                         <div class="row-left">
                             <div class="setting-icon green">
@@ -124,8 +123,7 @@
                     </div>
                     <div class="card-divider indent"></div>
 
-                    
-                     <!-- Tappable Battery Nav -->
+                    <!-- Tappable Battery Nav -->
                     <div class="settings-row clickable" id="batteryNav">
                         <div class="row-left">
                             <div class="setting-icon green">
@@ -138,7 +136,6 @@
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
-                    
                 </div>
 
                 <!-- Group 2: General & Utilities -->
@@ -173,7 +170,6 @@
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
                     <div class="card-divider indent"></div>
-                    <!-- Tappable Display & Brightness Row -->
                     <div class="settings-row clickable" id="displayBrightnessNav">
                         <div class="row-left"><div class="setting-icon blue"><img src="assets/display.png" alt="Display & Brightness"></div><span class="row-label-text">Display & Brightness</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
@@ -260,36 +256,30 @@
                 </div>
             </div>
       
-                    
-
-           <!-- Bottom Liquid Glass Search Bar Container -->
-<div class="bottom-search-container">
-    <div class="liquidglass-wrapper search-bar-liquid">
-        <div class="liquidglass-effect"></div>
-        <div class="liquidglass-content">
-            <img src="assets/search.png" alt="Search" class="search-icon-img">
-            <span class="search-placeholder">Search</span>
-            <img src="assets/microphone.png" alt="Microphone" class="mic-icon-img">
+            <!-- Bottom Liquid Glass Search Bar Container -->
+            <div class="bottom-search-container">
+                <div class="liquidglass-wrapper search-bar-liquid">
+                    <div class="liquidglass-effect"></div>
+                    <div class="liquidglass-content">
+                        <img src="assets/search.png" alt="Search" class="search-icon-img">
+                        <span class="search-placeholder">Search</span>
+                        <img src="assets/microphone.png" alt="Microphone" class="mic-icon-img">
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
-</div>
 
-<!-- SVG Distortion Filter for Liquid Glass Effect -->
-<svg style="display: none; width: 0; height: 0;">
-    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="2" result="turbulence" />
-        <feGaussianBlur in="turbulence" stdDeviation="2" result="softMap" />
-        <feDisplacementMap in="SourceGraphic" in2="softMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="output" />
-    </filter>
-</svg>
-
-
-
+        <!-- SVG Distortion Filter for Liquid Glass Effect -->
+        <svg style="display: none; width: 0; height: 0;">
+            <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="2" result="turbulence" />
+                <feGaussianBlur in="turbulence" stdDeviation="2" result="softMap" />
+                <feDisplacementMap in="SourceGraphic" in2="softMap" scale="8" xChannelSelector="R" yChannelSelector="G" result="output" />
+            </filter>
+        </svg>
 
         <!-- Sub-Page View: Display & Brightness -->
         <div class="settings-subview" id="displayBrightnessView">
-            <!-- Navigation Header -->
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainSettings">
                     <span class="back-chevron">‹</span>
@@ -297,14 +287,10 @@
                 <h2 class="subview-title">Display & Brightness</h2>
             </div>
 
-            <!-- Subview Scrollable Content -->
             <div class="subview-content">
-                
-                <!-- Section 1: Appearance -->
                 <div class="subview-section-label">Appearance</div>
                 <div class="settings-card appearance-card">
                     <div class="appearance-options">
-                        <!-- Light Mode Option -->
                         <div class="appearance-option" id="lightModeOption">
                             <div class="preview-screen light-preview">
                                 <div class="preview-notch"></div>
@@ -315,7 +301,6 @@
                             <span class="appearance-text">Light</span>
                             <div class="radio-check"></div>
                         </div>
-                        <!-- Dark Mode Option -->
                         <div class="appearance-option" id="darkModeOption">
                             <div class="preview-screen dark-preview">
                                 <div class="preview-notch"></div>
@@ -329,9 +314,7 @@
                     </div>
                     <div class="card-divider"></div>
                     <div class="settings-row">
-                        <div class="row-left">
-                            <span class="row-label-text">Automatic</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">Automatic</span></div>
                         <div class="row-right">
                             <label class="ios-switch">
                                 <input type="checkbox" id="automaticToggle">
@@ -341,31 +324,23 @@
                     </div>
                 </div>
 
-                <!-- Section 2: Text Controls -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
-                        <div class="row-left">
-                            <span class="row-label-text">Text Size</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="chevron-icon">›</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">Text Size</span></div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
                     <div class="card-divider indent"></div>
-                                        <div class="settings-row">
-                        <div class="row-left">
-                            <span class="row-label-text">Bold Text</span>
-                        </div>
+                    <div class="settings-row">
+                        <div class="row-left"><span class="row-label-text">Bold Text</span></div>
                         <div class="row-right">
                             <label class="ios-switch">
                                 <input type="checkbox" id="boldTextToggle">
                                 <span class="slider"></span>
                             </label>
                         </div>
-                                        </div>
+                    </div>
                 </div>
 
-                <!-- Section 3: Brightness & True Tone -->
                 <div class="subview-section-label">Brightness</div>
                 <div class="settings-card group-card">
                     <div class="brightness-slider-row">
@@ -377,9 +352,7 @@
                     </div>
                     <div class="card-divider indent"></div>
                     <div class="settings-row">
-                        <div class="row-left">
-                            <span class="row-label-text">True Tone</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">True Tone</span></div>
                         <div class="row-right">
                             <label class="ios-switch">
                                 <input type="checkbox" checked>
@@ -392,52 +365,31 @@
                     Automatically adapt iPhone display based on ambient lighting conditions to make colors appear consistent in different environments.
                 </div>
 
-                <!-- Section 4: Additional Display Settings -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
-                        <div class="row-left">
-                            <span class="row-label-text">Night Shift</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="row-status-text">Off</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">Night Shift</span></div>
+                        <div class="row-right"><span class="row-status-text">Off</span><span class="chevron-icon">›</span></div>
                     </div>
                 </div>
 
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
-                        <div class="row-left">
-                            <span class="row-label-text">Auto-Lock</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="row-status-text">Never</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">Auto-Lock</span></div>
+                        <div class="row-right"><span class="row-status-text">Never</span><span class="chevron-icon">›</span></div>
                     </div>
                     <div class="card-divider indent"></div>
                     <div class="settings-row">
-                        <div class="row-left">
-                            <span class="row-label-text">Raise to Wake</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">Raise to Wake</span></div>
                         <div class="row-right">
-                            <label class="ios-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
+                            <label class="ios-switch"><input type="checkbox" checked><span class="slider"></span></label>
                         </div>
                     </div>
                 </div>
 
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
-                        <div class="row-left">
-                            <span class="row-label-text">Always On Display</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="row-status-text">On</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">Always On Display</span></div>
+                        <div class="row-right"><span class="row-status-text">On</span><span class="chevron-icon">›</span></div>
                     </div>
                 </div>
                 <div class="settings-footer-note">
@@ -447,32 +399,17 @@
                 <div class="subview-section-label">Display</div>
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
-                        <div class="row-left">
-                            <span class="row-label-text">Display Zoom</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="row-status-text">Default</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
+                        <div class="row-left"><span class="row-label-text">Display Zoom</span></div>
+                        <div class="row-right"><span class="row-status-text">Default</span><span class="chevron-icon">›</span></div>
                     </div>
                 </div>
                 <div class="settings-footer-note bottom-note">
                     Choose a view for iPhone. Larger Text shows larger controls. Default shows more content.
                 </div>
-
             </div>
         </div>
 
-    </div>
-
-
-    </div>
-
-       
-          
-                   
-                            
-           <!-- Sub-Page View: Battery (100% Accurate iOS Layout) -->
+        <!-- Sub-Page View: Battery -->
         <div class="settings-subview" id="batteryView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromBattery">
@@ -482,7 +419,6 @@
             </div>
 
             <div class="subview-content">
-                <!-- Top Main Percentage Card -->
                 <div class="settings-card battery-top-card">
                     <div class="battery-main-header">
                         <span class="battery-percent-value" id="batteryPercentText">88%</span>
@@ -494,11 +430,8 @@
                     </div>
                 </div>
 
-                <!-- Single Master Grouped Card Container for Daily Usage + Activity + View All -->
                 <div class="subview-section-label">Daily Usage</div>
                 <div class="settings-card group-card master-battery-card">
-                    
-                    <!-- Daily Usage Content Block -->
                     <div class="battery-usage-inner-block">
                         <div class="battery-usage-header-text" id="batteryUsageDesc">
                             You're using less battery today than you usually do by 7:16 PM.
@@ -514,7 +447,6 @@
                             </div>
                         </div>
 
-                        <!-- Usage Bars Chart Simulation -->
                         <div class="battery-chart-container">
                             <div class="average-line"><span>Average</span></div>
                             <div class="chart-bars-flex">
@@ -536,31 +468,21 @@
 
                     <div class="card-divider full-divider"></div>
 
-                                        <!-- App and System Activity Header & Dynamic Container -->
                     <div class="embedded-section-title">App and System Activity</div>
-                    <div id="appActivityListContainer">
-                        <!-- Dynamically populated and shuffled by JavaScript -->
-                    </div>
-
+                    <div id="appActivityListContainer"></div>
 
                     <div class="card-divider full-divider"></div>
 
-                    <!-- View All Battery Usage Row inside same container -->
                     <div class="settings-row clickable view-all-row-embedded">
                         <div class="row-left"><span class="row-label-text blue-text">View All Battery Usage</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
-
                 </div>
 
-                <!-- Bottom Battery Health Options Grouped Card -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left"><span class="row-label-text">Battery Health</span></div>
-                        <div class="row-right">
-                            <span class="row-status-text">Normal</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
+                        <div class="row-right"><span class="row-status-text">Normal</span><span class="chevron-icon">›</span></div>
                     </div>
                     <div class="card-divider indent"></div>
                     <div class="settings-row clickable">
@@ -583,10 +505,7 @@
             </div>
         </div>
 
-                               
-               
-    
-    
+    </div>
 
     <!-- Bottom Sheet Modal with Liquid Glass Effect -->
     <div class="sheet-overlay" id="sheetOverlay">
@@ -601,37 +520,27 @@
                 <div class="sheet-page active" id="page1">
                     <div class="sheet-body text-center">
                         <div class="app-icon-container">
-                            <div class="ios-settings-icon">
-                                <span>⚙️</span>
-                            </div>
+                            <div class="ios-settings-icon"><span>⚙️</span></div>
                         </div>
                         <h3 class="welcome-title">Welcome to iOS 26 Settings</h3>
                         <p class="welcome-subtitle">Experience the next generation of system configuration. Redesigned with advanced fluidity, intelligent customization, and premium design.</p>
                     </div>
                     <div class="sheet-footer right">
-                        <button class="liquid-glass-btn ios-blue" id="toPage2Btn">
-                            <span class="chevron">›</span>
-                        </button>
+                        <button class="liquid-glass-btn ios-blue" id="toPage2Btn"><span class="chevron">›</span></button>
                     </div>
                 </div>
 
                 <div class="sheet-page" id="page2">
                     <div class="sheet-body text-center">
                         <div class="app-icon-container">
-                            <div class="ios-settings-icon secondary-icon">
-                                <span>✨</span>
-                            </div>
+                            <div class="ios-settings-icon secondary-icon"><span>✨</span></div>
                         </div>
                         <h3 class="welcome-title">System Personalization</h3>
                         <p class="welcome-subtitle">Your device is now synchronized with iOS 26 frameworks. Configure your preferences and secure your environment seamlessly.</p>
                     </div>
                     <div class="sheet-footer split">
-                        <button class="liquid-glass-btn" id="toPage1Btn">
-                            <span class="chevron">‹</span>
-                        </button>
-                        <button class="liquid-glass-btn ios-blue" id="toPage3Btn">
-                            <span class="chevron">›</span>
-                        </button>
+                        <button class="liquid-glass-btn" id="toPage1Btn"><span class="chevron">‹</span></button>
+                        <button class="liquid-glass-btn ios-blue" id="toPage3Btn"><span class="chevron">›</span></button>
                     </div>
                 </div>
 
@@ -660,12 +569,8 @@
                     </div>
                     
                     <div class="sheet-footer split">
-                        <button class="liquid-glass-btn" id="toPage2BtnFrom3">
-                            <span class="chevron">‹</span>
-                        </button>
-                        <button class="liquid-glass-btn disabled" id="finishBtn">
-                            <span class="tick">✓</span>
-                        </button>
+                        <button class="liquid-glass-btn" id="toPage2BtnFrom3"><span class="chevron">‹</span></button>
+                        <button class="liquid-glass-btn disabled" id="finishBtn"><span class="tick">✓</span></button>
                     </div>
                 </div>
             </div>
