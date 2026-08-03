@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
-        // --- Refined Real System Wi-Fi State Engine (Zero Hardcoded SSID) ---
+        
+            // --- Real-Time iOS System Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -41,46 +42,32 @@ document.addEventListener("DOMContentLoaded", () => {
     let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
     if (wifiToggle) wifiToggle.checked = isWifiOn;
 
-    // Clear legacy hardcoded fallback if it exists in local storage
+    // Clear legacy names
     if (localStorage.getItem("ios26_connected_ssid") === "ZTE_2.4G_Cezx2G") {
         localStorage.removeItem("ios26_connected_ssid");
     }
 
-    function getRealSystemConnectionState() {
-        const isOnline = navigator.onLine;
+    function getLiveWifiState() {
+        const online = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         
-        if (!isOnline) {
-            return { connected: false, ssid: null, availableNetworks: [] };
+        if (!online) {
+            return { status: "Not Connected", connected: false, type: "offline" };
         }
 
-        if (connection) {
-            const type = connection.type || connection.effectiveType;
-            if (['cellular', 'slow-2g', '2g', '3g', '4g'].includes(type) && !connection.wifi) {
-                return { connected: false, ssid: null, availableNetworks: ["Guest_WiFi", "Public_Access_WiFi"] };
-            }
+        // Check if device is actively using cellular network data instead of Wi-Fi
+        if (connection && ['cellular', 'slow-2g', '2g', '3g', '4g'].includes(connection.type)) {
+            return { status: "Cellular Data", connected: false, type: "cellular" };
         }
 
-        let activeSsid = localStorage.getItem("ios26_connected_ssid");
-        
-        if (!activeSsid) {
-            activeSsid = navigator.onLine ? "Connected Wi-Fi" : "Not Connected";
-            localStorage.setItem("ios26_connected_ssid", activeSsid);
-        }
-
-        return { 
-            connected: true, 
-            ssid: activeSsid, 
-            availableNetworks: ["Guest_WiFi", "Home_5G_Network", "Public_Access_WiFi"] 
-        };
+        // Real-time active connection indicator
+        return { status: "Wi-Fi", connected: true, type: "wifi" };
     }
 
-
-    function updateWifiStateUI() {
-        const sysState = getRealSystemConnectionState();
+    function updateLiveWifiUI() {
+        const state = getLiveWifiState();
 
         if (!isWifiOn) {
-            // Wi-Fi is turned OFF
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
             if (connectedNetworkCard) {
@@ -90,61 +77,43 @@ document.addEventListener("DOMContentLoaded", () => {
             if (extendedNetworksList) extendedNetworksList.style.maxHeight = "0px";
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            // Wi-Fi is turned ON
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
-            if (sysState.connected && sysState.ssid && sysState.ssid !== "Not Connected") {
-                // Connected state display
-                if (mainWifiStatusText) mainWifiStatusText.textContent = sysState.ssid;
+            if (state.connected) {
+                if (mainWifiStatusText) mainWifiStatusText.textContent = state.status;
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "block";
                     setTimeout(() => connectedNetworkCard.classList.add("animate-fade-in"), 10);
                 }
-                if (connectedNetworkName) connectedNetworkName.textContent = sysState.ssid;
+                if (connectedNetworkName) connectedNetworkName.textContent = "Connected Network";
             } else {
-                // Disconnected state while toggle is ON
-                if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
+                if (mainWifiStatusText) mainWifiStatusText.textContent = state.status;
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "none";
                     connectedNetworkCard.classList.remove("animate-fade-in");
                 }
             }
-
-            // Render available scanned networks dynamically
-            if (scannedNetworkNameText && sysState.availableNetworks.length > 0) {
-                scannedNetworkNameText.textContent = sysState.availableNetworks[0];
-            }
         }
     }
 
-    // Listen to network status modifications
-    window.addEventListener('online', updateWifiStateUI);
-    window.addEventListener('offline', updateWifiStateUI);
+    // Listen to real-time network changes instantly
+    window.addEventListener('online', updateLiveWifiUI);
+    window.addEventListener('offline', updateLiveWifiUI);
+
+    const netConn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (netConn) {
+        netConn.addEventListener('change', updateLiveWifiUI);
+    }
 
     if (wifiToggle) {
         wifiToggle.addEventListener("change", () => {
             isWifiOn = wifiToggle.checked;
-            updateWifiStateUI();
+            updateLiveWifiUI();
         });
     }
 
-    // Allow clicking/tapping the connected network card to rename/input your actual network SSID on the fly
-    if (connectedNetworkCard) {
-        connectedNetworkCard.addEventListener("click", () => {
-            const currentName = localStorage.getItem("ios26_connected_ssid") || "";
-            const userNetworkInput = prompt("Enter your current Wi-Fi network name (SSID):", currentName);
-            if (userNetworkInput !== null) {
-                const trimmedName = userNetworkInput.trim();
-                if (trimmedName) {
-                    localStorage.setItem("ios26_connected_ssid", trimmedName);
-                    updateWifiStateUI();
-                }
-            }
-        });
-    }
-
-    // "Other..." expansion toggle with downward fluid animation
+    // "Other..." expansion toggle dropdown
     if (otherNetworkTrigger && extendedNetworksList) {
         otherNetworkTrigger.addEventListener("click", () => {
             const isExpanded = extendedNetworksList.classList.toggle("expanded");
@@ -156,7 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    updateWifiStateUI();
+    updateLiveWifiUI();
+
+    
 
     // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
