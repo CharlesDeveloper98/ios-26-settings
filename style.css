@@ -869,3 +869,15 @@ html.bold-text-enabled .subview-title {
 .wifi-subview-content {
     padding-bottom: 48px; /* Fixed high bottom padding issue */
 }
+
+#connected-wifi-container {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#connected-wifi-container.animate-appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
