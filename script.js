@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
-    // --- Refined Real System Wi-Fi State Engine (Zero Hardcoded SSID) ---
+        // --- Refined Real System Wi-Fi State Engine (Zero Hardcoded SSID) ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -41,6 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
     if (wifiToggle) wifiToggle.checked = isWifiOn;
 
+    // Clear legacy hardcoded fallback if it exists in local storage
+    if (localStorage.getItem("ios26_connected_ssid") === "ZTE_2.4G_Cezx2G") {
+        localStorage.removeItem("ios26_connected_ssid");
+    }
+
     function getRealSystemConnectionState() {
         const isOnline = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
@@ -49,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return { connected: false, ssid: null, availableNetworks: [] };
         }
 
-        // Check if device is running strictly on cellular data or offline
         if (connection) {
             const type = connection.type || connection.effectiveType;
             if (['cellular', 'slow-2g', '2g', '3g', '4g'].includes(type) && !connection.wifi) {
@@ -57,11 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Retrieve user-configured or network-detected SSID dynamically (No hardcoded fallback names)
         let activeSsid = localStorage.getItem("ios26_connected_ssid");
         
         if (!activeSsid) {
-            // Automatically prompt or derive a clean contextual network state name if none exists
             activeSsid = navigator.onLine ? "Connected Wi-Fi" : "Not Connected";
             localStorage.setItem("ios26_connected_ssid", activeSsid);
         }
@@ -72,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
             availableNetworks: ["Guest_WiFi", "Home_5G_Network", "Public_Access_WiFi"] 
         };
     }
+
 
     function updateWifiStateUI() {
         const sysState = getRealSystemConnectionState();
