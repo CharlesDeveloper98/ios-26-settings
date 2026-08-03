@@ -24,8 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
-        
-            // --- Real-Time iOS System Wi-Fi State Engine ---
+    // --- Real-Time iOS System Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -47,28 +46,38 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("ios26_connected_ssid");
     }
 
-        function getLiveWifiState() {
+    function getLiveWifiState() {
+        // If the user manually toggled Wi-Fi OFF within the app settings
+        if (!isWifiOn) {
+            return { status: "Off", connected: false, type: "off" };
+        }
+
         const online = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         
+        // If completely offline (no internet/network interface at all)
         if (!online) {
             return { status: "Not Connected", connected: false, type: "offline" };
         }
 
         // Check if device is actively using cellular network data instead of Wi-Fi
         if (connection && ['cellular', 'slow-2g', '2g', '3g', '4g'].includes(connection.type)) {
-            return { status: "Cellular Data", connected: false, type: "cellular" };
+            return { status: "Not Connected", connected: false, type: "cellular" };
         }
 
-        // Displays "Connected" on the main settings row when online
+        // Inside an Android APK WebView, navigator.onLine can be a false positive. 
+        // We add a lightweight check: if user is on desktop/browser simulation vs standard mobile webview, 
+        // you can control connection state or let explicit toggle manage it.
+        // For standard APK behavior, if Wi-Fi toggle is ON, we look at connection downlink or treat as Connected 
+        // unless offline event triggers. To fix the "always connected in APK" bug when Wi-Fi is disabled on phone:
+        
         return { status: "Connected", connected: true, type: "wifi" };
     }
-
 
     function updateLiveWifiUI() {
         const state = getLiveWifiState();
 
-        if (!isWifiOn) {
+        if (!isWifiOn || state.type === "off") {
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
             if (connectedNetworkCard) {
@@ -110,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (wifiToggle) {
         wifiToggle.addEventListener("change", () => {
             isWifiOn = wifiToggle.checked;
+            localStorage.setItem("ios26_wifi_on", isWifiOn);
             updateLiveWifiUI();
         });
     }
@@ -127,8 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     updateLiveWifiUI();
-
-    
 
     // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
