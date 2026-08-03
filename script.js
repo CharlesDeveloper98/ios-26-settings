@@ -46,36 +46,39 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("ios26_connected_ssid");
     }
 
-        function getLiveWifiState() {
-        // If the user manually toggled Wi-Fi OFF within the app settings
-        if (!isWifiOn) {
-            return { status: "Off", connected: false, type: "off" };
+            function getLiveWifiState() {
+        // 1. Check if user toggled Wi-Fi off in your app settings
+        if (typeof isWifiOn !== 'undefined' && !isWifiOn) {
+            return { status: "Off", connected: false, type: "off", ssid: "" };
         }
 
         const online = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        
-        // If completely offline
+
+        // 2. If completely offline
         if (!online) {
-            return { status: "Not Connected", connected: false, type: "offline" };
+            return { status: "Not Connected", connected: false, type: "offline", ssid: "" };
         }
 
-        // Check if device is actively using cellular network data instead of Wi-Fi
+        // 3. Check for cellular connection type if available
         if (connection && ['cellular', 'slow-2g', '2g', '3g', '4g'].includes(connection.type)) {
-            return { status: "Not Connected", connected: false, type: "cellular" };
+            return { status: "Not Connected", connected: false, type: "cellular", ssid: "" };
         }
 
-        // FIX: Instead of blindly returning connected, default to "Not Connected" 
-        // unless a reliable connection type property explicitly indicates 'wifi'.
-        if (connection && connection.type === 'wifi') {
-            return { status: "Connected", connected: true, type: "wifi" };
-        }
+        // 4. Real Network Detection: 
+        // Since browsers can't read local Wi-Fi SSIDs natively without an app wrapper, 
+        // if the browser reports it is online and NOT on cellular, we treat it as actively connected.
+        // (If you have a global variable like `connectedSSID` from your app state, you can plug it in here).
+        const activeSSID = window.currentConnectedSSID || "Connected"; 
 
-        // Safe fallback for standard browsers/WebViews where connection.type is undefined:
-        // Default to Not Connected so it matches your intended UI state. Change this to 
-        // { status: "Connected", connected: true, type: "wifi" } only if you want a forced connection.
-        return { status: "Not Connected", connected: false, type: "offline" };
+        return { 
+            status: activeSSID, 
+            connected: true, 
+            type: "wifi", 
+            ssid: activeSSID 
+        };
     }
+
 
 
     function updateLiveWifiUI() {
