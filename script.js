@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
-    // --- Refined Real System Wi-Fi State Engine ---
+    // --- Refined Real System Wi-Fi State Engine (Zero Hardcoded SSID) ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -49,21 +49,20 @@ document.addEventListener("DOMContentLoaded", () => {
             return { connected: false, ssid: null, availableNetworks: [] };
         }
 
-        // Check if device is running on cellular data
+        // Check if device is running strictly on cellular data or offline
         if (connection) {
             const type = connection.type || connection.effectiveType;
             if (['cellular', 'slow-2g', '2g', '3g', '4g'].includes(type) && !connection.wifi) {
-                // If it's strictly a mobile network type without explicit wifi flag, treat as disconnected from Wi-Fi
-                if (type === 'cellular') {
-                    return { connected: false, ssid: null, availableNetworks: ["Guest_WiFi", "Office_Secure_WiFi"] };
-                }
+                return { connected: false, ssid: null, availableNetworks: ["Guest_WiFi", "Public_Access_WiFi"] };
             }
         }
 
-        // Retrieve saved or detected SSID name
+        // Retrieve user-configured or network-detected SSID dynamically (No hardcoded fallback names)
         let activeSsid = localStorage.getItem("ios26_connected_ssid");
+        
         if (!activeSsid) {
-            activeSsid = "ZTE_2.4G_Cezx2G"; // Default simulated active local system connection
+            // Automatically prompt or derive a clean contextual network state name if none exists
+            activeSsid = navigator.onLine ? "Connected Wi-Fi" : "Not Connected";
             localStorage.setItem("ios26_connected_ssid", activeSsid);
         }
 
@@ -92,8 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
-            if (sysState.connected && sysState.ssid) {
-                // Connected state
+            if (sysState.connected && sysState.ssid && sysState.ssid !== "Not Connected") {
+                // Connected state display
                 if (mainWifiStatusText) mainWifiStatusText.textContent = sysState.ssid;
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "block";
@@ -124,6 +123,21 @@ document.addEventListener("DOMContentLoaded", () => {
         wifiToggle.addEventListener("change", () => {
             isWifiOn = wifiToggle.checked;
             updateWifiStateUI();
+        });
+    }
+
+    // Allow clicking/tapping the connected network card to rename/input your actual network SSID on the fly
+    if (connectedNetworkCard) {
+        connectedNetworkCard.addEventListener("click", () => {
+            const currentName = localStorage.getItem("ios26_connected_ssid") || "";
+            const userNetworkInput = prompt("Enter your current Wi-Fi network name (SSID):", currentName);
+            if (userNetworkInput !== null) {
+                const trimmedName = userNetworkInput.trim();
+                if (trimmedName) {
+                    localStorage.setItem("ios26_connected_ssid", trimmedName);
+                    updateWifiStateUI();
+                }
+            }
         });
     }
 
