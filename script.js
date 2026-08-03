@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("ios26_connected_ssid");
     }
 
-    function getLiveWifiState() {
+        function getLiveWifiState() {
         // If the user manually toggled Wi-Fi OFF within the app settings
         if (!isWifiOn) {
             return { status: "Off", connected: false, type: "off" };
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const online = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         
-        // If completely offline (no internet/network interface at all)
+        // If completely offline
         if (!online) {
             return { status: "Not Connected", connected: false, type: "offline" };
         }
@@ -65,14 +65,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return { status: "Not Connected", connected: false, type: "cellular" };
         }
 
-        // Inside an Android APK WebView, navigator.onLine can be a false positive. 
-        // We add a lightweight check: if user is on desktop/browser simulation vs standard mobile webview, 
-        // you can control connection state or let explicit toggle manage it.
-        // For standard APK behavior, if Wi-Fi toggle is ON, we look at connection downlink or treat as Connected 
-        // unless offline event triggers. To fix the "always connected in APK" bug when Wi-Fi is disabled on phone:
-        
-        return { status: "Connected", connected: true, type: "wifi" };
+        // FIX: Instead of blindly returning connected, default to "Not Connected" 
+        // unless a reliable connection type property explicitly indicates 'wifi'.
+        if (connection && connection.type === 'wifi') {
+            return { status: "Connected", connected: true, type: "wifi" };
+        }
+
+        // Safe fallback for standard browsers/WebViews where connection.type is undefined:
+        // Default to Not Connected so it matches your intended UI state. Change this to 
+        // { status: "Connected", connected: true, type: "wifi" } only if you want a forced connection.
+        return { status: "Not Connected", connected: false, type: "offline" };
     }
+
 
     function updateLiveWifiUI() {
         const state = getLiveWifiState();
