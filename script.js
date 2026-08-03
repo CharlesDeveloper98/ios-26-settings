@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("ios26_connected_ssid");
     }
 
-    function getLiveWifiState() {
+        function getLiveWifiState() {
         const online = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         
@@ -60,9 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return { status: "Cellular Data", connected: false, type: "cellular" };
         }
 
-        // Real-time active connection indicator
-        return { status: "Wi-Fi", connected: true, type: "wifi" };
+        // Displays "Connected" on the main settings row when online
+        return { status: "Connected", connected: true, type: "wifi" };
     }
+
 
     function updateLiveWifiUI() {
         const state = getLiveWifiState();
