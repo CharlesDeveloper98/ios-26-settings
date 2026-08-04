@@ -721,20 +721,23 @@ html.bold-text-enabled .subview-title {
     font-weight: 400;
 }
 
+/* 1. Move Wi-Fi icon on top of the "Wi-Fi" title in the hero card */
 .wifi-hero-card {
-    padding: 16px 18px;
+    padding: 20px 18px;
     display: flex;
-    gap: 16px;
+    flex-direction: column; /* Stack elements vertically */
     align-items: flex-start;
+    gap: 12px;
 }
 
 .wifi-hero-icon-container {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 2px; /* Positioned right on top of the text block */
 }
 
 .wifi-hero-icon-container img {
@@ -747,6 +750,7 @@ html.bold-text-enabled .subview-title {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    width: 100%;
 }
 
 .wifi-hero-title {
@@ -799,8 +803,10 @@ html.bold-text-enabled .subview-title {
     filter: brightness(0) invert(1);
 }
 
-[data-theme="light"] .wifi-meta-icon {
-    filter: brightness(0) saturate(100%) invert(35%) sepia(9%) saturate(417%) hue-rotate(169deg) brightness(92%) contrast(88%);
+[data-theme="light"] .liquid-edit-btn {
+    background: rgba(255, 255, 255, 0.6);
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 /* Smooth Collapse & Fade Animation for Wi-Fi Off State */
@@ -824,35 +830,42 @@ html.bold-text-enabled .subview-title {
     height: 22px;
     border-radius: 50%;
     background-color: rgba(0, 122, 255, 0.15);
-    color: #007aff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
-    font-style: italic;
-    font-weight: 700;
     cursor: pointer;
+    overflow: hidden;
 }
 
+.wifi-info-badge img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(37%) sepia(95%) saturate(1900%) hue-rotate(202deg) brightness(101%) contrast(101%);
+}        
 
-    /* Liquid Edit Button Container */
+
+   /* 3. Liquid Glass "Edit" Button at Top Right */
 .liquid-edit-btn {
     position: absolute;
     right: 16px;
     font-size: 15px;
     font-weight: 400;
     color: #007aff;
-    background: rgba(0, 122, 255, 0.12);
-    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.08); /* Transparent glass base */
+    padding: 6px 16px;
     border-radius: 20px;
     cursor: pointer;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: background 0.2s ease;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 0.5px solid rgba(255, 255, 255, 0.25); /* Liquid glass border */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .liquid-edit-btn:active {
-    background: rgba(0, 122, 255, 0.25);
+    transform: scale(0.95);
+    background: rgba(0, 122, 255, 0.2);
 }
 
 
