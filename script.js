@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const backToMainSettings = document.getElementById("backToMainSettings");
 
         
-            // --- Real-Time iOS System Wi-Fi State Engine ---
+           
+        // --- Real-Time iOS System Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -34,70 +35,72 @@ document.addEventListener("DOMContentLoaded", () => {
     const wifiDynamicContentWrapper = document.getElementById("wifiDynamicContentWrapper");
     const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
-    const scannedNetworkContainer = document.getElementById("scannedNetworkContainer");
-    const scannedNetworkNameText = document.getElementById("scannedNetworkNameText");
-    const otherNetworkTrigger = document.getElementById("otherNetworkTrigger");
-    const extendedNetworksList = document.getElementById("extendedNetworksList");
 
     let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
     if (wifiToggle) wifiToggle.checked = isWifiOn;
-
-    // Clear legacy names
-    if (localStorage.getItem("ios26_connected_ssid") === "ZTE_2.4G_Cezx2G") {
-        localStorage.removeItem("ios26_connected_ssid");
-    }
 
     function getLiveWifiState() {
         const online = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         
         if (!online) {
-            return { status: "Not Connected", connected: false, type: "offline" };
+            return { status: "Not Connected", connected: false };
         }
 
-        // Check if device is actively using cellular network data instead of Wi-Fi
+        // If using cellular data explicitly while online
         if (connection && ['cellular', 'slow-2g', '2g', '3g', '4g'].includes(connection.type)) {
-            return { status: "Cellular Data", connected: false, type: "cellular" };
+            return { status: "Not Connected", connected: false };
         }
 
-        // Real-time active connection indicator
-        return { status: "Wi-Fi", connected: true, type: "wifi" };
+        // Simulating actual active Wi-Fi connection vs On but unconnected
+        // You can toggle or tie this to real network properties
+        return { status: "Connected", connected: true };
     }
 
     function updateLiveWifiUI() {
         const state = getLiveWifiState();
 
         if (!isWifiOn) {
+            // Wi-Fi Switch is OFF
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
+            
+            // Animate out connected container
             if (connectedNetworkCard) {
-                connectedNetworkCard.style.display = "none";
-                connectedNetworkCard.classList.remove("animate-fade-in");
+                connectedNetworkCard.classList.remove("animate-show");
+                connectedNetworkCard.classList.add("animate-hide");
             }
-            if (extendedNetworksList) extendedNetworksList.style.maxHeight = "0px";
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
+            // Wi-Fi Switch is ON
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
             if (state.connected) {
-                if (mainWifiStatusText) mainWifiStatusText.textContent = state.status;
+                if (mainWifiStatusText) mainWifiStatusText.textContent = "Connected";
+                if (connectedNetworkName) connectedNetworkName.textContent = "Home_WiFi_5G"; // Active SSID name
+                
+                // Animate appear connected container
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "block";
-                    setTimeout(() => connectedNetworkCard.classList.add("animate-fade-in"), 10);
+                    connectedNetworkCard.classList.remove("animate-hide");
+                    void connectedNetworkCard.offsetWidth; // Trigger reflow
+                    connectedNetworkCard.classList.add("animate-show");
                 }
-                if (connectedNetworkName) connectedNetworkName.textContent = "Connected Network";
             } else {
-                if (mainWifiStatusText) mainWifiStatusText.textContent = state.status;
+                // Wi-Fi is ON, but NOT connected to any network
+                if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
+                
+                // Animate disappear connected container
                 if (connectedNetworkCard) {
-                    connectedNetworkCard.style.display = "none";
-                    connectedNetworkCard.classList.remove("animate-fade-in");
+                    connectedNetworkCard.classList.remove("animate-show");
+                    connectedNetworkCard.classList.add("animate-hide");
                 }
             }
         }
     }
 
-    // Listen to real-time network changes instantly
+    // Event Listeners for real-time changes
     window.addEventListener('online', updateLiveWifiUI);
     window.addEventListener('offline', updateLiveWifiUI);
 
@@ -113,19 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // "Other..." expansion toggle dropdown
-    if (otherNetworkTrigger && extendedNetworksList) {
-        otherNetworkTrigger.addEventListener("click", () => {
-            const isExpanded = extendedNetworksList.classList.toggle("expanded");
-            if (isExpanded) {
-                extendedNetworksList.style.maxHeight = extendedNetworksList.scrollHeight + "px";
-            } else {
-                extendedNetworksList.style.maxHeight = "0px";
-            }
-        });
-    }
-
     updateLiveWifiUI();
+
 
     
 
