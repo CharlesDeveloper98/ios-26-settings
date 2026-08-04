@@ -794,6 +794,15 @@ html.bold-text-enabled .subview-title {
     opacity: 0.7;
 }
 
+.wifiView {
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 140px !important; /* Deep padding to ensure the last element scrolls well above system bars */
+    box-sizing: border-box;
+}
+
 [data-theme="dark"] .wifi-meta-icon,
 :root:not([data-theme="light"]) .wifi-meta-icon {
     filter: brightness(0) invert(1);
