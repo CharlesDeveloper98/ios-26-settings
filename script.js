@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         
            
-        // --- Real-Time iOS System Wi-Fi State Engine ---
+           // --- Native APK / Build.yml Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -39,59 +39,66 @@ document.addEventListener("DOMContentLoaded", () => {
     let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
     if (wifiToggle) wifiToggle.checked = isWifiOn;
 
-    function getLiveWifiState() {
-        const online = navigator.onLine;
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        
-        if (!online) {
-            return { status: "Not Connected", connected: false };
+    function getNativeAppNetworkState() {
+        // Check standard Cordova/PhoneGap connection plugin if available in APK build
+        if (navigator.connection) {
+            const networkState = navigator.connection.type;
+            
+            // Connection types defined by cordova-plugin-network-information
+            if (typeof Connection !== 'undefined') {
+                if (networkState === Connection.WIFI) {
+                    return { status: "Connected", connected: true, type: "wifi" };
+                } else if (networkState === Connection.NONE || networkState === Connection.UNKNOWN) {
+                    return { status: "Not Connected", connected: false, type: "none" };
+                } else {
+                    // Cellular or other data types while Wi-Fi switch might be active
+                    return { status: "Not Connected", connected: false, type: "cellular" };
+                }
+            }
         }
 
-        // If using cellular data explicitly while online
-        if (connection && ['cellular', 'slow-2g', '2g', '3g', '4g'].includes(connection.type)) {
-            return { status: "Not Connected", connected: false };
+        // Fallback for native Android webviews supporting standard navigator online properties
+        if (!navigator.onLine) {
+            return { status: "Not Connected", connected: false, type: "none" };
         }
 
-        // Simulating actual active Wi-Fi connection vs On but unconnected
-        // You can toggle or tie this to real network properties
-        return { status: "Connected", connected: true };
+        // Default assumption if online through a network interface
+        return { status: "Connected", connected: true, type: "unknown" };
     }
 
     function updateLiveWifiUI() {
-        const state = getLiveWifiState();
+        const state = getNativeAppNetworkState();
 
         if (!isWifiOn) {
-            // Wi-Fi Switch is OFF
+            // Wi-Fi Switch is toggled OFF manually by user
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
             
-            // Animate out connected container
             if (connectedNetworkCard) {
                 connectedNetworkCard.classList.remove("animate-show");
                 connectedNetworkCard.classList.add("animate-hide");
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            // Wi-Fi Switch is ON
+            // Wi-Fi Switch is toggled ON
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
-            if (state.connected) {
+            // Check if device is actively linked to a Wi-Fi network interface
+            if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Connected";
-                if (connectedNetworkName) connectedNetworkName.textContent = "Home_WiFi_5G"; // Active SSID name
+                if (connectedNetworkName) connectedNetworkName.textContent = "Home_WiFi_5G"; 
                 
-                // Animate appear connected container
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "block";
                     connectedNetworkCard.classList.remove("animate-hide");
-                    void connectedNetworkCard.offsetWidth; // Trigger reflow
+                    void connectedNetworkCard.offsetWidth; // Force layout reflow for animation
                     connectedNetworkCard.classList.add("animate-show");
                 }
             } else {
-                // Wi-Fi is ON, but NOT connected to any network
+                // Wi-Fi is turned ON in settings, but phone isn't linked to any router/access point
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
                 
-                // Animate disappear connected container
                 if (connectedNetworkCard) {
                     connectedNetworkCard.classList.remove("animate-show");
                     connectedNetworkCard.classList.add("animate-hide");
@@ -100,14 +107,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Event Listeners for real-time changes
+    // Native Cordova / WebView Event Listeners bundled into APK builds
+    document.addEventListener("online", updateLiveWifiUI, false);
+    document.addEventListener("offline", updateLiveWifiUI, false);
+    
+    // Standard web fallbacks just in case
     window.addEventListener('online', updateLiveWifiUI);
     window.addEventListener('offline', updateLiveWifiUI);
-
-    const netConn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    if (netConn) {
-        netConn.addEventListener('change', updateLiveWifiUI);
-    }
 
     if (wifiToggle) {
         wifiToggle.addEventListener("change", () => {
@@ -116,7 +122,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Run check on initial application view load inside APK
+    document.addEventListener("deviceready", () => {
+        updateLiveWifiUI();
+    }, false);
+
+    // Immediate fallback execution
     updateLiveWifiUI();
+
 
 
     
