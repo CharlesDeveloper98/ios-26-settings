@@ -42,6 +42,11 @@ jobs:
           cp -r assets/ myApp/www/
           cp -r fonts/ myApp/www/
 
+      - name: Install Network Information Plugin
+        run: |
+          cd myApp
+          cordova plugin add cordova-plugin-network-information
+
       - name: Setup Android Platform
         run: |
           cd myApp
@@ -57,4 +62,3 @@ jobs:
         with:
           name: Settings-APK
           path: myApp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
-
