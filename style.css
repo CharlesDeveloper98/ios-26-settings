@@ -852,9 +852,12 @@ html.bold-text-enabled .subview-title {
 
 /* --- 3. Fix Bottom Padding / Cut-off Text on Wi-Fi Sub-Page --- */
 #wifiView {
-    padding-bottom: 60px !important; /* Adds enough breathing room at the bottom of the scroll view */
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 140px !important; /* Deep padding to ensure the last element scrolls well above system bars */
     box-sizing: border-box;
-    overflow-y: auto;
 }
 
 
