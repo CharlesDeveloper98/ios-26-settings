@@ -322,82 +322,66 @@ document.addEventListener("DOMContentLoaded", () => {
     const automaticToggle = document.getElementById("automaticToggle");
     const htmlElement = document.documentElement;
 
-    function setTheme(theme) {
-        htmlElement.classList.add("theme-transitioning");
-        htmlElement.setAttribute("data-theme", theme);
-        localStorage.setItem("ios26_theme", theme);
 
-        if (lightModeOption && darkModeOption) {
-            if (theme === "light") {
-                lightModeOption.classList.add("active");
-                lightModeOption.querySelector(".radio-check").classList.add("checked");
-                lightModeOption.querySelector(".radio-check").textContent = "✓";
-                
-                darkModeOption.classList.remove("active");
-                darkModeOption.querySelector(".radio-check").classList.remove("checked");
-                darkModeOption.querySelector(".radio-check").textContent = "";
-            } else {
-                darkModeOption.classList.add("active");
-                darkModeOption.querySelector(".radio-check").classList.add("checked");
-                darkModeOption.querySelector(".radio-check").textContent = "✓";
-                
-                lightModeOption.classList.remove("active");
-                lightModeOption.querySelector(".radio-check").classList.remove("checked");
-                lightModeOption.querySelector(".radio-check").textContent = "";
-            }
+
+        // --- Native APK / Build.yml System Theme Engine ---
+    const autoThemeToggle = document.getElementById("autoThemeToggle"); // Adjust ID to match your actual automatic switch element
+    const lightThemeBtn = document.getElementById("lightThemeCard");   // Adjust to your light theme selector element if needed
+    const darkThemeBtn = document.getElementById("darkThemeCard");     // Adjust to your dark theme selector element if needed
+
+    function applyTheme(theme) {
+        if (theme === "dark") {
+            document.documentElement.classList.add("dark-theme");
+            document.documentElement.classList.remove("light-theme");
+            localStorage.setItem("ios26_theme", "dark");
+        } else {
+            document.documentElement.classList.add("light-theme");
+            document.documentElement.classList.remove("dark-theme");
+            localStorage.setItem("ios26_theme", "light");
         }
-
-        setTimeout(() => {
-            htmlElement.classList.remove("theme-transitioning");
-        }, 200);
     }
 
-    function getSystemTheme() {
-        if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-        return "light";
+    function checkSystemTheme() {
+        const isAutoEnabled = localStorage.getItem("ios26_auto_theme") === "true";
+        
+        if (isAutoEnabled) {
+            // Check native OS dark mode preference inside Android WebView
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(prefersDark ? "dark" : "light");
+        }
     }
 
-    const savedTheme = localStorage.getItem("ios26_theme");
-    const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
+    // Listen to real-time system theme changes on Android
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (localStorage.getItem("ios26_auto_theme") === "true") {
+                applyTheme(event.matches ? "dark" : "light");
+            }
+        });
+    }
+
+    // Handle Automatic Toggle Switch change
+    if (autoThemeToggle) {
+        autoThemeToggle.checked = localStorage.getItem("ios26_auto_theme") === "true";
+        
+        autoThemeToggle.addEventListener("change", () => {
+            if (autoThemeToggle.checked) {
+                localStorage.setItem("ios26_auto_theme", "true");
+                checkSystemTheme();
+            } else {
+                localStorage.setItem("ios26_auto_theme", "false");
+            }
+        });
+    }
+
+    // Initial check on app startup inside APK
+    document.addEventListener("deviceready", () => {
+        checkSystemTheme();
+    }, false);
+
+    checkSystemTheme();
+
     
-    if (automaticToggle) automaticToggle.checked = savedAutomatic;
-
-    if (savedAutomatic) {
-        setTheme(getSystemTheme());
-    } else if (savedTheme) {
-        setTheme(savedTheme);
-    } else {
-        setTheme("dark");
-    }
-
-    if (lightModeOption) {
-        lightModeOption.addEventListener("click", () => {
-            if (automaticToggle && automaticToggle.checked) {
-                automaticToggle.checked = false;
-                localStorage.setItem("ios26_automatic", "false");
-            }
-            setTheme("light");
-        });
-    }
-
-    if (darkModeOption) {
-        darkModeOption.addEventListener("click", () => {
-            if (automaticToggle && automaticToggle.checked) {
-                automaticToggle.checked = false;
-                localStorage.setItem("ios26_automatic", "false");
-            }
-            setTheme("dark");
-        });
-    }
-
-    if (automaticToggle) {
-        automaticToggle.addEventListener("change", () => {
-            const isAutomatic = automaticToggle.checked;
-            localStorage.setItem("ios26_automatic", isAutomatic);
-            if (isAutomatic) setTheme(getSystemTheme());
-        });
-    }
 
     // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
