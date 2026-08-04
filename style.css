@@ -834,6 +834,29 @@ html.bold-text-enabled .subview-title {
     cursor: pointer;
 }
 
+    /* Ensure the list item container behaves correctly for inline alignment */
+#wifiNav .setting-item, 
+.wifi-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#mainWifiStatusText {
+    margin-left: auto;
+    margin-right: 8px; /* Adds clean spacing right before the chevron arrow */
+    font-size: 0.9rem;
+    color: var(--secondary-text-color, #8e8e93);
+    font-weight: 400;
+}
+
+/* --- 3. Fix Bottom Padding / Cut-off Text on Wi-Fi Sub-Page --- */
+#wifiView {
+    padding-bottom: 60px !important; /* Adds enough breathing room at the bottom of the scroll view */
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
 
     /* Liquid Edit Button Container */
 .liquid-edit-btn {
@@ -880,15 +903,16 @@ html.bold-text-enabled .subview-title {
     transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     margin-top: 0;
     margin-bottom: 0;
-    border: none;
+    border: none !important; /* Forces border to stay hidden when collapsed */
+    box-shadow: none;
 }
 
 #connectedNetworkCard.animate-show {
     opacity: 1;
     max-height: 100px;
     transform: translateY(0);
-    margin-bottom: 16px; /* Restores gap spacing */
-    border: var(--card-border);
+    margin-bottom: 16px; 
+    border: var(--card-border) !important; /* Restores border safely only when fully expanded */
 }
 
 #connectedNetworkCard.animate-hide {
@@ -896,6 +920,5 @@ html.bold-text-enabled .subview-title {
     max-height: 0;
     transform: translateY(-10px);
     margin-bottom: 0;
-    border: none;
+    border: none !important;
 }
-
