@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
 
-    // --- Real-Time iOS System Wi-Fi State Engine ---
+        
+            // --- Real-Time iOS System Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -46,109 +47,55 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("ios26_connected_ssid");
     }
 
-            function getLiveWifiState() {
-        // 1. Check if user toggled Wi-Fi off in your app settings
-        if (typeof isWifiOn !== 'undefined' && !isWifiOn) {
-            return { status: "Off", connected: false, type: "off", ssid: "" };
-        }
-
+    function getLiveWifiState() {
         const online = navigator.onLine;
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-
-        // 2. If completely offline
+        
         if (!online) {
-            return { status: "Not Connected", connected: false, type: "offline", ssid: "" };
+            return { status: "Not Connected", connected: false, type: "offline" };
         }
 
-        // 3. Check for cellular connection type if available
+        // Check if device is actively using cellular network data instead of Wi-Fi
         if (connection && ['cellular', 'slow-2g', '2g', '3g', '4g'].includes(connection.type)) {
-            return { status: "Not Connected", connected: false, type: "cellular", ssid: "" };
+            return { status: "Cellular Data", connected: false, type: "cellular" };
         }
 
-        // 4. Real Network Detection: 
-        // Since browsers can't read local Wi-Fi SSIDs natively without an app wrapper, 
-        // if the browser reports it is online and NOT on cellular, we treat it as actively connected.
-        // (If you have a global variable like `connectedSSID` from your app state, you can plug it in here).
-        const activeSSID = window.currentConnectedSSID || "Connected"; 
-
-        return { 
-            status: activeSSID, 
-            connected: true, 
-            type: "wifi", 
-            ssid: activeSSID 
-        };
+        // Real-time active connection indicator
+        return { status: "Wi-Fi", connected: true, type: "wifi" };
     }
 
+    function updateLiveWifiUI() {
+        const state = getLiveWifiState();
 
+        if (!isWifiOn) {
+            if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
+            if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
+            if (connectedNetworkCard) {
+                connectedNetworkCard.style.display = "none";
+                connectedNetworkCard.classList.remove("animate-fade-in");
+            }
+            if (extendedNetworksList) extendedNetworksList.style.maxHeight = "0px";
+            localStorage.setItem("ios26_wifi_on", "false");
+        } else {
+            if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
+            localStorage.setItem("ios26_wifi_on", "true");
 
-    // Global states tracker
-window.isWifiOn = window.isWifiOn !== undefined ? window.isWifiOn : true; 
-window.isWifiConnected = window.isWifiConnected !== undefined ? window.isWifiConnected : false;
-
-function updateWifiSystemState() {
-    const wifiStatusText = document.getElementById("wifi-status-text"); // The text element on main page ("Connected" / "Not Connected")
-    const wifiContainerCard = document.getElementById("connected-wifi-container"); // The animated box container for connected wifi
-
-    // 1. Check if Wi-Fi hardware toggle is OFF in settings
-    if (!window.isWifiOn) {
-        if (wifiStatusText) wifiStatusText.textContent = "Off";
-        if (wifiContainerCard) {
-            wifiContainerCard.style.display = "none";
-            wifiContainerCard.classList.remove("animate-appear");
-        }
-        return { status: "Off", connected: false };
-    }
-
-    // 2. Hardware toggle is ON: Check real browser/APK connection status
-    let realConnectionActive = navigator.onLine;
-    
-    // If running inside an APK wrapper that exposes native connection state, use it:
-    if (window.AndroidInterface && typeof window.AndroidInterface.isWifiConnected === 'function') {
-        realConnectionActive = window.AndroidInterface.isWifiConnected();
-    } else if (navigator.connection) {
-        // If connection type API exists, evaluate if it's cellular/offline
-        const connType = navigator.connection.type;
-        if (connType === 'cellular' || connType === 'none') {
-            realConnectionActive = false;
-        }
-    }
-
-    window.isWifiConnected = realConnectionActive;
-
-    // 3. Update UI based on exact requirements
-    if (!window.isWifiConnected) {
-        // Wi-Fi is ON, but NOT connected to any network -> Display "Not Connected" & hide container box
-        if (wifiStatusText) wifiStatusText.textContent = "Not Connected";
-        if (wifiContainerCard) {
-            wifiContainerCard.style.display = "none";
-            wifiContainerCard.classList.remove("animate-appear");
-        }
-    } else {
-        // Wi-Fi is ON and CONNECTED -> Display "Connected" & trigger animated appearance container box
-        if (wifiStatusText) wifiStatusText.textContent = "Connected";
-        if (wifiContainerCard) {
-            wifiContainerCard.style.display = "block";
-            // Forces reflow to trigger CSS/JS animation smoothly
-            void wifiContainerCard.offsetWidth; 
-            wifiContainerCard.classList.add("animate-appear");
+            if (state.connected) {
+                if (mainWifiStatusText) mainWifiStatusText.textContent = state.status;
+                if (connectedNetworkCard) {
+                    connectedNetworkCard.style.display = "block";
+                    setTimeout(() => connectedNetworkCard.classList.add("animate-fade-in"), 10);
+                }
+                if (connectedNetworkName) connectedNetworkName.textContent = "Connected Network";
+            } else {
+                if (mainWifiStatusText) mainWifiStatusText.textContent = state.status;
+                if (connectedNetworkCard) {
+                    connectedNetworkCard.style.display = "none";
+                    connectedNetworkCard.classList.remove("animate-fade-in");
+                }
+            }
         }
     }
-
-    return { status: window.isWifiConnected ? "Connected" : "Not Connected", connected: window.isWifiConnected };
-}
-
-// Listen to native browser online/offline switches instantly
-window.addEventListener('online', updateWifiSystemState);
-window.addEventListener('offline', updateWifiSystemState);
-
-// Poll live changes every 1 second to catch APK / background hardware toggle shifts instantly
-setInterval(updateWifiSystemState, 1000);
-
-// Run immediately on load
-document.addEventListener("DOMContentLoaded", updateWifiSystemState);
-
-
-    
 
     // Listen to real-time network changes instantly
     window.addEventListener('online', updateLiveWifiUI);
@@ -162,7 +109,6 @@ document.addEventListener("DOMContentLoaded", updateWifiSystemState);
     if (wifiToggle) {
         wifiToggle.addEventListener("change", () => {
             isWifiOn = wifiToggle.checked;
-            localStorage.setItem("ios26_wifi_on", isWifiOn);
             updateLiveWifiUI();
         });
     }
@@ -180,6 +126,8 @@ document.addEventListener("DOMContentLoaded", updateWifiSystemState);
     }
 
     updateLiveWifiUI();
+
+    
 
     // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
