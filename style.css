@@ -169,37 +169,33 @@ html, body {
     height: 44px; /* Fix header height alignment */
 }
 
-/* 1. Liquid Glass Back Chevron Button (Matching the Edit Button) */
-.back-btn, .subview-back-btn, .header-back-btn {
+/* --- Unified Circular Liquid Glass Back Button --- */
+.liquid-back-btn {
     position: absolute;
     left: 16px;
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08); /* Transparent glass base */
+    background: rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 0.5px solid rgba(255, 255, 255, 0.25); /* Liquid glass border */
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: background 0.2s ease, transform 0.15s ease;
     z-index: 10;
 }
 
-[data-theme="light"] .back-btn, 
-[data-theme="light"] .subview-back-btn, 
-[data-theme="light"] .header-back-btn {
+[data-theme="light"] .liquid-back-btn {
     background: rgba(255, 255, 255, 0.6);
     border: 0.5px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.back-btn:active, 
-.subview-back-btn:active, 
-.header-back-btn:active {
+.liquid-back-btn:active {
     transform: scale(0.92);
     background: rgba(0, 122, 255, 0.2);
 }
@@ -213,7 +209,13 @@ html, body {
 }
 
 
-.back-chevron { font-size: 24px; font-weight: 400; color: var(--text-main); line-height: 1; margin-right: 2px; }
+.back-chevron {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-main);
+    line-height: 1;
+    margin-right: 2px;
+}
 
 .subview-title {
     position: absolute; left: 0; right: 0; text-align: center;
