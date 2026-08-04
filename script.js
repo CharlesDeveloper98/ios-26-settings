@@ -23,8 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessView = document.getElementById("displayBrightnessView");
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
+
+        
            
-    // --- Native APK / Build.yml Wi-Fi State Engine ---
+           // --- Native APK / Build.yml Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -38,21 +40,29 @@ document.addEventListener("DOMContentLoaded", () => {
     if (wifiToggle) wifiToggle.checked = isWifiOn;
 
     function getNativeAppNetworkState() {
+        // Check standard Cordova/PhoneGap connection plugin if available in APK build
         if (navigator.connection) {
             const networkState = navigator.connection.type;
+            
+            // Connection types defined by cordova-plugin-network-information
             if (typeof Connection !== 'undefined') {
                 if (networkState === Connection.WIFI) {
                     return { status: "Connected", connected: true, type: "wifi" };
                 } else if (networkState === Connection.NONE || networkState === Connection.UNKNOWN) {
                     return { status: "Not Connected", connected: false, type: "none" };
                 } else {
+                    // Cellular or other data types while Wi-Fi switch might be active
                     return { status: "Not Connected", connected: false, type: "cellular" };
                 }
             }
         }
+
+        // Fallback for native Android webviews supporting standard navigator online properties
         if (!navigator.onLine) {
             return { status: "Not Connected", connected: false, type: "none" };
         }
+
+        // Default assumption if online through a network interface
         return { status: "Connected", connected: true, type: "unknown" };
     }
 
@@ -60,28 +70,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const state = getNativeAppNetworkState();
 
         if (!isWifiOn) {
+            // Wi-Fi Switch is toggled OFF manually by user
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
+            
             if (connectedNetworkCard) {
                 connectedNetworkCard.classList.remove("animate-show");
                 connectedNetworkCard.classList.add("animate-hide");
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
+            // Wi-Fi Switch is toggled ON
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
+            // Check if device is actively linked to a Wi-Fi network interface
             if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Connected";
                 if (connectedNetworkName) connectedNetworkName.textContent = "Home_WiFi_5G"; 
+                
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "block";
                     connectedNetworkCard.classList.remove("animate-hide");
-                    void connectedNetworkCard.offsetWidth;
+                    void connectedNetworkCard.offsetWidth; // Force layout reflow for animation
                     connectedNetworkCard.classList.add("animate-show");
                 }
             } else {
+                // Wi-Fi is turned ON in settings, but phone isn't linked to any router/access point
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
+                
                 if (connectedNetworkCard) {
                     connectedNetworkCard.classList.remove("animate-show");
                     connectedNetworkCard.classList.add("animate-hide");
@@ -90,8 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Native Cordova / WebView Event Listeners bundled into APK builds
     document.addEventListener("online", updateLiveWifiUI, false);
     document.addEventListener("offline", updateLiveWifiUI, false);
+    
+    // Standard web fallbacks just in case
     window.addEventListener('online', updateLiveWifiUI);
     window.addEventListener('offline', updateLiveWifiUI);
 
@@ -102,11 +122,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Run check on initial application view load inside APK
     document.addEventListener("deviceready", () => {
         updateLiveWifiUI();
     }, false);
 
+    // Immediate fallback execution
     updateLiveWifiUI();
+
+
+
+    
 
     // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
@@ -290,84 +316,88 @@ document.addEventListener("DOMContentLoaded", () => {
         if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
-    // --- Fixed Theme Engine (Light, Dark, & Automatic System Theme) ---
+    // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
     const htmlElement = document.documentElement;
 
-    function applyThemeState(theme) {
-        if (theme === "dark") {
-            htmlElement.classList.add("dark-theme");
-            htmlElement.classList.remove("light-theme");
-        } else {
-            htmlElement.classList.add("light-theme");
-            htmlElement.classList.remove("dark-theme");
-        }
-    }
+    function setTheme(theme) {
+        htmlElement.classList.add("theme-transitioning");
+        htmlElement.setAttribute("data-theme", theme);
+        localStorage.setItem("ios26_theme", theme);
 
-    function evaluateTheme() {
-        const isAuto = localStorage.getItem("ios26_auto_theme") === "true";
-        
-        if (automaticToggle) automaticToggle.checked = isAuto;
-
-        if (isAuto) {
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            applyThemeState(prefersDark ? "dark" : "light");
-        } else {
-            const savedTheme = localStorage.getItem("ios26_theme") || "dark";
-            applyThemeState(savedTheme);
-            
-            if (lightModeOption && darkModeOption) {
-                lightModeOption.checked = (savedTheme === "light");
-                darkModeOption.checked = (savedTheme === "dark");
+        if (lightModeOption && darkModeOption) {
+            if (theme === "light") {
+                lightModeOption.classList.add("active");
+                lightModeOption.querySelector(".radio-check").classList.add("checked");
+                lightModeOption.querySelector(".radio-check").textContent = "✓";
+                
+                darkModeOption.classList.remove("active");
+                darkModeOption.querySelector(".radio-check").classList.remove("checked");
+                darkModeOption.querySelector(".radio-check").textContent = "";
+            } else {
+                darkModeOption.classList.add("active");
+                darkModeOption.querySelector(".radio-check").classList.add("checked");
+                darkModeOption.querySelector(".radio-check").textContent = "✓";
+                
+                lightModeOption.classList.remove("active");
+                lightModeOption.querySelector(".radio-check").classList.remove("checked");
+                lightModeOption.querySelector(".radio-check").textContent = "";
             }
         }
+
+        setTimeout(() => {
+            htmlElement.classList.remove("theme-transitioning");
+        }, 200);
     }
 
-    // Handle Manual Light Mode Choice
+    function getSystemTheme() {
+        if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+        return "light";
+    }
+
+    const savedTheme = localStorage.getItem("ios26_theme");
+    const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
+    
+    if (automaticToggle) automaticToggle.checked = savedAutomatic;
+
+    if (savedAutomatic) {
+        setTheme(getSystemTheme());
+    } else if (savedTheme) {
+        setTheme(savedTheme);
+    } else {
+        setTheme("dark");
+    }
+
     if (lightModeOption) {
         lightModeOption.addEventListener("click", () => {
-            localStorage.setItem("ios26_auto_theme", "false");
-            localStorage.setItem("ios26_theme", "light");
-            if (automaticToggle) automaticToggle.checked = false;
-            applyThemeState("light");
+            if (automaticToggle && automaticToggle.checked) {
+                automaticToggle.checked = false;
+                localStorage.setItem("ios26_automatic", "false");
+            }
+            setTheme("light");
         });
     }
 
-    // Handle Manual Dark Mode Choice
     if (darkModeOption) {
         darkModeOption.addEventListener("click", () => {
-            localStorage.setItem("ios26_auto_theme", "false");
-            localStorage.setItem("ios26_theme", "dark");
-            if (automaticToggle) automaticToggle.checked = false;
-            applyThemeState("dark");
+            if (automaticToggle && automaticToggle.checked) {
+                automaticToggle.checked = false;
+                localStorage.setItem("ios26_automatic", "false");
+            }
+            setTheme("dark");
         });
     }
 
-    // Handle Automatic System Theme Toggle
     if (automaticToggle) {
         automaticToggle.addEventListener("change", () => {
-            const isChecked = automaticToggle.checked;
-            localStorage.setItem("ios26_auto_theme", isChecked ? "true" : "false");
-            if (!isChecked) {
-                const fallback = htmlElement.classList.contains("dark-theme") ? "dark" : "light";
-                localStorage.setItem("ios26_theme", fallback);
-            }
-            evaluateTheme();
+            const isAutomatic = automaticToggle.checked;
+            localStorage.setItem("ios26_automatic", isAutomatic);
+            if (isAutomatic) setTheme(getSystemTheme());
         });
     }
-
-    // Listen to real-time OS theme changes inside Android APK webview
-    if (window.matchMedia) {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            if (localStorage.getItem("ios26_auto_theme") === "true") {
-                applyThemeState(event.matches ? "dark" : "light");
-            }
-        });
-    }
-
-    evaluateTheme();
 
     // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
