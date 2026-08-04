@@ -869,3 +869,33 @@ html.bold-text-enabled .subview-title {
 .wifi-subview-content {
     padding-bottom: 48px; /* Fixed high bottom padding issue */
 }
+
+
+/* --- Connected Wi-Fi Container Smooth Animations --- */
+#connectedNetworkCard {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(-10px);
+    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+}
+
+#connectedNetworkCard.animate-show {
+    opacity: 1;
+    max-height: 100px;
+    transform: translateY(0);
+    margin-bottom: 16px; /* Restores gap spacing */
+    border: var(--card-border);
+}
+
+#connectedNetworkCard.animate-hide {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+    margin-bottom: 0;
+    border: none;
+}
+
