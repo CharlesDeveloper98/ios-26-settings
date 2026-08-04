@@ -290,16 +290,18 @@
             </filter>
         </svg>
 
-        <!-- Sub-Page View: Display & Brightness -->
-<div class="settings-subview" id="displayBrightnessView">
-    <div class="subview-header">
-        <div class="liquid-back-btn" id="backToMainSettings">
-            <span class="back-chevron">‹</span>
-        </div>
-        <h2 class="subview-title">Display & Brightness</h2>
-    </div>
 
-            <div class="subview-content">
+
+                <!-- Sub-Page View: Display & Brightness -->
+        <div class="settings-subview" id="displayBrightnessView">
+            <div class="subview-header">
+                <div class="liquid-back-btn" id="backToMainSettings">
+                    <span class="back-chevron">‹</span>
+                </div>
+                <h2 class="subview-title">Display & Brightness</h2>
+            </div>
+
+            <div class="subview-scroll-container">
                 <!-- Section 1: Appearance -->
                 <div class="subview-section-label">Appearance</div>
                 <div class="settings-card appearance-card">
@@ -460,16 +462,18 @@
             </div>
         </div>
 
-        <!-- Sub-Page View: Battery -->
-<div class="settings-subview" id="batteryView">
-    <div class="subview-header">
-        <div class="liquid-back-btn" id="backToMainFromBattery">
-            <span class="back-chevron">‹</span>
-        </div>
-        <h2 class="subview-title">Battery</h2>
-    </div>
+        
 
-            <div class="subview-content">
+             <!-- Sub-Page View: Battery -->
+        <div class="settings-subview" id="batteryView">
+            <div class="subview-header">
+                <div class="liquid-back-btn" id="backToMainFromBattery">
+                    <span class="back-chevron">‹</span>
+                </div>
+                <h2 class="subview-title">Battery</h2>
+            </div>
+
+            <div class="subview-scroll-container">
                 <div class="settings-card battery-top-card">
                     <div class="battery-main-header">
                         <span class="battery-percent-value" id="batteryPercentText">88%</span>
@@ -559,29 +563,31 @@
             </div>
         </div>
 
-       <!-- Sub-Page View: General -->
-<div class="settings-subview" id="generalView">
-    <div class="subview-header">
-        <div class="liquid-back-btn" id="backToMainFromGeneral">
-            <span class="back-chevron">‹</span>
-        </div>
-        <h2 class="subview-title">General</h2>
-    </div>
 
-    <div class="subview-content">
-        <!-- Exact match to wifi-hero-card padding & structure -->
-        <div class="settings-card wifi-hero-card">
-            <div class="wifi-hero-icon-container">
-                <img src="assets/settings.png" alt="General">
-            </div>
-            <div class="wifi-hero-text-block">
-                <div class="wifi-hero-title">General</div>
-                <div class="wifi-hero-subtitle">
-                    Manage your overall setup and preferences for iPhone, such as software updates, device language, CarPlay, AirDrop, and more.
+        
+
+      
+          <!-- Sub-Page View: General -->
+        <div class="settings-subview" id="generalView">
+            <div class="subview-header">
+                <div class="liquid-back-btn" id="backToMainFromGeneral">
+                    <span class="back-chevron">‹</span>
                 </div>
+                <h2 class="subview-title">General</h2>
             </div>
-        </div>
 
+            <div class="subview-scroll-container">
+                <div class="settings-card wifi-hero-card">
+                    <div class="wifi-hero-icon-container">
+                        <img src="assets/settings.png" alt="General">
+                    </div>
+                    <div class="wifi-hero-text-block">
+                        <div class="wifi-hero-title">General</div>
+                        <div class="wifi-hero-subtitle">
+                            Manage your overall setup and preferences for iPhone, such as software updates, device language, CarPlay, AirDrop, and more.
+                        </div>
+                    </div>
+                </div>
 
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
@@ -731,11 +737,12 @@
             </div>
         </div>
 
+        
+
 
 
             
-                    
-        <!-- Sub-Page View: Wi-Fi -->
+                       <!-- Sub-Page View: Wi-Fi -->
         <div class="settings-subview" id="wifiView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromWifi">
@@ -745,7 +752,7 @@
                 <div class="liquid-edit-btn" id="wifiEditBtn">Edit</div>
             </div>
 
-            <div class="subview-content wifi-subview-content">
+            <div class="subview-scroll-container">
                 <!-- Hero Header Card -->
                 <div class="settings-card wifi-hero-card">
                     <div class="wifi-hero-icon-container">
@@ -776,26 +783,22 @@
 
                 <!-- Collapsible Content Wrapper (Animated on Toggle) -->
                 <div id="wifiDynamicContentWrapper" class="wifi-collapsible-wrapper">
-
-                    
                     <!-- Connected Network Section -->
-<div class="settings-card group-card" id="connectedNetworkCard">
-    <div class="settings-row clickable">
-        <div class="row-left wifi-connected-left">
-            <span class="wifi-check-icon">✓</span>
-            <span class="row-label-text" id="connectedNetworkName"></span>
-        </div>
-        <div class="row-right wifi-row-icons">
-            <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
-            <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
-            <div class="wifi-info-badge" id="wifiInfoBtn">
-                <img src="assets/info.png" alt="Info">
-            </div>
-        </div>
-    </div>
-</div>
-
-
+                    <div class="settings-card group-card" id="connectedNetworkCard">
+                        <div class="settings-row clickable">
+                            <div class="row-left wifi-connected-left">
+                                <span class="wifi-check-icon">✓</span>
+                                <span class="row-label-text" id="connectedNetworkName"></span>
+                            </div>
+                            <div class="row-right wifi-row-icons">
+                                <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
+                                <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
+                                <div class="wifi-info-badge" id="wifiInfoBtn">
+                                    <img src="assets/info.png" alt="Info">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Networks Section -->
                     <div class="subview-section-label">Networks</div>
@@ -853,7 +856,9 @@
                 </div>
             </div>
         </div>
-
+     
+        
+                    
 
 
         
