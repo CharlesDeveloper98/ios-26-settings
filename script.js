@@ -492,6 +492,22 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "";
     }
 
+
+    // Add scroll listener to subviews for advanced iOS header blur behavior
+document.querySelectorAll('.settings-subview').forEach(subview => {
+    subview.addEventListener('scroll', (e) => {
+        const header = subview.querySelector('.subview-header');
+        if (!header) return;
+        
+        if (subview.scrollTop > 10) {
+            header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
+        } else {
+            header.style.boxShadow = 'none';
+        }
+    });
+});
+
+
     function goToPage(pageNumber) {
         const pages = [page1, page2, page3];
         const targetPage = pages[pageNumber - 1];
