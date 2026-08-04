@@ -23,10 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessView = document.getElementById("displayBrightnessView");
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
-
-        
            
-           // --- Native APK / Build.yml Wi-Fi State Engine ---
+    // --- Native APK / Build.yml Wi-Fi State Engine ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -40,29 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (wifiToggle) wifiToggle.checked = isWifiOn;
 
     function getNativeAppNetworkState() {
-        // Check standard Cordova/PhoneGap connection plugin if available in APK build
         if (navigator.connection) {
             const networkState = navigator.connection.type;
-            
-            // Connection types defined by cordova-plugin-network-information
             if (typeof Connection !== 'undefined') {
                 if (networkState === Connection.WIFI) {
                     return { status: "Connected", connected: true, type: "wifi" };
                 } else if (networkState === Connection.NONE || networkState === Connection.UNKNOWN) {
                     return { status: "Not Connected", connected: false, type: "none" };
                 } else {
-                    // Cellular or other data types while Wi-Fi switch might be active
                     return { status: "Not Connected", connected: false, type: "cellular" };
                 }
             }
         }
-
-        // Fallback for native Android webviews supporting standard navigator online properties
         if (!navigator.onLine) {
             return { status: "Not Connected", connected: false, type: "none" };
         }
-
-        // Default assumption if online through a network interface
         return { status: "Connected", connected: true, type: "unknown" };
     }
 
@@ -70,35 +60,28 @@ document.addEventListener("DOMContentLoaded", () => {
         const state = getNativeAppNetworkState();
 
         if (!isWifiOn) {
-            // Wi-Fi Switch is toggled OFF manually by user
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
-            
             if (connectedNetworkCard) {
                 connectedNetworkCard.classList.remove("animate-show");
                 connectedNetworkCard.classList.add("animate-hide");
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            // Wi-Fi Switch is toggled ON
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
-            // Check if device is actively linked to a Wi-Fi network interface
             if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Connected";
                 if (connectedNetworkName) connectedNetworkName.textContent = "Home_WiFi_5G"; 
-                
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "block";
                     connectedNetworkCard.classList.remove("animate-hide");
-                    void connectedNetworkCard.offsetWidth; // Force layout reflow for animation
+                    void connectedNetworkCard.offsetWidth;
                     connectedNetworkCard.classList.add("animate-show");
                 }
             } else {
-                // Wi-Fi is turned ON in settings, but phone isn't linked to any router/access point
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
-                
                 if (connectedNetworkCard) {
                     connectedNetworkCard.classList.remove("animate-show");
                     connectedNetworkCard.classList.add("animate-hide");
@@ -107,11 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Native Cordova / WebView Event Listeners bundled into APK builds
     document.addEventListener("online", updateLiveWifiUI, false);
     document.addEventListener("offline", updateLiveWifiUI, false);
-    
-    // Standard web fallbacks just in case
     window.addEventListener('online', updateLiveWifiUI);
     window.addEventListener('offline', updateLiveWifiUI);
 
@@ -122,17 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Run check on initial application view load inside APK
     document.addEventListener("deviceready", () => {
         updateLiveWifiUI();
     }, false);
 
-    // Immediate fallback execution
     updateLiveWifiUI();
-
-
-
-    
 
     // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
@@ -316,72 +290,84 @@ document.addEventListener("DOMContentLoaded", () => {
         if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
-    // Display & Brightness interactive state elements
+    // --- Fixed Theme Engine (Light, Dark, & Automatic System Theme) ---
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
     const htmlElement = document.documentElement;
 
-
-
-        // --- Native APK / Build.yml System Theme Engine ---
-    const autoThemeToggle = document.getElementById("autoThemeToggle"); // Adjust ID to match your actual automatic switch element
-    const lightThemeBtn = document.getElementById("lightThemeCard");   // Adjust to your light theme selector element if needed
-    const darkThemeBtn = document.getElementById("darkThemeCard");     // Adjust to your dark theme selector element if needed
-
-    function applyTheme(theme) {
+    function applyThemeState(theme) {
         if (theme === "dark") {
-            document.documentElement.classList.add("dark-theme");
-            document.documentElement.classList.remove("light-theme");
-            localStorage.setItem("ios26_theme", "dark");
+            htmlElement.classList.add("dark-theme");
+            htmlElement.classList.remove("light-theme");
         } else {
-            document.documentElement.classList.add("light-theme");
-            document.documentElement.classList.remove("dark-theme");
-            localStorage.setItem("ios26_theme", "light");
+            htmlElement.classList.add("light-theme");
+            htmlElement.classList.remove("dark-theme");
         }
     }
 
-    function checkSystemTheme() {
-        const isAutoEnabled = localStorage.getItem("ios26_auto_theme") === "true";
+    function evaluateTheme() {
+        const isAuto = localStorage.getItem("ios26_auto_theme") === "true";
         
-        if (isAutoEnabled) {
-            // Check native OS dark mode preference inside Android WebView
+        if (automaticToggle) automaticToggle.checked = isAuto;
+
+        if (isAuto) {
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            applyTheme(prefersDark ? "dark" : "light");
+            applyThemeState(prefersDark ? "dark" : "light");
+        } else {
+            const savedTheme = localStorage.getItem("ios26_theme") || "dark";
+            applyThemeState(savedTheme);
+            
+            if (lightModeOption && darkModeOption) {
+                lightModeOption.checked = (savedTheme === "light");
+                darkModeOption.checked = (savedTheme === "dark");
+            }
         }
     }
 
-    // Listen to real-time system theme changes on Android
+    // Handle Manual Light Mode Choice
+    if (lightModeOption) {
+        lightModeOption.addEventListener("click", () => {
+            localStorage.setItem("ios26_auto_theme", "false");
+            localStorage.setItem("ios26_theme", "light");
+            if (automaticToggle) automaticToggle.checked = false;
+            applyThemeState("light");
+        });
+    }
+
+    // Handle Manual Dark Mode Choice
+    if (darkModeOption) {
+        darkModeOption.addEventListener("click", () => {
+            localStorage.setItem("ios26_auto_theme", "false");
+            localStorage.setItem("ios26_theme", "dark");
+            if (automaticToggle) automaticToggle.checked = false;
+            applyThemeState("dark");
+        });
+    }
+
+    // Handle Automatic System Theme Toggle
+    if (automaticToggle) {
+        automaticToggle.addEventListener("change", () => {
+            const isChecked = automaticToggle.checked;
+            localStorage.setItem("ios26_auto_theme", isChecked ? "true" : "false");
+            if (!isChecked) {
+                const fallback = htmlElement.classList.contains("dark-theme") ? "dark" : "light";
+                localStorage.setItem("ios26_theme", fallback);
+            }
+            evaluateTheme();
+        });
+    }
+
+    // Listen to real-time OS theme changes inside Android APK webview
     if (window.matchMedia) {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
             if (localStorage.getItem("ios26_auto_theme") === "true") {
-                applyTheme(event.matches ? "dark" : "light");
+                applyThemeState(event.matches ? "dark" : "light");
             }
         });
     }
 
-    // Handle Automatic Toggle Switch change
-    if (autoThemeToggle) {
-        autoThemeToggle.checked = localStorage.getItem("ios26_auto_theme") === "true";
-        
-        autoThemeToggle.addEventListener("change", () => {
-            if (autoThemeToggle.checked) {
-                localStorage.setItem("ios26_auto_theme", "true");
-                checkSystemTheme();
-            } else {
-                localStorage.setItem("ios26_auto_theme", "false");
-            }
-        });
-    }
-
-    // Initial check on app startup inside APK
-    document.addEventListener("deviceready", () => {
-        checkSystemTheme();
-    }, false);
-
-    checkSystemTheme();
-
-    
+    evaluateTheme();
 
     // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
