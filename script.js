@@ -151,6 +151,65 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+        // --- iOS 26 Wi-Fi Rename Popup Engine ---
+    const wifiInfoBtn = document.getElementById("wifiInfoBtn");
+    const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
+    const wifiRenameInput = document.getElementById("wifiRenameInput");
+    const wifiCancelRenameBtn = document.getElementById("wifiCancelRenameBtn");
+    const wifiConfirmRenameBtn = document.getElementById("wifiConfirmRenameBtn");
+    const connectedNetworkName = document.getElementById("connectedNetworkName");
+    const mainWifiStatusText = document.getElementById("mainWifiStatusText");
+
+    const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
+    if (connectedNetworkName) {
+        updateTruncatedWifiName(savedCustomWifiName);
+    }
+    if (wifiRenameInput) {
+        wifiRenameInput.value = savedCustomWifiName;
+    }
+
+    function updateTruncatedWifiName(name) {
+        const maxLength = 18; // Adjust max limit before truncation
+        let displayName = name;
+        if (name.length > maxLength) {
+            displayName = name.substring(0, maxLength) + "…";
+        }
+        if (connectedNetworkName) {
+            connectedNetworkName.textContent = displayName;
+        }
+    }
+
+    if (wifiInfoBtn && wifiRenameOverlay) {
+        wifiInfoBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
+            wifiRenameOverlay.classList.add("active");
+        });
+    }
+
+    if (wifiCancelRenameBtn && wifiRenameOverlay) {
+        wifiCancelRenameBtn.addEventListener("click", () => {
+            wifiRenameOverlay.classList.remove("active");
+        });
+    }
+
+    if (wifiConfirmRenameBtn && wifiRenameOverlay) {
+        wifiConfirmRenameBtn.addEventListener("click", () => {
+            let newName = wifiRenameInput.value.trim();
+            if (newName === "") {
+                newName = "Home_WiFi_5G";
+            }
+            
+            localStorage.setItem("ios26_custom_wifi_name", newName);
+            updateTruncatedWifiName(newName);
+            
+            wifiRenameOverlay.classList.remove("active");
+        });
+    }
+
+    
+
     // General View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
