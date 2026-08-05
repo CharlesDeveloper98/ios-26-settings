@@ -950,5 +950,30 @@
     </div>
 
     <script src="script.js"></script>
+
+
+        <!-- iOS 26 Wi-Fi Rename Popup Modal -->
+    <div class="wifi-rename-overlay" id="wifiRenameOverlay">
+        <div class="wifi-rename-popup liquid-glass-container">
+            <div class="liquid-glass-effect"></div>
+            <div class="popup-content-inner">
+                <h3 class="popup-title">Rename Wi-Fi Network</h3>
+                <p class="popup-subtitle">Update the network identifier displayed across your synced devices.</p>
+                
+                <div class="ios-rounded-input-container">
+                    <input type="text" id="wifiRenameInput" class="ios-rounded-text-field" value="Home_WiFi_5G" autocomplete="off" spellcheck="false">
+                </div>
+
+                <div class="popup-button-row">
+                    <button class="popup-action-btn cancel-btn" id="wifiCancelRenameBtn">Cancel</button>
+                    <div class="button-divider-vertical"></div>
+                    <button class="popup-action-btn rename-btn" id="wifiConfirmRenameBtn">Rename</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
 </body>
 </html>
