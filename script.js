@@ -112,20 +112,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-        // Initialize Wi-Fi name input value & UI text fields
-    const savedInitialWifiName = localStorage.getItem("ios26_custom_wifi_name") || "My wifi";
+    // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
-        wifiRenameInput.value = savedInitialWifiName;
+        wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
     }
-    updateTruncatedWifiName(savedInitialWifiName);
 
-    // Wi-Fi Popup Event Listeners with Smooth Open/Close handling
+    // Wi-Fi Popup Event Listeners
     if (wifiInfoBtn && wifiRenameOverlay) {
         wifiInfoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
-            wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "My wifi";
+            wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
             wifiRenameOverlay.classList.add("active");
-            setTimeout(() => wifiRenameInput.focus(), 100);
         });
     }
 
@@ -139,27 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
         wifiConfirmRenameBtn.addEventListener("click", () => {
             let newName = wifiRenameInput.value.trim();
             if (newName === "") {
-                newName = "My wifi";
+                newName = "Home_WiFi_5G";
             }
             localStorage.setItem("ios26_custom_wifi_name", newName);
-            
-            // Instantly update UI elements across pages
             updateTruncatedWifiName(newName);
-            
             wifiRenameOverlay.classList.remove("active");
         });
     }
-
-    // Close popup if clicking outside the dialog card
-    if (wifiRenameOverlay) {
-        wifiRenameOverlay.addEventListener("click", (e) => {
-            if (e.target === wifiRenameOverlay) {
-                wifiRenameOverlay.classList.remove("active");
-            }
-        });
-    }
-
-    
 
     document.addEventListener("online", updateLiveWifiUI, false);
     document.addEventListener("offline", updateLiveWifiUI, false);
