@@ -993,3 +993,10 @@ html.bold-text-enabled .subview-title {
     margin-bottom: 0;
     border: none;
 }
+
+
+/* Force proper bottom clearance specifically for the Wi-Fi view container */
+#wifiView .subview-scroll-container {
+    padding-bottom: 180px !important;
+    box-sizing: border-box;
+}
