@@ -752,70 +752,53 @@
                 <div class="liquid-edit-btn" id="wifiEditBtn">Edit</div>
             </div>
 
-
-
-
-            
             <div class="subview-scroll-container">
-    <!-- Master Unified Container matching iOS 26 Style -->
-    <div class="settings-card master-group-container">
-        
-        <!-- Hero Header Section -->
-        <div class="wifi-hero-section">
-            <div class="wifi-hero-icon-container">
-                <img src="assets/wifid.png" alt="Wi-Fi">
-            </div>
-            <div class="wifi-hero-text-block">
-                <div class="wifi-hero-title">Wi-Fi</div>
-                <div class="wifi-hero-subtitle">
-                    Connect to Wi-Fi, view available networks, and manage settings for joining networks and nearby hotspots. <span class="blue-link">Learn more...</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Divider Line -->
-        <div class="card-divider full-divider"></div>
-
-        <!-- Toggle Row Section -->
-        <div class="settings-row">
-            <div class="row-left">
-                <span class="row-label-text">Wi-Fi</span>
-            </div>
-            <div class="row-right">
-                <label class="ios-switch">
-                    <input type="checkbox" id="wifiToggle" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </div>
-
-        <!-- Collapsible Content Wrapper (Animated on Toggle) -->
-        <div id="wifiDynamicContentWrapper" class="wifi-collapsible-wrapper">
-            <!-- Divider Line before connected network -->
-            <div class="card-divider full-divider"></div>
-
-            <!-- Connected Network Section -->
-            <div class="settings-row clickable" id="connectedNetworkCard">
-                <div class="row-left wifi-connected-left">
-                    <span class="wifi-check-icon">✓</span>
-                    <span class="row-label-text" id="connectedNetworkName"></span>
-                </div>
-                <div class="row-right wifi-row-icons">
-                    <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
-                    <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
-                    <div class="wifi-info-badge" id="wifiInfoBtn">
-                        <img src="assets/info.png" alt="Info">
+                <!-- Hero Header Card -->
+                <div class="settings-card wifi-hero-card">
+                    <div class="wifi-hero-icon-container">
+                        <img src="assets/wifid.png" alt="Wi-Fi">
+                    </div>
+                    <div class="wifi-hero-text-block">
+                        <div class="wifi-hero-title">Wi-Fi</div>
+                        <div class="wifi-hero-subtitle">
+                            Connect to Wi-Fi, view available networks, and manage settings for joining networks and nearby hotspots. <span class="blue-link">Learn more...</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-    </div>
-</div>
+                <!-- Toggle Row Card -->
+                <div class="settings-card group-card">
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">Wi-Fi</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox" id="wifiToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
-
-
-                    
+                <!-- Collapsible Content Wrapper (Animated on Toggle) -->
+                <div id="wifiDynamicContentWrapper" class="wifi-collapsible-wrapper">
+                    <!-- Connected Network Section -->
+                    <div class="settings-card group-card" id="connectedNetworkCard">
+                        <div class="settings-row clickable">
+                            <div class="row-left wifi-connected-left">
+                                <span class="wifi-check-icon">✓</span>
+                                <span class="row-label-text" id="connectedNetworkName"></span>
+                            </div>
+                            <div class="row-right wifi-row-icons">
+                                <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
+                                <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
+                                <div class="wifi-info-badge" id="wifiInfoBtn">
+                                    <img src="assets/info.png" alt="Info">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Networks Section -->
                     <div class="subview-section-label">Networks</div>
