@@ -992,3 +992,16 @@ html.bold-text-enabled .subview-title {
     margin-bottom: 0;
     border: none;
 }
+
+
+/* Dedicated scroll fix for Wi-Fi subview */
+#wifiSubview .subview-scroll-container,
+.settings-subview[id*="wifi"] .subview-scroll-container,
+div[data-subview="wifi"] .subview-scroll-container {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    max-height: calc(100dvh - 52px);
+    padding-bottom: 160px !important;
+}
+
+
