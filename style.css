@@ -992,3 +992,142 @@ html.bold-text-enabled .subview-title {
     margin-bottom: 0;
     border: none;
 }
+
+
+
+/* --- iOS 26 Liquid Glass Wi-Fi Rename Popup --- */
+.wifi-rename-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s;
+}
+
+.wifi-rename-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.wifi-rename-popup {
+    width: 280px;
+    background: rgba(30, 30, 32, 0.75);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border-radius: 22px;
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.wifi-rename-overlay.active .wifi-rename-popup {
+    transform: scale(1);
+}
+
+[data-theme="light"] .wifi-rename-popup {
+    background: rgba(255, 255, 255, 0.75);
+    border: 0.5px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.popup-content-inner {
+    padding: 20px 16px 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.popup-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-main);
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+}
+
+.popup-subtitle {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+.ios-rounded-input-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.ios-rounded-text-field {
+    width: 100%;
+    height: 36px;
+    padding: 0 10px;
+    background: rgba(120, 120, 128, 0.18);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+}
+
+[data-theme="light"] .ios-rounded-text-field {
+    background: rgba(120, 120, 128, 0.08);
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.ios-rounded-text-field:focus {
+    border-color: #007aff;
+}
+
+.popup-button-row {
+    display: flex;
+    width: calc(100% + 32px);
+    margin-left: -16px;
+    border-top: 0.5px solid var(--divider-color);
+}
+
+.popup-action-btn {
+    flex: 1;
+    height: 44px;
+    background: transparent;
+    border: none;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.popup-action-btn.cancel-btn {
+    color: #007aff;
+    font-weight: 400;
+}
+
+.popup-action-btn.rename-btn {
+    color: #007aff;
+    font-weight: 600;
+}
+
+.popup-action-btn:active {
+    background: rgba(128, 128, 128, 0.15);
+}
+
+.button-divider-vertical {
+    width: 0.5px;
+    background: var(--divider-color);
+}
+
