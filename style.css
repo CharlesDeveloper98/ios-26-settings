@@ -147,17 +147,18 @@ html, body {
     pointer-events: auto;
 }
 
-/* ADD THIS: Dedicated scrollable wrapper for subview contents */
+/* Dedicated scrollable wrapper for subview contents with proper bottom padding */
 .subview-scroll-container {
     flex: 1;
     width: 100%;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 12px 16px 120px 16px; /* Ensures padding at the bottom so elements aren't cut off */
+    padding: 12px 16px 160px 16px; /* Increased bottom padding from 120px to 160px to fully reveal the last container */
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
+
 
 
 .settings-container {
