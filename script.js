@@ -23,10 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessView = document.getElementById("displayBrightnessView");
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
-
-        
            
-           // --- Native APK / Build.yml Wi-Fi State Engine ---
+    // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -36,41 +34,51 @@ document.addEventListener("DOMContentLoaded", () => {
     const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
 
+    // Rename Popup Elements
+    const wifiInfoBtn = document.getElementById("wifiInfoBtn");
+    const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
+    const wifiRenameInput = document.getElementById("wifiRenameInput");
+    const wifiCancelRenameBtn = document.getElementById("wifiCancelRenameBtn");
+    const wifiConfirmRenameBtn = document.getElementById("wifiConfirmRenameBtn");
+
     let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
     if (wifiToggle) wifiToggle.checked = isWifiOn;
 
     function getNativeAppNetworkState() {
-        // Check standard Cordova/PhoneGap connection plugin if available in APK build
         if (navigator.connection) {
             const networkState = navigator.connection.type;
-            
-            // Connection types defined by cordova-plugin-network-information
             if (typeof Connection !== 'undefined') {
                 if (networkState === Connection.WIFI) {
                     return { status: "Connected", connected: true, type: "wifi" };
                 } else if (networkState === Connection.NONE || networkState === Connection.UNKNOWN) {
                     return { status: "Not Connected", connected: false, type: "none" };
                 } else {
-                    // Cellular or other data types while Wi-Fi switch might be active
                     return { status: "Not Connected", connected: false, type: "cellular" };
                 }
             }
         }
-
-        // Fallback for native Android webviews supporting standard navigator online properties
         if (!navigator.onLine) {
             return { status: "Not Connected", connected: false, type: "none" };
         }
-
-        // Default assumption if online through a network interface
         return { status: "Connected", connected: true, type: "unknown" };
+    }
+
+    function updateTruncatedWifiName(name) {
+        const maxLength = 18;
+        let displayName = name;
+        if (name.length > maxLength) {
+            displayName = name.substring(0, maxLength) + "…";
+        }
+        if (connectedNetworkName) {
+            connectedNetworkName.textContent = displayName;
+        }
     }
 
     function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
+        const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
 
         if (!isWifiOn) {
-            // Wi-Fi Switch is toggled OFF manually by user
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
             
@@ -80,23 +88,20 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            // Wi-Fi Switch is toggled ON
             if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "true");
 
-            // Check if device is actively linked to a Wi-Fi network interface
             if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Connected";
-                if (connectedNetworkName) connectedNetworkName.textContent = "Home_WiFi_5G"; 
+                updateTruncatedWifiName(savedCustomWifiName);
                 
                 if (connectedNetworkCard) {
                     connectedNetworkCard.style.display = "block";
                     connectedNetworkCard.classList.remove("animate-hide");
-                    void connectedNetworkCard.offsetWidth; // Force layout reflow for animation
+                    void connectedNetworkCard.offsetWidth;
                     connectedNetworkCard.classList.add("animate-show");
                 }
             } else {
-                // Wi-Fi is turned ON in settings, but phone isn't linked to any router/access point
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
                 
                 if (connectedNetworkCard) {
@@ -107,79 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Native Cordova / WebView Event Listeners bundled into APK builds
-    document.addEventListener("online", updateLiveWifiUI, false);
-    document.addEventListener("offline", updateLiveWifiUI, false);
-    
-    // Standard web fallbacks just in case
-    window.addEventListener('online', updateLiveWifiUI);
-    window.addEventListener('offline', updateLiveWifiUI);
-
-    if (wifiToggle) {
-        wifiToggle.addEventListener("change", () => {
-            isWifiOn = wifiToggle.checked;
-            updateLiveWifiUI();
-        });
-    }
-
-    // Run check on initial application view load inside APK
-    document.addEventListener("deviceready", () => {
-        updateLiveWifiUI();
-    }, false);
-
-    // Immediate fallback execution
-    updateLiveWifiUI();
-
-
-
-    
-
-    // Wi-Fi Sub-page Slide Navigation Bindings
-    if (wifiNav && wifiView && backToMainFromWifi) {
-        wifiNav.addEventListener("click", () => {
-            requestAnimationFrame(() => {
-                mainSettingsView.classList.add("slide-left");
-                wifiView.classList.add("active");
-            });
-        });
-
-        backToMainFromWifi.addEventListener("click", () => {
-            requestAnimationFrame(() => {
-                wifiView.classList.remove("active");
-                mainSettingsView.classList.remove("slide-left");
-            });
-        });
-    }
-
-
-        // --- iOS 26 Wi-Fi Rename Popup Engine ---
-    const wifiInfoBtn = document.getElementById("wifiInfoBtn");
-    const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
-    const wifiRenameInput = document.getElementById("wifiRenameInput");
-    const wifiCancelRenameBtn = document.getElementById("wifiCancelRenameBtn");
-    const wifiConfirmRenameBtn = document.getElementById("wifiConfirmRenameBtn");
-    const connectedNetworkName = document.getElementById("connectedNetworkName");
-    const mainWifiStatusText = document.getElementById("mainWifiStatusText");
-
-    const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
-    if (connectedNetworkName) {
-        updateTruncatedWifiName(savedCustomWifiName);
-    }
+    // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
-        wifiRenameInput.value = savedCustomWifiName;
+        wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
     }
 
-    function updateTruncatedWifiName(name) {
-        const maxLength = 18; // Adjust max limit before truncation
-        let displayName = name;
-        if (name.length > maxLength) {
-            displayName = name.substring(0, maxLength) + "…";
-        }
-        if (connectedNetworkName) {
-            connectedNetworkName.textContent = displayName;
-        }
-    }
-
+    // Wi-Fi Popup Event Listeners
     if (wifiInfoBtn && wifiRenameOverlay) {
         wifiInfoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -200,15 +138,46 @@ document.addEventListener("DOMContentLoaded", () => {
             if (newName === "") {
                 newName = "Home_WiFi_5G";
             }
-            
             localStorage.setItem("ios26_custom_wifi_name", newName);
             updateTruncatedWifiName(newName);
-            
             wifiRenameOverlay.classList.remove("active");
         });
     }
 
-    
+    document.addEventListener("online", updateLiveWifiUI, false);
+    document.addEventListener("offline", updateLiveWifiUI, false);
+    window.addEventListener('online', updateLiveWifiUI);
+    window.addEventListener('offline', updateLiveWifiUI);
+
+    if (wifiToggle) {
+        wifiToggle.addEventListener("change", () => {
+            isWifiOn = wifiToggle.checked;
+            updateLiveWifiUI();
+        });
+    }
+
+    document.addEventListener("deviceready", () => {
+        updateLiveWifiUI();
+    }, false);
+
+    updateLiveWifiUI();
+
+    // Wi-Fi Sub-page Slide Navigation Bindings
+    if (wifiNav && wifiView && backToMainFromWifi) {
+        wifiNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                wifiView.classList.add("active");
+            });
+        });
+
+        backToMainFromWifi.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                wifiView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
 
     // General View Elements
     const generalNav = document.getElementById("generalNav");
@@ -551,21 +520,19 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "";
     }
 
-
     // Add scroll listener to subviews for advanced iOS header blur behavior
-document.querySelectorAll('.settings-subview').forEach(subview => {
-    subview.addEventListener('scroll', (e) => {
-        const header = subview.querySelector('.subview-header');
-        if (!header) return;
-        
-        if (subview.scrollTop > 10) {
-            header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
-        } else {
-            header.style.boxShadow = 'none';
-        }
+    document.querySelectorAll('.settings-subview').forEach(subview => {
+        subview.addEventListener('scroll', () => {
+            const header = subview.querySelector('.subview-header');
+            if (!header) return;
+            
+            if (subview.scrollTop > 10) {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
     });
-});
-
 
     function goToPage(pageNumber) {
         const pages = [page1, page2, page3];
