@@ -24,7 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
            
-    // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
+
+        // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -69,8 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (name.length > maxLength) {
             displayName = name.substring(0, maxLength) + "…";
         }
+        // Update Wi-Fi sub-page connected network card label
         if (connectedNetworkName) {
             connectedNetworkName.textContent = displayName;
+        }
+        // Synchronize and display the active custom Wi-Fi name on the main settings page view
+        if (mainWifiStatusText && isWifiOn) {
+            mainWifiStatusText.textContent = displayName;
         }
     }
 
@@ -92,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("ios26_wifi_on", "true");
 
             if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
-                if (mainWifiStatusText) mainWifiStatusText.textContent = "Connected";
                 updateTruncatedWifiName(savedCustomWifiName);
                 
                 if (connectedNetworkCard) {
@@ -143,6 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
             wifiRenameOverlay.classList.remove("active");
         });
     }
+
+    
 
     document.addEventListener("online", updateLiveWifiUI, false);
     document.addEventListener("offline", updateLiveWifiUI, false);
