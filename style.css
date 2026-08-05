@@ -1005,3 +1005,9 @@ div[data-subview="wifi"] .subview-scroll-container {
 }
 
 
+.settings-subview .subview-scroll-container {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 140px;
+}
