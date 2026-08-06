@@ -802,51 +802,13 @@ html.bold-text-enabled .subview-title {
     font-weight: 400;
 }
 
-/* --- Corrected Sizing for Wi-Fi Hero Icon and Container --- */
+/* 1. Move Wi-Fi icon on top of the "Wi-Fi" title in the hero card */
 .wifi-hero-card {
-    padding: 20px 18px; /* Restores standard iOS card inner padding */
+    padding: 20px 18px;
     display: flex;
-    flex-direction: column;
-}
-
-/* Match the exact large icon size and margins from the General card */
-.wifi-hero-card .wifi-hero-icon-container img,
-.wifi-hero-card .wifi-hero-icon-container svg {
-    width: 60px;
-    height: 60px;
-    border-radius: 13px; /* Matches iOS squircle icon curve */
-    margin-bottom: 12px;
-}
-
-/* Reset inner paddings since the main card now handles it uniformly */
-.wifi-hero-card .wifi-hero-text-block,
-.wifi-hero-card .wifi-hero-icon-container,
-.wifi-hero-card .wifi-hero-subtitle {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.wifi-hero-card .wifi-hero-icon-container {
-    margin-top: 20px;
-    margin-bottom: 2px;
-}
-
-/* Ensure description paragraph spacing matches standard headers */
-.wifi-hero-card .wifi-hero-subtitle {
-    margin-bottom: 0;
-    font-size: 13.5px;
-    line-height: 1.4;
-}
-
-/* Make internal rows inside the unified card match native iOS row padding */
-.wifi-hero-card .settings-row {
-    padding: 11px 18px;
-}
-
-/* Fix dividers inside the unified card to match native indent rules */
-.wifi-hero-card .card-divider.full-divider {
-    margin-left: 18px;
-    width: calc(100% - 18px);
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start;
+    gap: 12px;
 }
 
 .wifi-hero-icon-container {
