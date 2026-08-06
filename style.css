@@ -750,7 +750,7 @@ html.bold-text-enabled .subview-title {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 12px;
 }
 
 .general-hero-icon-container {
@@ -762,7 +762,6 @@ html.bold-text-enabled .subview-title {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 4px;
     background: linear-gradient(135deg, #3a3a3c 0%, #1c1c1e 100%);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     border: 0.5px solid rgba(255, 255, 255, 0.15);
@@ -776,9 +775,9 @@ html.bold-text-enabled .subview-title {
 }
 
 .general-hero-icon-container img {
-    width: 65% !important;
-    height: 65% !important;
-    object-fit: contain;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
 }
 
 .general-hero-title {
@@ -786,7 +785,7 @@ html.bold-text-enabled .subview-title {
     font-weight: 700;
     color: var(--text-main);
     letter-spacing: -0.4px;
-    margin-bottom: 2px;
+    margin: 0;
 }
 
 .general-hero-subtitle {
@@ -794,6 +793,7 @@ html.bold-text-enabled .subview-title {
     line-height: 1.45;
     color: var(--text-sub);
     letter-spacing: -0.1px;
+    margin: 0;
 }
 
 /* --- Wi-Fi Sub-Page Exact Layout & Animation Styles --- */
@@ -813,7 +813,6 @@ html.bold-text-enabled .subview-title {
     flex-direction: column;
 }
 
-
 /* Hero Content Area Inside the Unified Card */
 .wifi-hero-card .wifi-hero-icon-container {
     width: 60px;
@@ -825,22 +824,24 @@ html.bold-text-enabled .subview-title {
     align-items: center;
     justify-content: center;
     margin-top: 24px;
-    margin-bottom: 4px;
     margin-left: 20px;
     background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
     box-shadow: 0 6px 16px rgba(0, 122, 255, 0.3);
 }
 
 .wifi-hero-card .wifi-hero-icon-container img {
-    width: 60% !important;
-    height: 60% !important;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
 }
 
 .wifi-hero-card .wifi-hero-text-block {
     padding-left: 20px;
     padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
 }
 
 .wifi-hero-card .wifi-hero-title {
@@ -848,27 +849,19 @@ html.bold-text-enabled .subview-title {
     font-weight: 700;
     color: var(--text-main);
     letter-spacing: -0.4px;
-    margin-bottom: 4px;
+    margin: 0;
 }
 
 .wifi-hero-card .wifi-hero-subtitle {
     font-size: 13px;
     line-height: 1.45;
     color: var(--text-sub);
-    padding-left: 0;
-    padding-right: 0;
-    margin-bottom: 20px;
+    padding: 0;
+    margin: 0 0 20px 0;
     letter-spacing: -0.1px;
 }
 
-/* Ensure description paragraph spacing matches standard headers */
-.wifi-hero-card .wifi-hero-subtitle {
-    padding-left: 0;
-    padding-right: 0;
-    margin-bottom: 16px;
-    padding-left: 18px;
-    padding-right: 18px;
-}
+
 
 /* Make internal rows inside the unified card match native iOS row padding */
 .wifi-hero-card .settings-row {
