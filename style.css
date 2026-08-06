@@ -778,7 +778,9 @@ html.bold-text-enabled .subview-title {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
+    filter: grayscale(100%) brightness(1.2);
 }
+
 
 .general-hero-title {
     font-size: 24px;
@@ -833,7 +835,9 @@ html.bold-text-enabled .subview-title {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
+    filter: brightness(0) invert(1);
 }
+
 
 .wifi-hero-card .wifi-hero-text-block {
     padding-left: 20px;
