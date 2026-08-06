@@ -80,35 +80,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+
+
         function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
+        const animatableElements = document.querySelectorAll(".wifi-animatable-section");
 
         if (!isWifiOn) {
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
-            if (wifiDynamicContentWrapper) {
-                wifiDynamicContentWrapper.classList.add("wifi-hidden");
-            }
+            animatableElements.forEach(el => el.classList.add("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            if (wifiDynamicContentWrapper) {
-                wifiDynamicContentWrapper.classList.remove("wifi-hidden");
-            }
+            animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
             if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
                 updateTruncatedWifiName(savedCustomWifiName);
-                if (connectedNetworkCard) {
-                    connectedNetworkCard.style.display = "flex";
+                if (connectedNetworkCardContainer) {
+                    connectedNetworkCardContainer.style.display = "block";
                 }
             } else {
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
-                if (connectedNetworkCard) {
-                    connectedNetworkCard.style.display = "none";
+                if (connectedNetworkCardContainer) {
+                    connectedNetworkCardContainer.style.display = "none";
                 }
             }
         }
     }
+
+    
 
 
     // Initialize Wi-Fi name input value
