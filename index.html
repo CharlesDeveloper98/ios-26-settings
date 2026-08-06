@@ -739,6 +739,7 @@
 
         
 
+
        <!-- Sub-Page View: Wi-Fi -->
         <div class="settings-subview" id="wifiView">
             <div class="subview-header">
@@ -750,7 +751,7 @@
             </div>
 
             <div class="subview-scroll-container">
-                <!-- Unified Hero Container holding Hero, Toggle, and Connected Network -->
+                <!-- Unified Hero Container holding Hero, Toggle, and Collapsible Content -->
                 <div class="settings-card wifi-hero-card">
                     <div class="wifi-hero-icon-container">
                         <img src="assets/wifid.png" alt="Wi-Fi">
@@ -779,9 +780,10 @@
 
                     <div class="card-divider full-divider"></div>
                     
-                    <!-- Collapsible Content Wrapper & Connected Network Row -->
+                    <!-- Collapsible Content Wrapper holding everything below the Wi-Fi toggle -->
                     <div id="wifiDynamicContentWrapper" class="wifi-collapsible-wrapper">
-                        <div class="settings-row clickable">
+                        <!-- Connected Network Row -->
+                        <div class="settings-row clickable" id="connectedNetworkCard">
                             <div class="row-left wifi-connected-left">
                                 <span class="wifi-check-icon">✓</span>
                                 <span class="row-label-text" id="connectedNetworkName"></span>
@@ -794,31 +796,33 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card-divider full-divider"></div>
+
+                        <!-- Networks Section Header & Container -->
+                        <div class="subview-section-label">Networks</div>
+                        <div class="settings-card group-card" id="networksCardContainer" style="border: none; background: transparent; box-shadow: none;">
+                            <div class="settings-row clickable" id="availableNetworkRow">
+                                <div class="row-left">
+                                    <span class="row-label-text" id="scannedNetworkNameText">Scanning networks...</span>
+                                </div>
+                                <div class="row-right">
+                                    <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
+                                    <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
+                                </div>
+                            </div>
+                            <div class="card-divider indent"></div>
+                            <div class="settings-row clickable">
+                                <div class="row-left">
+                                    <span class="row-label-text">Other...</span>
+                                </div>
+                                <div class="row-right">
+                                    <span class="chevron-icon">›</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div> <!-- End of Unified Wi-Fi Hero Card Container -->
-
-                <!-- Networks Section -->
-                <div class="subview-section-label">Networks</div>
-                <div class="settings-card group-card" id="networksCardContainer">
-                    <div class="settings-row clickable" id="availableNetworkRow">
-                        <div class="row-left">
-                            <span class="row-label-text" id="scannedNetworkNameText">Scanning networks...</span>
-                        </div>
-                        <div class="row-right">
-                            <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
-                            <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
-                        </div>
-                    </div>
-                    <div class="card-divider indent"></div>
-                    <div class="settings-row clickable">
-                        <div class="row-left">
-                            <span class="row-label-text">Other...</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="chevron-icon">›</span>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Additional Wi-Fi Options -->
                 <div class="settings-card group-card">
@@ -853,7 +857,7 @@
             </div>
         </div>
 
-
+        
             
         
 
