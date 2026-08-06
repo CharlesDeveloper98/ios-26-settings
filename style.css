@@ -806,24 +806,59 @@ html.bold-text-enabled .subview-title {
     font-weight: 400;
 }
 
-/* --- Exact Uniform Sizing for Unified Wi-Fi Hero Container --- */
+/* --- Exact Wi-Fi Hero Container Matching iOS Reference --- */
 .wifi-hero-card {
-    padding: 0; /* Remove outer card padding so inner rows align with standard iOS card indents */
+    padding: 0;
     display: flex;
     flex-direction: column;
 }
 
 
 /* Hero Content Area Inside the Unified Card */
-.wifi-hero-card .wifi-hero-text-block,
 .wifi-hero-card .wifi-hero-icon-container {
-    padding-left: 18px;
-    padding-right: 18px;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    margin-bottom: 4px;
+    margin-left: 20px;
+    background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
+    box-shadow: 0 6px 16px rgba(0, 122, 255, 0.3);
 }
 
-.wifi-hero-card .wifi-hero-icon-container {
-    margin-top: 20px;
-    margin-bottom: 2px;
+.wifi-hero-card .wifi-hero-icon-container img {
+    width: 60% !important;
+    height: 60% !important;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.wifi-hero-card .wifi-hero-text-block {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.wifi-hero-card .wifi-hero-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.4px;
+    margin-bottom: 4px;
+}
+
+.wifi-hero-card .wifi-hero-subtitle {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-sub);
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 20px;
+    letter-spacing: -0.1px;
 }
 
 /* Ensure description paragraph spacing matches standard headers */
