@@ -742,8 +742,7 @@
 
 
             
-   
-             <!-- Sub-Page View: Wi-Fi -->
+                       <!-- Sub-Page View: Wi-Fi -->
         <div class="settings-subview" id="wifiView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromWifi">
@@ -754,25 +753,22 @@
             </div>
 
             <div class="subview-scroll-container">
-                <!-- Combined Master Container Card -->
-                <div class="settings-card group-card">
-                    <!-- Hero Header Content -->
-                    <div class="wifi-hero-card-inner" style="display: flex; gap: 16px; padding: 16px;">
-                        <div class="wifi-hero-icon-container" style="flex-shrink: 0;">
-                            <img src="assets/wifid.png" alt="Wi-Fi" style="width: 36px; height: 36px;">
-                        </div>
-                        <div class="wifi-hero-text-block">
-                            <div class="wifi-hero-title" style="font-weight: 600; font-size: 17px; margin-bottom: 4px;">Wi-Fi</div>
-                            <div class="wifi-hero-subtitle" style="font-size: 13px; color: var(--text-secondary, #8e8e93); line-height: 1.4;">
-                                Connect to Wi-Fi, view available networks, and manage settings for joining networks and nearby hotspots. <span class="blue-link" style="color: var(--ios-blue, #007aff);">Learn more...</span>
-                            </div>
+                <!-- Hero Header Card -->
+                <div class="settings-card wifi-hero-card">
+                    <div class="wifi-hero-icon-container">
+                        <img src="assets/wifid.png" alt="Wi-Fi">
+                    </div>
+                    <div class="wifi-hero-text-block">
+                        <div class="wifi-hero-title">Wi-Fi</div>
+                        <div class="wifi-hero-subtitle">
+                            Connect to Wi-Fi, view available networks, and manage settings for joining networks and nearby hotspots. <span class="blue-link">Learn more...</span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="card-divider"></div>
-
-                    <!-- Toggle Row -->
-                    <div class="settings-row" style="padding: 12px 16px;">
+                <!-- Toggle Row Card -->
+                <div class="settings-card group-card">
+                    <div class="settings-row">
                         <div class="row-left">
                             <span class="row-label-text">Wi-Fi</span>
                         </div>
@@ -782,29 +778,28 @@
                                 <span class="slider"></span>
                             </label>
                         </div>
-                  
-
-                    <div class="card-divider indent"></div>
-
-                    <!-- Connected Network Row -->
-                    <div class="settings-row clickable" id="connectedNetworkCard" style="padding: 12px 16px;">
-                        <div class="row-left wifi-connected-left">
-                            <span class="wifi-check-icon" style="color: var(--ios-blue, #007aff); margin-right: 8px;">✓</span>
-                            <span class="row-label-text" id="connectedNetworkName">ZTE_2.4G_Cezx2G</span>
-                        </div>
-                        <div class="row-right wifi-row-icons" style="display: flex; align-items: center; gap: 10px;">
-                            <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon" style="width: 14px; height: 14px;">
-                            <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon" style="width: 16px; height: 16px;">
-                            <div class="wifi-info-badge" id="wifiInfoBtn" style="display: flex; align-items: center;">
-                                <img src="assets/info.png" alt="Info" style="width: 20px; height: 20px;">
-                            </div>
-                        </div>
                     </div>
-                </div>
                 </div>
 
                 <!-- Collapsible Content Wrapper (Animated on Toggle) -->
                 <div id="wifiDynamicContentWrapper" class="wifi-collapsible-wrapper">
+                    <!-- Connected Network Section -->
+                    <div class="settings-card group-card" id="connectedNetworkCard">
+                        <div class="settings-row clickable">
+                            <div class="row-left wifi-connected-left">
+                                <span class="wifi-check-icon">✓</span>
+                                <span class="row-label-text" id="connectedNetworkName"></span>
+                            </div>
+                            <div class="row-right wifi-row-icons">
+                                <img src="assets/lock.png" alt="Locked" class="wifi-meta-icon">
+                                <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
+                                <div class="wifi-info-badge" id="wifiInfoBtn">
+                                    <img src="assets/info.png" alt="Info">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Networks Section -->
                     <div class="subview-section-label">Networks</div>
                     <div class="settings-card group-card" id="networksCardContainer">
@@ -861,7 +856,7 @@
                 </div>
             </div>
         </div>
-
+     
         
                     
 
