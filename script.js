@@ -80,42 +80,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function updateLiveWifiUI() {
+        function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
 
         if (!isWifiOn) {
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
-            if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.add("wifi-hidden");
-            
-            if (connectedNetworkCard) {
-                connectedNetworkCard.classList.remove("animate-show");
-                connectedNetworkCard.classList.add("animate-hide");
+            if (wifiDynamicContentWrapper) {
+                wifiDynamicContentWrapper.classList.add("wifi-hidden");
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            if (wifiDynamicContentWrapper) wifiDynamicContentWrapper.classList.remove("wifi-hidden");
+            if (wifiDynamicContentWrapper) {
+                wifiDynamicContentWrapper.classList.remove("wifi-hidden");
+            }
             localStorage.setItem("ios26_wifi_on", "true");
 
             if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
                 updateTruncatedWifiName(savedCustomWifiName);
-                
                 if (connectedNetworkCard) {
-                    connectedNetworkCard.style.display = "block";
-                    connectedNetworkCard.classList.remove("animate-hide");
-                    void connectedNetworkCard.offsetWidth;
-                    connectedNetworkCard.classList.add("animate-show");
+                    connectedNetworkCard.style.display = "flex";
                 }
             } else {
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
-                
                 if (connectedNetworkCard) {
-                    connectedNetworkCard.classList.remove("animate-show");
-                    connectedNetworkCard.classList.add("animate-hide");
+                    connectedNetworkCard.style.display = "none";
                 }
             }
         }
     }
+
 
     // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
