@@ -811,6 +811,39 @@ html.bold-text-enabled .subview-title {
     gap: 12px;
 }
 
+
+/* Hero Content Area Inside the Unified Card */
+.wifi-hero-card .wifi-hero-text-block,
+.wifi-hero-card .wifi-hero-icon-container {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.wifi-hero-card .wifi-hero-icon-container {
+    margin-top: 20px;
+    margin-bottom: 2px;
+}
+
+/* Ensure description paragraph spacing matches standard headers */
+.wifi-hero-card .wifi-hero-subtitle {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 16px;
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+/* Make internal rows inside the unified card match native iOS row padding */
+.wifi-hero-card .settings-row {
+    padding: 11px 18px;
+}
+
+/* Fix dividers inside the unified card to match native indent rules */
+.wifi-hero-card .card-divider.full-divider {
+    margin-left: 18px;
+    width: calc(100% - 18px);
+}
+
 .wifi-hero-icon-container {
     width: 44px;
     height: 44px;
@@ -1143,4 +1176,5 @@ html.bold-text-enabled .subview-title {
     width: 0.5px;
     background: var(--divider-color);
 }
+
 
