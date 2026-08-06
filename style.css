@@ -958,9 +958,8 @@ html.bold-text-enabled .subview-title {
 .wifi-collapsible-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 16px;
     overflow: hidden;
-    max-height: 1200px;
+    max-height: 800px;
     opacity: 1;
     transform: translateY(0);
     transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
@@ -968,6 +967,17 @@ html.bold-text-enabled .subview-title {
                 transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     transform-origin: top;
 }
+
+.wifi-collapsible-wrapper.wifi-hidden {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-15px);
+    pointer-events: none;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
 
     /* Blue Circular Info Badge */
 .wifi-info-badge {
