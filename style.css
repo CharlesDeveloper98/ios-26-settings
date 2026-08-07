@@ -1076,15 +1076,21 @@ html.bold-text-enabled .subview-title {
     transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     margin-top: 0;
     margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     border: none;
+    visibility: hidden;
 }
 
 #connectedNetworkCard.animate-show {
     opacity: 1;
-    max-height: 100px;
+    max-height: 80px; /* Constrains height precisely to match standard iOS rows */
     transform: translateY(0);
-    margin-bottom: 16px; /* Restores gap spacing */
+    margin-bottom: 12px; /* Matches your app's standard spacing card gap */
+    padding-top: 0;
+    padding-bottom: 0;
     border: var(--card-border);
+    visibility: visible;
 }
 
 #connectedNetworkCard.animate-hide {
@@ -1092,7 +1098,10 @@ html.bold-text-enabled .subview-title {
     max-height: 0;
     transform: translateY(-10px);
     margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     border: none;
+    visibility: hidden;
 }
 
 
