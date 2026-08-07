@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +22,7 @@
     } else if (savedTheme) {
         activeTheme = savedTheme;
     } else {
+        // If nothing is saved at all, respect the device's native theme by default!
         activeTheme = getSystemTheme();
     }
     
@@ -88,7 +88,11 @@
 
                     <div class="card-divider indent"></div>
 
-                    <div class="settings-row clickable" id="wifiNav">
+
+
+                    
+
+                                        <div class="settings-row clickable" id="wifiNav">
                         <div class="row-left">
                             <div class="setting-icon blue">
                                 <img src="assets/wifi.png" alt="Wi-Fi">
@@ -100,6 +104,11 @@
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
+
+
+
+
+                    
 
                     <div class="card-divider indent"></div>
 
@@ -160,6 +169,7 @@
 
                 <!-- Group 2: General & Utilities -->
                 <div class="settings-card group-card">
+                    <!-- Tappable General Row added back -->
                     <div class="settings-row clickable" id="generalNav">
                         <div class="row-left"><div class="setting-icon grey-icon"><img src="assets/general.png" alt="General"></div><span class="row-label-text">General</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
@@ -190,6 +200,7 @@
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
                     <div class="card-divider indent"></div>
+                    <!-- Tappable Display & Brightness Row -->
                     <div class="settings-row clickable" id="displayBrightnessNav">
                         <div class="row-left"><div class="setting-icon blue"><img src="assets/display.png" alt="Display & Brightness"></div><span class="row-label-text">Display & Brightness</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
@@ -306,7 +317,9 @@
             </filter>
         </svg>
 
-        <!-- Sub-Page View: Display & Brightness -->
+
+
+                <!-- Sub-Page View: Display & Brightness -->
         <div class="settings-subview" id="displayBrightnessView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainSettings">
@@ -322,7 +335,6 @@
                     <div class="appearance-options">
                         <div class="appearance-option" id="lightModeOption">
                             <div class="preview-screen light-preview">
-                                <img src="assets/light_wallpaper.png" alt="Light Wallpaper" class="preview-wallpaper-img">
                                 <div class="preview-notch"></div>
                                 <div class="preview-time">9:41</div>
                                 <div class="preview-widget"></div>
@@ -333,7 +345,6 @@
                         </div>
                         <div class="appearance-option" id="darkModeOption">
                             <div class="preview-screen dark-preview">
-                                <img src="assets/dark_wallpaper.png" alt="Dark Wallpaper" class="preview-wallpaper-img">
                                 <div class="preview-notch"></div>
                                 <div class="preview-time">9:41</div>
                                 <div class="preview-widget"></div>
@@ -385,11 +396,11 @@
                 <div class="subview-section-label">Brightness</div>
                 <div class="settings-card group-card">
                     <div class="brightness-slider-row">
-                        <img src="assets/low_brightness.png" alt="Low Brightness" class="brightness-custom-icon">
+                        <span class="sun-icon">☀️</span>
                         <div class="slider-track-container">
                             <input type="range" min="0" max="100" value="45" class="ios-range-slider" id="brightnessRange">
                         </div>
-                        <img src="assets/high_brightness.png" alt="High Brightness" class="brightness-custom-icon large">
+                        <span class="sun-icon large">☀️</span>
                     </div>
                     <div class="card-divider indent"></div>
                     <div class="settings-row">
@@ -478,7 +489,9 @@
             </div>
         </div>
 
-        <!-- Sub-Page View: Battery -->
+        
+
+             <!-- Sub-Page View: Battery -->
         <div class="settings-subview" id="batteryView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromBattery">
@@ -577,7 +590,11 @@
             </div>
         </div>
 
-        <!-- Sub-Page View: General -->
+
+        
+
+      
+          <!-- Sub-Page View: General -->
         <div class="settings-subview" id="generalView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromGeneral">
@@ -747,7 +764,10 @@
             </div>
         </div>
 
-        <!-- Sub-Page View: Wi-Fi -->
+        
+
+
+                   <!-- Sub-Page View: Wi-Fi -->
         <div class="settings-subview" id="wifiView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromWifi">
@@ -758,6 +778,7 @@
             </div>
 
             <div class="subview-scroll-container">
+                <!-- Main Wi-Fi Hero & Toggle Card -->
                 <div class="settings-card wifi-hero-card">
                     <div class="wifi-hero-icon-container">
                         <img src="assets/wifid.png" alt="Wi-Fi">
@@ -771,6 +792,7 @@
                  
                     <div class="card-divider full-divider"></div>
 
+                    <!-- Toggle Row -->
                     <div class="settings-row">
                         <div class="row-left">
                             <span class="row-label-text">Wi-Fi</span>
@@ -784,6 +806,7 @@
                     </div>
                 </div>
 
+                <!-- Connected Network Row / Card -->
                 <div class="settings-card group-card wifi-animatable-section" id="connectedNetworkCardContainer">
                     <div class="settings-row clickable" id="connectedNetworkCard">
                         <div class="row-left wifi-connected-left">
@@ -800,6 +823,7 @@
                     </div>
                 </div>
 
+                <!-- Networks Section Header & Container -->
                 <div class="subview-section-label wifi-animatable-section" id="networksHeaderLabel">Networks</div>
                 <div class="settings-card group-card wifi-animatable-section" id="networksCardContainer">
                     <div class="settings-row clickable" id="availableNetworkRow">
@@ -822,6 +846,7 @@
                     </div>
                 </div>
 
+                <!-- Additional Wi-Fi Options -->
                 <div class="settings-card group-card wifi-animatable-section">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -853,6 +878,11 @@
                 </div>
             </div>
         </div>
+
+        
+        
+            
+        
 
     <!-- Bottom Sheet Modal with Liquid Glass Effect -->
     <div class="sheet-overlay" id="sheetOverlay">
@@ -938,7 +968,10 @@
         </div>
     </div>
 
-    <!-- iOS 26 Wi-Fi Rename Popup Modal -->
+    <script src="script.js"></script>
+
+
+        <!-- iOS 26 Wi-Fi Rename Popup Modal -->
     <div class="wifi-rename-overlay" id="wifiRenameOverlay">
         <div class="wifi-rename-popup liquid-glass-container">
             <div class="liquid-glass-effect"></div>
@@ -959,6 +992,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+        
 </body>
 </html>
