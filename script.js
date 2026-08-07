@@ -82,54 +82,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-                                function updateLiveWifiUI() {
-        const state = getNativeAppNetworkState(); // Retrieves your environment/native network status
+                                    function updateLiveWifiUI() {
+        const state = getNativeAppNetworkState(); // Real system network state
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
         const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
 
-        // Check browser's native connection profile if available (wifi, cellular, etc.)
+        // Check browser / system connection profile
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        const effectiveType = connection ? connection.type : null; // e.g., 'wifi', 'cellular', etc.
+        const effectiveType = connection ? connection.type : null;
         const networkTypeStr = (state.type || effectiveType || "").toLowerCase();
 
-        // Check if the system is explicitly on Wi-Fi and connected
-        const isSystemWifiActive = isWifiOn && (
-            networkTypeStr.includes("wifi") || 
-            networkTypeStr.includes("wireless") || 
-            (!networkTypeStr.includes("cellular") && !networkTypeStr.includes("data") && !networkTypeStr.includes("net"))
-        );
+        // Determine if system is actively using cellular/mobile data instead of wifi
+        const isCellularActive = effectiveType === 'cellular' || networkTypeStr.includes('cellular') || networkTypeStr.includes('data');
+        
+        // Determine if the real system Wi-Fi is connected
+        const isSystemWifiConnected = state.connected && !isCellularActive && (networkTypeStr.includes('wifi') || networkTypeStr.includes('wireless') || networkTypeStr === '');
 
+        // Rule 1: If the user's toggle for Wi-Fi is OFF
         if (!isWifiOn) {
-            // 1. Wi-Fi toggle is explicitly OFF -> Hide container with animation
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             animatableElements.forEach(el => el.classList.add("wifi-hidden"));
             if (connectedNetworkCardContainer) {
                 connectedNetworkCardContainer.classList.add("wifi-hidden");
             }
             localStorage.setItem("ios26_wifi_on", "false");
-        } else if (effectiveType === 'cellular' || networkTypeStr.includes('cellular') || networkTypeStr.includes('data')) {
-            // 2. Mobile Data is active instead of Wi-Fi -> Keep connected Wi-Fi card hidden
+        } 
+        // Rule 2: Toggle is ON, but device system Wi-Fi is disconnected OR mobile data is active
+        else if (!isSystemWifiConnected || isCellularActive) {
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
+            
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
             if (connectedNetworkCardContainer) {
-                connectedNetworkCardContainer.classList.add("wifi-hidden");
+                connectedNetworkCardContainer.classList.add("wifi-hidden"); // Animates away!
             }
-        } else {
-            // 3. Wi-Fi is ON and active -> Animate and show the connected network card
+        } 
+        // Rule 3: Toggle is ON AND device system Wi-Fi is fully connected
+        else {
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
             updateTruncatedWifiName(savedCustomWifiName);
-            if (connectedNetworkCardContainer) {
-                connectedNetworkCardContainer.classList.remove("wifi-hidden");
-            }
             if (mainWifiStatusText) {
                 mainWifiStatusText.textContent = savedCustomWifiName;
             }
+            if (connectedNetworkCardContainer) {
+                connectedNetworkCardContainer.classList.remove("wifi-hidden"); // Animates and appears!
+            }
         }
     }
+
 
 
 
