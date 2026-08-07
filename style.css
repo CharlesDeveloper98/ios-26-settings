@@ -1067,17 +1067,33 @@ html.bold-text-enabled .subview-title {
 }
 
 
-/* --- Connected Wi-Fi Container Smooth Animations --- */
-#connectedNetworkCard {
-    opacity: 0;
-    max-height: 0;
+/* --- Connected Network Card / Container Fix --- */
+#connectedNetworkCardContainer {
+    width: 100%;
     overflow: hidden;
-    transform: translateY(-10px);
     transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    margin-top: 0;
-    margin-bottom: 0;
-    border: none;
 }
+
+#connectedNetworkCardContainer.wifi-hidden {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    pointer-events: none;
+    border: none !important;
+}
+
+/* Ensure the inner row doesn't restrict heights */
+#connectedNetworkCard {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 16px;
+}
+
 
 #connectedNetworkCard.animate-show {
     opacity: 1;
