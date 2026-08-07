@@ -371,7 +371,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
-    // Display & Brightness interactive state elements
+   
+
+
+        // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
@@ -409,8 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getSystemTheme() {
         if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-        return "light";
+        return "dark";
     }
 
     const savedTheme = localStorage.getItem("ios26_theme");
@@ -425,6 +427,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         setTheme("dark");
     }
+
+    // Listen to real-time system appearance changes if automatic mode is active
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        if (localStorage.getItem("ios26_automatic") === "true") {
+            setTheme(getSystemTheme());
+        }
+    });
 
     if (lightModeOption) {
         lightModeOption.addEventListener("click", () => {
@@ -450,9 +459,14 @@ document.addEventListener("DOMContentLoaded", () => {
         automaticToggle.addEventListener("change", () => {
             const isAutomatic = automaticToggle.checked;
             localStorage.setItem("ios26_automatic", isAutomatic);
-            if (isAutomatic) setTheme(getSystemTheme());
+            if (isAutomatic) {
+                setTheme(getSystemTheme());
+            }
         });
     }
+
+
+    
 
     // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
