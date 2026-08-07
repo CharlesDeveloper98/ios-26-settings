@@ -45,10 +45,9 @@ jobs:
       - name: Configure Android Theme and Webview Preferences
         run: |
           cd myApp
-          # Ensure DOM storage is enabled for localStorage to reliably save automatic/theme state in APK
-          # Adding preference overrides to config.xml if necessary
-          echo '<preference name="DisallowOverscroll" value="true" />' >> config.xml
-          echo '<preference name="BackupWebStorage" value="none" />' >> config.xml
+          # Safely insert preferences inside the <widget> node of config.xml
+          sed -i '/<\/widget>/i \    <preference name="DisallowOverscroll" value="true" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="BackupWebStorage" value="none" />' config.xml
 
       - name: Install Network Information Plugin
         run: |
