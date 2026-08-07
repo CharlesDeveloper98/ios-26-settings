@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener("DOMContentLoaded", () => {
     const sheetOverlay = document.getElementById("sheetOverlay");
     const sheetTitle = document.getElementById("sheetTitle");
@@ -19,19 +18,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const errorMsg = document.getElementById("errorMsg");
     const displayProfileName = document.getElementById("displayProfileName");
 
+    // Navigation Views Elements
     const mainSettingsView = document.getElementById("mainSettingsView");
     const displayBrightnessView = document.getElementById("displayBrightnessView");
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
+           
 
+        // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
     const wifiToggle = document.getElementById("wifiToggle");
     const mainWifiStatusText = document.getElementById("mainWifiStatusText");
+    const wifiDynamicContentWrapper = document.getElementById("wifiDynamicContentWrapper");
     const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
 
+    // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
     const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
     const wifiRenameInput = document.getElementById("wifiRenameInput");
@@ -66,28 +70,37 @@ document.addEventListener("DOMContentLoaded", () => {
         if (name.length > maxLength) {
             displayName = name.substring(0, maxLength) + "…";
         }
+        // Update Wi-Fi sub-page connected network card label
         if (connectedNetworkName) {
             connectedNetworkName.textContent = displayName;
         }
+        // Synchronize and display the active custom Wi-Fi name on the main settings page view
         if (mainWifiStatusText && isWifiOn) {
             mainWifiStatusText.textContent = displayName;
         }
     }
 
-    function updateLiveWifiUI() {
+
+
+                                        function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
         const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
 
+        // Check browser / network connection type precisely
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         const effectiveType = connection ? connection.type : null;
         const networkTypeStr = (state.type || effectiveType || "").toLowerCase();
 
+        // Check if device is actively on cellular/mobile data
         const isCellular = effectiveType === 'cellular' || networkTypeStr.includes('cellular') || networkTypeStr.includes('data');
+
+        // Check if device is strictly connected to Wi-Fi
         const isWifiConnected = state.connected && !isCellular && (networkTypeStr.includes('wifi') || networkTypeStr.includes('wireless') || networkTypeStr === 'unknown');
 
         if (!isWifiOn) {
+            // Condition 1: Wi-Fi toggle is OFF -> Hide everything and animate connected card away
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             animatableElements.forEach(el => el.classList.add("wifi-hidden"));
             if (connectedNetworkCardContainer) {
@@ -95,15 +108,19 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
+            // Condition 2: Wi-Fi toggle is ON -> Show general Wi-Fi sections
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
+            // Check real-time connection state for the connected card
             if (isWifiConnected) {
+                // Toggle ON & Wi-Fi Connected -> Animate and display connected card
                 updateTruncatedWifiName(savedCustomWifiName);
                 if (connectedNetworkCardContainer) {
                     connectedNetworkCardContainer.classList.remove("wifi-hidden");
                 }
             } else {
+                // Toggle ON, but Wi-Fi Disconnected or using Mobile Data -> Animate connected card away
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
                 if (connectedNetworkCardContainer) {
                     connectedNetworkCardContainer.classList.add("wifi-hidden");
@@ -112,10 +129,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+
+
+
+
+
+    
+
+
+    // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
         wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
     }
 
+    // Wi-Fi Popup Event Listeners
     if (wifiInfoBtn && wifiRenameOverlay) {
         wifiInfoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -142,6 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    
+
     document.addEventListener("online", updateLiveWifiUI, false);
     document.addEventListener("offline", updateLiveWifiUI, false);
     window.addEventListener('online', updateLiveWifiUI);
@@ -160,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateLiveWifiUI();
 
+    // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
         wifiNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -176,10 +206,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // General View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
     const backToMainFromGeneral = document.getElementById("backToMainFromGeneral");
 
+    // Battery View Elements
     const batteryNav = document.getElementById("batteryNav");
     const batteryView = document.getElementById("batteryView");
     const backToMainFromBattery = document.getElementById("backToMainFromBattery");
@@ -188,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const batteryLevelFill = document.getElementById("batteryLevelFill");
     const lastChargedText = document.getElementById("lastChargedText");
 
+    // --- Real-Time iOS App Activity Tracker Engine ---
     const systemApps = [
         { id: "display", name: "Display & Home", icon: "assets/home.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 5 },
         { id: "settings", name: "Settings", icon: "assets/settings.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 3 },
@@ -270,6 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderActivityList();
 
+    // Precise Battery Tracking Engine
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
             let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
@@ -337,6 +371,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
+   
+
+
+        // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
@@ -377,7 +415,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return "dark";
     }
 
-    const savedTheme = localStorage.getItem("ios26_theme");
+        const savedTheme = localStorage.getItem("ios26_theme");
     const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
     
     if (automaticToggle) automaticToggle.checked = savedAutomatic;
@@ -387,9 +425,12 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (savedTheme) {
         setTheme(savedTheme);
     } else {
+        // Default to system theme instead of blindly forcing dark
         setTheme(getSystemTheme());
     }
 
+
+    // Listen to real-time system appearance changes if automatic mode is active
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
         if (localStorage.getItem("ios26_automatic") === "true") {
             setTheme(getSystemTheme());
@@ -426,6 +467,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+    
+
+    // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
     const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
 
@@ -444,6 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Sub-page sliding navigations
     if (generalNav && generalView && backToMainFromGeneral) {
         generalNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -498,6 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
+    // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
     if (!isSetupFinished && sheetOverlay) {
         setTimeout(() => openSheet(), 400);
@@ -516,6 +563,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "";
     }
 
+    // Add scroll listener to subviews for advanced iOS header blur behavior
     document.querySelectorAll('.settings-subview').forEach(subview => {
         subview.addEventListener('scroll', () => {
             const header = subview.querySelector('.subview-header');
