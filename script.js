@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return "dark";
     }
 
-    const savedTheme = localStorage.getItem("ios26_theme");
+        const savedTheme = localStorage.getItem("ios26_theme");
     const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
     
     if (automaticToggle) automaticToggle.checked = savedAutomatic;
@@ -425,8 +425,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (savedTheme) {
         setTheme(savedTheme);
     } else {
-        setTheme("dark");
+        // Default to system theme instead of blindly forcing dark
+        setTheme(getSystemTheme());
     }
+
 
     // Listen to real-time system appearance changes if automatic mode is active
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
