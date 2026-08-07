@@ -1,3 +1,4 @@
+/* style.css */
 /* Theme Design Tokens Engine */
 :root {
     --bg-app: #000000;
@@ -61,39 +62,6 @@ html, body {
     -webkit-tap-highlight-color: transparent;
 }
 
-@font-face {
-    font-family: 'MyCustomFont';
-    src: url('/fonts/regular.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'MyCustomFont';
-    src: url('/fonts/medium.otf') format('opentype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'MyCustomFont';
-    src: url('/fonts/semibold.otf') format('opentype');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'MyCustomFont';
-    src: url('/fonts/bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* App Background Container */
 .app-background {
     width: 100%;
     max-width: 430px;
@@ -106,7 +74,6 @@ html, body {
     overflow: hidden;
 }
 
-/* iOS Navigation View Architecture */
 .settings-view {
     position: absolute;
     top: 0; left: 0;
@@ -139,7 +106,7 @@ html, body {
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     z-index: 20;
     pointer-events: none;
-    overflow: hidden; /* Keeps hidden state contained when inactive */
+    overflow: hidden;
 }
 
 .settings-subview.active {
@@ -147,18 +114,16 @@ html, body {
     pointer-events: auto;
 }
 
-/* ADD THIS: Dedicated scrollable wrapper for subview contents */
 .subview-scroll-container {
     flex: 1;
     width: 100%;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 12px 16px 120px 16px; /* Ensures padding at the bottom so elements aren't cut off */
+    padding: 12px 16px 120px 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-
 
 .settings-container {
     padding: 12px 16px 120px 16px;
@@ -171,7 +136,6 @@ html, body {
     color: var(--text-main); padding-left: 4px; margin-top: 44px; margin-bottom: 6px; flex-shrink: 0;
 }
 
-/* --- Translucent iOS Blur Subview Header --- */
 .subview-header {
     position: sticky;
     top: 0;
@@ -181,31 +145,19 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* Updated to use your search gradient and matching backdrop blur */
     background: var(--search-gradient, rgba(20, 20, 20, 0.75));
     backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
-    
-   
     z-index: 100;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 [data-theme="light"] .subview-header {
-    /* Uses your custom light background with native iOS translucency */
     background: rgba(242, 241, 246, 0.75);
     backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
-    
-    
 }
 
-
-
-
-
-/* --- Unified Circular Liquid Glass Back Button --- */
 .liquid-back-btn {
     position: absolute;
     left: 16px;
@@ -236,15 +188,6 @@ html, body {
     background: rgba(0, 122, 255, 0.2);
 }
 
-/* Ensure back arrow icon inside looks correct */
-.back-btn svg, .back-btn img, 
-.subview-back-btn svg, .subview-back-btn img {
-    width: 14px;
-    height: 14px;
-    object-fit: contain;
-}
-
-
 .back-chevron {
     font-size: 24px;
     font-weight: 400;
@@ -253,7 +196,6 @@ html, body {
     margin-right: 2px;
 }
 
-/* Subview Title Styling */
 .subview-title {
     font-size: 17px;
     font-weight: 600;
@@ -263,17 +205,8 @@ html, body {
     text-align: center;
 }
 
-
-/* Ensure subview content container sits nicely underneath the sticky header */
-.subview-content, 
-.settings-subview > *:not(.subview-header) {
-    /* Allows items to scroll seamlessly right behind the blurred header */
-    box-sizing: border-box;
-}
-
 .subview-section-label { font-size: 13px; font-weight: 400; color: var(--text-sub); letter-spacing: -0.1px; padding-left: 16px; flex-shrink: 0; }
 
-/* iOS Grouped Cards */
 .settings-card {
     background: var(--bg-card); border-radius: 20px; overflow: hidden;
     border: var(--card-border); flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
@@ -297,11 +230,9 @@ html, body {
 .row-status-text { font-size: 15px; color: var(--text-sub); }
 .chevron-icon { font-size: 20px; color: var(--text-sub); font-weight: 400; }
 
-
 .row-text-stack { display: flex; flex-direction: column; gap: 2px; }
 .row-sub-label { font-size: 12px; color: var(--text-sub); }
 
-/* Battery Subview specific layouts */
 .battery-top-card { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
 .battery-main-header { display: flex; justify-content: space-between; align-items: center; }
 .battery-percent-value { font-size: 38px; font-weight: 700; color: var(--text-main); line-height: 1; }
@@ -310,52 +241,41 @@ html, body {
 .battery-level-bar-container { width: 100%; height: 8px; background: rgba(128,128,128,0.2); border-radius: 4px; overflow: hidden; }
 .battery-level-fill { height: 100%; background: #34c759; border-radius: 4px; transition: width 0.4s ease; }
 
-.battery-usage-card { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
-.battery-usage-header-text { font-size: 14px; color: var(--text-main); line-height: 1.4; font-weight: 400; }
-.battery-stats-row { display: flex; gap: 32px; }
-.stat-group { display: flex; flex-direction: column; gap: 2px; }
-.stat-label { font-size: 12px; color: var(--text-sub); }
-.stat-label.today-color { color: #007aff; font-weight: 500; }
-.stat-value { font-size: 20px; font-weight: 600; color: var(--text-main); }
-.stat-value.today-color { color: #007aff; }
-
-.battery-chart-container { position: relative; height: 110px; width: 100%; margin-top: 8px; display: flex; flex-direction: column; justify-content: flex-end; }
-.average-line { position: absolute; top: 40%; left: 0; width: 100%; border-top: 1px dashed var(--text-sub); display: flex; justify-content: flex-end; }
-.average-line span { font-size: 10px; color: var(--text-sub); transform: translateY(-12px); background: var(--bg-card); padding-left: 4px; }
-.chart-bars-flex { display: flex; justify-content: space-between; align-items: flex-end; height: 90px; padding: 0 4px; }
-.chart-bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 8px; flex: 1; }
-.bar-fill { width: 100%; background: rgba(128,128,128,0.25); border-radius: 3px; }
-.bar-fill.active-fill { background: #007aff; }
-.day-label { font-size: 11px; color: var(--text-sub); }
-.day-label.active-day { color: #007aff; font-weight: 600; }
-
-.chart-legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub); margin-top: 4px; }
-.legend-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(128,128,128,0.5); }
-.legend-dot.active-dot { background: #007aff; margin-left: 8px; }
-
-
 .notification-badge {
     background-color: #ff3b30; color: #fff; font-size: 13px; font-weight: 600;
     width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
 }
 
-/* Appearance Selector */
+/* Appearance Selector & Wallpaper Integration */
 .appearance-options { display: flex; justify-content: space-around; padding: 16px 12px 12px 12px; gap: 16px; }
 .appearance-option { display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 10px; flex: 1; }
 
 .preview-screen {
-    width: 100%; max-width: 110px; height: 150px; border-radius: 14px;
-    position: relative; overflow: hidden; border: 2px solid transparent; transition: border-color 0.15s ease;
+    width: 100%; 
+    max-width: 140px; 
+    height: 240px; 
+    border-radius: 14px;
+    position: relative; 
+    overflow: hidden; 
+    border: 2px solid transparent; 
+    transition: border-color 0.15s ease;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.appearance-option.active .preview-screen { border-color: #007aff; }
-.light-preview { background: linear-gradient(135deg, #f2f2f7 0%, #e5e5ea 100%); }
-.dark-preview { background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%); }
+.preview-wallpaper-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
 
-.preview-notch { width: 40px; height: 8px; background: var(--preview-notch-bg); border-radius: 4px; margin: 6px auto 0 auto; }
-.preview-time { font-size: 11px; font-weight: 600; text-align: center; color: var(--preview-time-color); margin-top: 4px; }
-.preview-widget { width: 80%; height: 20px; background: var(--preview-widget-bg); border-radius: 6px; margin: 8px auto 0 auto; }
+.appearance-option.active .preview-screen { border-color: #007aff; }
+
+.preview-notch { width: 40px; height: 8px; background: var(--preview-notch-bg); border-radius: 4px; margin: 6px auto 0 auto; position: relative; z-index: 1; }
+.preview-time { font-size: 11px; font-weight: 600; text-align: center; color: var(--preview-time-color); margin-top: 4px; position: relative; z-index: 1; }
+.preview-widget { width: 80%; height: 20px; background: var(--preview-widget-bg); border-radius: 6px; margin: 8px auto 0 auto; position: relative; z-index: 1; backdrop-filter: blur(4px); }
 .appearance-text { font-size: 14px; font-weight: 500; color: var(--text-main); }
 
 .radio-check {
@@ -364,10 +284,24 @@ html, body {
 }
 .radio-check.checked { background-color: #007aff; border-color: #007aff; color: #fff; }
 
-/* Slider */
+/* Brightness Controls & Custom Icons */
 .brightness-slider-row { display: flex; align-items: center; padding: 14px 16px; gap: 12px; flex-shrink: 0; }
-.sun-icon { font-size: 14px; color: var(--text-sub); }
-.sun-icon.large { font-size: 18px; }
+.brightness-custom-icon {
+    width: 16px !important;
+    height: 16px !important;
+    object-fit: contain;
+    opacity: 0.6;
+}
+.brightness-custom-icon.large {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+[data-theme="dark"] .brightness-custom-icon,
+:root:not([data-theme="light"]) .brightness-custom-icon {
+    filter: brightness(0) invert(1);
+}
+
 .slider-track-container { flex-grow: 1; display: flex; align-items: center; }
 
 .ios-range-slider {
@@ -380,7 +314,6 @@ html, body {
 .settings-footer-note { font-size: 13px; color: var(--text-sub); line-height: 1.4; padding: 8px 16px 14px 16px; flex-shrink: 0; }
 .settings-footer-note.bottom-note { padding-top: 0; }
 
-/* Setting Icons */
 .setting-icon {
     width: 28px; height: 28px; border-radius: 6px; display: flex; justify-content: center; align-items: center;
     font-size: 14px; color: #fff; flex-shrink: 0; overflow: hidden; position: relative;
@@ -403,7 +336,6 @@ html, body {
 [data-theme="light"] .setting-icon.red { background-color: #ff3b30; }
 [data-theme="light"] .setting-icon.purple { background-color: #af52de; }
 
-/* iOS Toggle Switch */
 .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; }
 .ios-switch input { opacity: 0; width: 0; height: 0; }
 .slider {
@@ -417,14 +349,11 @@ html, body {
 input:checked + .slider { background-color: #34c759; }
 input:checked + .slider:before { transform: translateX(20px); }
 
-/* Bottom Search Container */
 .bottom-search-container {
     position: absolute; bottom: 0; left: 0; width: 100%;
     padding: 10px 16px 24px 16px; background: var(--search-gradient); z-index: 50; display: flex; justify-content: center; pointer-events: none;
 }
 
-
-/* --- Perfect Liquid Glass Search Bar Engine --- */
 .liquidglass-wrapper {
     position: relative;
     overflow: hidden;
@@ -473,14 +402,8 @@ input:checked + .slider:before { transform: translateX(20px); }
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-
-
-
-
 .search-placeholder { flex-grow: 1; color: var(--text-sub); }
 
-
-/* Separate Sizing Rules to Balance Internal PNG Padding */
 .search-icon-img {
     width: 18px !important;
     height: 18px !important;
@@ -497,7 +420,6 @@ input:checked + .slider:before { transform: translateX(20px); }
     display: inline-block;
 }
 
-/* Dynamic Theme Color Matching for Light & Dark Themes */
 [data-theme="light"] .search-icon-img,
 [data-theme="light"] .mic-icon-img {
     filter: brightness(0) saturate(100%) invert(35%) sepia(9%) saturate(417%) hue-rotate(169deg) brightness(92%) contrast(88%);
@@ -512,11 +434,6 @@ input:checked + .slider:before { transform: translateX(20px); }
     opacity: 0.6;
 }
 
-
-
-
-
-/* Sheet Overlay */
 .sheet-overlay {
     position: absolute;
     top: 0;
@@ -539,20 +456,6 @@ input:checked + .slider:before { transform: translateX(20px); }
     visibility: visible;
 }
 
-.sheet-container {
-    transform: translateY(100%) scale(0.95);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    /* Liquid Glass Bubble Effect */
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.sheet-overlay.active .sheet-container {
-    transform: translateY(0) scale(1);
-}
-
-/* Liquid Glass Bottom Sheet */
 .bottom-sheet {
     width: 100%;
     height: 85%;
@@ -574,7 +477,6 @@ input:checked + .slider:before { transform: translateX(20px); }
 .sheet-overlay.active .bottom-sheet {
     transform: translateY(0);
 }
-
 
 .sheet-indicator {
     width: 36px; height: 5px; background: rgba(255, 255, 255, 0.3);
@@ -648,52 +550,6 @@ input:checked + .slider:before { transform: translateX(20px); }
 .chevron { font-size: 28px; font-weight: 300; color: #ffffff; line-height: 1; }
 .tick { font-size: 22px; font-weight: 1; color: #ffffff; line-height: 1; }
 
-
-.master-battery-card {
-    display: flex;
-    flex-direction: column;
-}
-
-.battery-usage-inner-block {
-    padding: 20px 16px 16px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.battery-chart-container {
-    position: relative;
-    height: 140px; /* Increased height to give the graph bars breathing room */
-    width: 100%;
-    margin-top: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-
-.chart-bars-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    height: 110px; /* Expanded vertical column area for bars */
-    padding: 0 4px;
-}
-
-.embedded-section-title {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-sub);
-    letter-spacing: -0.1px;
-    padding: 20px 16px 8px 16px; /* Balanced spacing above the activity list */
-}
-.card-divider.full-divider {
-    margin-left: 0;
-    width: 100%;
-}
-
-
-
-/* iOS Bold Text System State */
 html.bold-text-enabled body {
     font-weight: 500;
 }
@@ -712,108 +568,12 @@ html.bold-text-enabled .subview-title {
     font-weight: 800;
 }
 
-
-/* Dynamic Battery Level Colors */
-.battery-level-fill.color-green { background-color: #34c759 !important; }
-.battery-level-fill.color-normal { background-color: #ffffff !important; }
-[data-theme="light"] .battery-level-fill.color-normal { background-color: #000000 !important; }
-.battery-level-fill.color-yellow { background-color: #ffcc00 !important; }
-.battery-level-fill.color-red { background-color: #ff453a !important; }
-
-
-/* Fallback protection for setting icons */
-.setting-icon img[src=""], 
-.setting-icon img:not([src]) {
-    opacity: 0;
-}
-.setting-icon {
-    background: transparent !important;
-    background-color: transparent !important;
-    border-radius: 8px; /* Match iOS squircle curve */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.setting-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-
-/* --- General Hero Card Top Layout (100% Accurate iOS Style) --- */
-.general-hero-card {
-    padding: 24px 20px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.general-hero-icon-container {
-    width: 60px;
-    height: 60px;
-    border-radius: 14px;
-    overflow: hidden;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    box-shadow: none;
-}
-
-.general-hero-text-block {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
-}
-
-.general-hero-icon-container img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-}
-
-
-.general-hero-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text-main);
-    letter-spacing: -0.4px;
-    margin: 0;
-}
-
-.general-hero-subtitle {
-    font-size: 13px;
-    line-height: 1.45;
-    color: var(--text-sub);
-    letter-spacing: -0.1px;
-    margin: 0;
-}
-
-/* --- Wi-Fi Sub-Page Exact Layout & Animation Styles --- */
-.subview-header-right-btn {
-    position: absolute;
-    right: 16px;
-    font-size: 17px;
-    color: #007aff;
-    cursor: pointer;
-    font-weight: 400;
-}
-
-/* --- Exact Wi-Fi Hero Container Matching iOS Reference --- */
 .wifi-hero-card {
     padding: 0;
     display: flex;
     flex-direction: column;
 }
 
-/* Hero Content Area Inside the Unified Card */
 .wifi-hero-card .wifi-hero-icon-container {
     width: 60px;
     height: 60px;
@@ -834,7 +594,6 @@ html.bold-text-enabled .subview-title {
     height: 100% !important;
     object-fit: contain !important;
 }
-
 
 .wifi-hero-card .wifi-hero-text-block {
     padding-left: 20px;
@@ -862,53 +621,13 @@ html.bold-text-enabled .subview-title {
     letter-spacing: -0.1px;
 }
 
-
-
-/* Make internal rows inside the unified card match native iOS row padding */
 .wifi-hero-card .settings-row {
     padding: 11px 18px;
 }
 
-/* Fix dividers inside the unified card to match native indent rules */
 .wifi-hero-card .card-divider.full-divider {
     margin-left: 18px;
     width: calc(100% - 18px);
-}
-
-.wifi-hero-icon-container {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2px; /* Positioned right on top of the text block */
-}
-
-.wifi-hero-icon-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.wifi-hero-text-block {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
-}
-
-.wifi-hero-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-main);
-    letter-spacing: -0.2px;
-}
-
-.wifi-hero-subtitle {
-    font-size: 13px;
-    line-height: 1.4;
-    color: var(--text-sub);
 }
 
 .blue-link {
@@ -948,38 +667,6 @@ html.bold-text-enabled .subview-title {
     filter: brightness(0) invert(1);
 }
 
-[data-theme="light"] .liquid-edit-btn {
-    background: rgba(255, 255, 255, 0.6);
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-/* Smooth Collapse & Fade Animation for Wi-Fi Off State */
-.wifi-collapsible-wrapper {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    max-height: 800px;
-    opacity: 1;
-    transform: translateY(0);
-    transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                opacity 0.3s ease, 
-                transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transform-origin: top;
-}
-
-.wifi-collapsible-wrapper.wifi-hidden {
-    max-height: 0;
-    opacity: 0;
-    transform: translateY(-15px);
-    pointer-events: none;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-
-
-/* Individual containers below the Wi-Fi toggle */
 .wifi-animatable-section {
     max-height: 500px;
     opacity: 1;
@@ -993,7 +680,6 @@ html.bold-text-enabled .subview-title {
     transform-origin: top;
 }
 
-/* Hidden state: slides and collapses cleanly upward */
 .wifi-animatable-section.wifi-hidden {
     max-height: 0 !important;
     opacity: 0 !important;
@@ -1005,9 +691,6 @@ html.bold-text-enabled .subview-title {
     pointer-events: none;
 }
 
-
-
-    /* Blue Circular Info Badge */
 .wifi-info-badge {
     width: 22px;
     height: 22px;
@@ -1025,23 +708,21 @@ html.bold-text-enabled .subview-title {
     height: 14px;
     object-fit: contain;
     filter: brightness(0) saturate(100%) invert(37%) sepia(95%) saturate(1900%) hue-rotate(202deg) brightness(101%) contrast(101%);
-}        
+}
 
-
-   /* 3. Liquid Glass "Edit" Button at Top Right */
 .liquid-edit-btn {
     position: absolute;
     right: 16px;
     font-size: 15px;
     font-weight: 400;
     color: #007aff;
-    background: rgba(255, 255, 255, 0.08); /* Transparent glass base */
+    background: rgba(255, 255, 255, 0.08);
     padding: 6px 16px;
     border-radius: 20px;
     cursor: pointer;
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 0.5px solid rgba(255, 255, 255, 0.25); /* Liquid glass border */
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: background 0.2s ease, transform 0.15s ease;
 }
@@ -1051,214 +732,8 @@ html.bold-text-enabled .subview-title {
     background: rgba(0, 122, 255, 0.2);
 }
 
-
-.wifi-collapsible-wrapper.wifi-hidden {
-    max-height: 0;
-    opacity: 0;
-    transform: translateY(-20px);
-    pointer-events: none;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-/* --- Wi-Fi Sub-Page Overhauls & Fixes --- */
-.wifi-subview-content {
-    padding-bottom: 48px; /* Fixed high bottom padding issue */
-}
-
-
-/* --- Connected Network Card / Container Fix --- */
-#connectedNetworkCardContainer {
-    width: 100%;
-    overflow: hidden;
-    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-#connectedNetworkCardContainer.wifi-hidden {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    pointer-events: none;
-    border: none !important;
-}
-
-/* Ensure the inner row doesn't restrict heights */
-#connectedNetworkCard {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 11px 16px;
-}
-
-
-#connectedNetworkCard.animate-show {
-    opacity: 1;
-    max-height: 100px;
-    transform: translateY(0);
-    margin-bottom: 16px; /* Restores gap spacing */
-    border: var(--card-border);
-}
-
-#connectedNetworkCard.animate-hide {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
-    margin-bottom: 0;
-    border: none;
-}
-
-
-
-/* --- iOS 26 Liquid Glass Wi-Fi Rename Popup --- */
-#wifiRenameOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-/* Active state for showing overlay */
-#wifiRenameOverlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Popup Box Scaling Animation */
-#wifiRenameOverlay .wifi-rename-dialog {
-    transform: scale(1.1);
-    opacity: 0;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
-}
-
-#wifiRenameOverlay.active .wifi-rename-dialog {
-    transform: scale(1);
-    opacity: 1;
-}
-
-.wifi-rename-popup {
-    width: 280px;
-    background: rgba(30, 30, 32, 0.75);
-    backdrop-filter: blur(30px) saturate(200%);
-    -webkit-backdrop-filter: blur(30px) saturate(200%);
-    border-radius: 22px;
-    border: 0.5px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    overflow: hidden;
-    transform: scale(0.9);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-}
-
-.wifi-rename-overlay.active .wifi-rename-popup {
-    transform: scale(1);
-}
-
-[data-theme="light"] .wifi-rename-popup {
-    background: rgba(255, 255, 255, 0.75);
-    border: 0.5px solid rgba(0, 0, 0, 0.15);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.popup-content-inner {
-    padding: 20px 16px 0 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-}
-
-.popup-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-main);
-    letter-spacing: -0.4px;
-    margin-bottom: 6px;
-}
-
-.popup-subtitle {
-    font-size: 13px;
-    color: var(--text-sub);
-    line-height: 1.4;
-    margin-bottom: 16px;
-}
-
-.ios-rounded-input-container {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.ios-rounded-text-field {
-    width: 100%;
-    height: 36px;
-    padding: 0 10px;
-    background: rgba(120, 120, 128, 0.18);
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    color: var(--text-main);
-    font-size: 15px;
-    text-align: center;
-    outline: none;
-}
-
-[data-theme="light"] .ios-rounded-text-field {
-    background: rgba(120, 120, 128, 0.08);
+[data-theme="light"] .liquid-edit-btn {
+    background: rgba(255, 255, 255, 0.6);
     border: 0.5px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
-
-.ios-rounded-text-field:focus {
-    border-color: #007aff;
-}
-
-.popup-button-row {
-    display: flex;
-    width: calc(100% + 32px);
-    margin-left: -16px;
-    border-top: 0.5px solid var(--divider-color);
-}
-
-.popup-action-btn {
-    flex: 1;
-    height: 44px;
-    background: transparent;
-    border: none;
-    font-size: 17px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.popup-action-btn.cancel-btn {
-    color: #007aff;
-    font-weight: 400;
-}
-
-.popup-action-btn.rename-btn {
-    color: #007aff;
-    font-weight: 600;
-}
-
-.popup-action-btn:active {
-    background: rgba(128, 128, 128, 0.15);
-}
-
-.button-divider-vertical {
-    width: 0.5px;
-    background: var(--divider-color);
-}
-
