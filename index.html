@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="color-scheme" content="light dark">
     <title>iOS 26 Settings</title>
+    <!-- Immediate theme injector to fix APK build webview evaluation -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem("ios26_theme");
+            const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
+            let activeTheme = "dark"; // Default fallback
+
+            if (savedAutomatic) {
+                const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+                activeTheme = prefersLight ? "light" : "dark";
+            } else if (savedTheme) {
+                activeTheme = savedTheme;
+            }
+            document.documentElement.setAttribute("data-theme", activeTheme);
+        })();
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 
 <body>
 
