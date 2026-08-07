@@ -82,39 +82,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-                    function updateLiveWifiUI() {
+                        function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
         const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
 
         if (!isWifiOn) {
+            // Wi-Fi is turned OFF: Hide everything Wi-Fi related
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             animatableElements.forEach(el => el.classList.add("wifi-hidden"));
             if (connectedNetworkCardContainer) connectedNetworkCardContainer.classList.add("wifi-hidden");
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
+            // Wi-Fi is turned ON: Show sections and the connected network container
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
-            // Extract network type safely and check if it's explicitly wifi (ignoring case)
-            const networkType = (state.type || "").toLowerCase();
-            const isWifiType = networkType.includes("wifi") || networkType.includes("wireless");
-
-            // Show connected card ONLY if connected AND type is explicitly Wi-Fi
-            if (state.connected && isWifiType) {
-                updateTruncatedWifiName(savedCustomWifiName);
-                if (connectedNetworkCardContainer) {
-                    connectedNetworkCardContainer.classList.remove("wifi-hidden");
-                }
-            } else {
-                if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
-                if (connectedNetworkCardContainer) {
-                    connectedNetworkCardContainer.classList.add("wifi-hidden");
-                }
+            // Update name and force the connected Wi-Fi card to show since Wi-Fi is active
+            updateTruncatedWifiName(savedCustomWifiName);
+            if (connectedNetworkCardContainer) {
+                connectedNetworkCardContainer.classList.remove("wifi-hidden");
+            }
+            if (mainWifiStatusText) {
+                mainWifiStatusText.textContent = savedCustomWifiName;
             }
         }
     }
+
 
 
 
