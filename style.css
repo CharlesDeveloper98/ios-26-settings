@@ -1067,7 +1067,7 @@ html.bold-text-enabled .subview-title {
 }
 
 
-/* --- Connected Wi-Fi Container Smooth Animations --- */
+/* --- Connected Wi-Fi Container Fixed Height & Layout --- */
 #connectedNetworkCard {
     opacity: 0;
     max-height: 0;
@@ -1076,19 +1076,15 @@ html.bold-text-enabled .subview-title {
     transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     margin-top: 0;
     margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
     border: none;
     visibility: hidden;
 }
 
 #connectedNetworkCard.animate-show {
     opacity: 1;
-    max-height: 80px; /* Constrains height precisely to match standard iOS rows */
+    max-height: 200px; /* Increased high enough to fit content without clipping */
     transform: translateY(0);
-    margin-bottom: 12px; /* Matches your app's standard spacing card gap */
-    padding-top: 0;
-    padding-bottom: 0;
+    margin-bottom: 12px;
     border: var(--card-border);
     visibility: visible;
 }
@@ -1098,11 +1094,10 @@ html.bold-text-enabled .subview-title {
     max-height: 0;
     transform: translateY(-10px);
     margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
     border: none;
     visibility: hidden;
 }
+
 
 
 
