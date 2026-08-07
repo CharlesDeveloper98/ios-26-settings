@@ -82,22 +82,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-                            function updateLiveWifiUI() {
+                                function updateLiveWifiUI() {
+        const state = getNativeAppNetworkState(); // Retrieves your environment/native network status
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
         const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
 
-        // Use the explicit global or local boolean state for the Wi-Fi toggle
-        if (typeof isWifiOn !== 'undefined' && !isWifiOn) {
-            // Wi-Fi is OFF: Hide everything, including the connected container
+        // Check browser's native connection profile if available (wifi, cellular, etc.)
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const effectiveType = connection ? connection.type : null; // e.g., 'wifi', 'cellular', etc.
+        const networkTypeStr = (state.type || effectiveType || "").toLowerCase();
+
+        // Check if the system is explicitly on Wi-Fi and connected
+        const isSystemWifiActive = isWifiOn && (
+            networkTypeStr.includes("wifi") || 
+            networkTypeStr.includes("wireless") || 
+            (!networkTypeStr.includes("cellular") && !networkTypeStr.includes("data") && !networkTypeStr.includes("net"))
+        );
+
+        if (!isWifiOn) {
+            // 1. Wi-Fi toggle is explicitly OFF -> Hide container with animation
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             animatableElements.forEach(el => el.classList.add("wifi-hidden"));
             if (connectedNetworkCardContainer) {
                 connectedNetworkCardContainer.classList.add("wifi-hidden");
             }
             localStorage.setItem("ios26_wifi_on", "false");
+        } else if (effectiveType === 'cellular' || networkTypeStr.includes('cellular') || networkTypeStr.includes('data')) {
+            // 2. Mobile Data is active instead of Wi-Fi -> Keep connected Wi-Fi card hidden
+            animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
+            localStorage.setItem("ios26_wifi_on", "true");
+            if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
+            if (connectedNetworkCardContainer) {
+                connectedNetworkCardContainer.classList.add("wifi-hidden");
+            }
         } else {
-            // Wi-Fi is ON: Show the animatable sections and the connected network container
+            // 3. Wi-Fi is ON and active -> Animate and show the connected network card
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
