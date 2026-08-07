@@ -82,24 +82,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-                        function updateLiveWifiUI() {
-        const state = getNativeAppNetworkState();
+                            function updateLiveWifiUI() {
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
         const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
 
-        if (!isWifiOn) {
-            // Wi-Fi is turned OFF: Hide everything Wi-Fi related
+        // Use the explicit global or local boolean state for the Wi-Fi toggle
+        if (typeof isWifiOn !== 'undefined' && !isWifiOn) {
+            // Wi-Fi is OFF: Hide everything, including the connected container
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             animatableElements.forEach(el => el.classList.add("wifi-hidden"));
-            if (connectedNetworkCardContainer) connectedNetworkCardContainer.classList.add("wifi-hidden");
+            if (connectedNetworkCardContainer) {
+                connectedNetworkCardContainer.classList.add("wifi-hidden");
+            }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            // Wi-Fi is turned ON: Show sections and the connected network container
+            // Wi-Fi is ON: Show the animatable sections and the connected network container
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
-            // Update name and force the connected Wi-Fi card to show since Wi-Fi is active
             updateTruncatedWifiName(savedCustomWifiName);
             if (connectedNetworkCardContainer) {
                 connectedNetworkCardContainer.classList.remove("wifi-hidden");
