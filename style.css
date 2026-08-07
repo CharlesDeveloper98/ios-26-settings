@@ -1067,36 +1067,32 @@ html.bold-text-enabled .subview-title {
 }
 
 
-/* --- Connected Wi-Fi Container Fixed Height & Layout --- */
+/* --- Connected Wi-Fi Container Clean Flex Fix --- */
 #connectedNetworkCard {
+    display: none; /* Fully hidden by default so it doesn't take up layout space */
     opacity: 0;
-    max-height: 0;
-    overflow: hidden;
     transform: translateY(-10px);
-    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
     margin-top: 0;
     margin-bottom: 0;
     border: none;
-    visibility: hidden;
 }
 
 #connectedNetworkCard.animate-show {
+    display: flex; /* Restores standard iOS card flex behavior */
     opacity: 1;
-    max-height: 200px; /* Increased high enough to fit content without clipping */
     transform: translateY(0);
-    margin-bottom: 12px;
+    margin-bottom: 12px; /* Matches normal section spacing */
     border: var(--card-border);
-    visibility: visible;
 }
 
 #connectedNetworkCard.animate-hide {
     opacity: 0;
-    max-height: 0;
     transform: translateY(-10px);
     margin-bottom: 0;
     border: none;
-    visibility: hidden;
 }
+
 
 
 
