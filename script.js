@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-            function updateLiveWifiUI() {
+                function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
@@ -97,7 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
-            if (state.connected && (state.type === "wifi" || state.type === "unknown")) {
+            // STRICT CHECK: Only show connected card if connected AND the network type is strictly 'wifi'
+            if (state.connected && state.type === "wifi") {
                 updateTruncatedWifiName(savedCustomWifiName);
                 if (connectedNetworkCardContainer) {
                     connectedNetworkCardContainer.classList.remove("wifi-hidden");
@@ -110,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+
 
 
     
