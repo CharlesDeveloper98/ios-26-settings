@@ -35,19 +35,12 @@ jobs:
         run: |
           cordova create myApp com.reelcee.settings "Settings"
           rm -rf myApp/www/*
-          # Copying all necessary files, assets, and standalone folders to the www directory
+          # Copying all necessary files, assets, and standalone fonts folder to the www directory
           cp index.html myApp/www/
           cp script.js myApp/www/
           cp style.css myApp/www/
           cp -r assets/ myApp/www/
           cp -r fonts/ myApp/www/
-
-      - name: Configure Android Theme and Webview Preferences
-        run: |
-          cd myApp
-          # Safely insert preferences inside the <widget> node of config.xml
-          sed -i '/<\/widget>/i \    <preference name="DisallowOverscroll" value="true" />' config.xml
-          sed -i '/<\/widget>/i \    <preference name="BackupWebStorage" value="none" />' config.xml
 
       - name: Install Network Information Plugin
         run: |
