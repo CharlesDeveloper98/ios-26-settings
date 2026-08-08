@@ -6,31 +6,21 @@
     <meta name="color-scheme" content="light dark">
     <title>iOS 26 Settings</title>
     <!-- Immediate theme injector to fix APK build webview evaluation -->
-   <script>
-(function() {
-    const savedTheme = localStorage.getItem("ios26_theme");
-    const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
-    
-    function getSystemTheme() {
-        return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-    }
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem("ios26_theme");
+            const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
+            let activeTheme = "dark"; // Default fallback
 
-    let activeTheme = "dark"; // Ultimate fallback
-
-    if (savedAutomatic) {
-        activeTheme = getSystemTheme();
-    } else if (savedTheme) {
-        activeTheme = savedTheme;
-    } else {
-        // If nothing is saved at all, respect the device's native theme by default!
-        activeTheme = getSystemTheme();
-    }
-    
-    document.documentElement.setAttribute("data-theme", activeTheme);
-})();
-</script>
-
-
+            if (savedAutomatic) {
+                const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+                activeTheme = prefersLight ? "light" : "dark";
+            } else if (savedTheme) {
+                activeTheme = savedTheme;
+            }
+            document.documentElement.setAttribute("data-theme", activeTheme);
+        })();
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 
