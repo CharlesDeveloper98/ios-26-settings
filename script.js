@@ -466,6 +466,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+
+
+    const automaticOptionsContainer = document.getElementById("automaticOptionsContainer");
+
+function updateAutomaticUI(isAutomatic) {
+    if (automaticOptionsContainer) {
+        if (isAutomatic) {
+            automaticOptionsContainer.style.display = "block";
+        } else {
+            automaticOptionsContainer.style.display = "none";
+        }
+    }
+}
+
+// Inside your initialization and event listeners:
+if (automaticToggle) {
+    automaticToggle.addEventListener("change", () => {
+        const isAutomatic = automaticToggle.checked;
+        localStorage.setItem("ios26_automatic", isAutomatic);
+        updateAutomaticUI(isAutomatic);
+        if (isAutomatic) {
+            setTheme(getSystemTheme());
+        }
+    });
+    
+    // Set initial state on load
+    updateAutomaticUI(automaticToggle.checked);
+}
+
+    
     
 
     // Bold Text interactive state
