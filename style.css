@@ -1332,4 +1332,16 @@ html.bold-text-enabled .subview-title {
     width: 20px;
     text-align: center;
 }
-               
+
+
+
+/* --- Appearance Schedule Sub-page Styles --- */
+.subview-scroll-container .settings-footer-note.top-note {
+    margin-top: 12px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #6e6e73;
+}
