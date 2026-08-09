@@ -1322,3 +1322,14 @@ html.bold-text-enabled .subview-title {
 :root:not([data-theme="light"]) .brightness-custom-icon {
     filter: brightness(0) invert(1);
 }
+
+
+/* --- Options Sub-page Selection Styles --- */
+.option-checkmark {
+    font-size: 17px;
+    font-weight: 600;
+    color: #007aff;
+    width: 20px;
+    text-align: center;
+}
+               
