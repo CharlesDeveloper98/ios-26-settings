@@ -341,19 +341,20 @@
             </label>
         </div>
     </div>
-    <!-- Missing Container under Automatic Options -->
-    <div class="automatic-options-container" id="automaticOptionsContainer">
-        <div class="card-divider"></div>
-        <div class="settings-row clickable">
-            <div class="row-left">
-                <span class="row-label-text">Options</span>
-            </div>
-            <div class="row-right">
-                <span class="row-status-text">Sunset to Sunrise</span>
-                <span class="chevron-icon">›</span>
-            </div>
+    <!-- Automatic Options Container -->
+<div class="automatic-options-container" id="automaticOptionsContainer">
+    <div class="card-divider"></div>
+    <div class="settings-row clickable" id="optionsNav">
+        <div class="row-left">
+            <span class="row-label-text">Options</span>
+        </div>
+        <div class="row-right">
+            <span class="row-status-text" id="selectedOptionText">Sunset to Sunrise</span>
+            <span class="chevron-icon">›</span>
         </div>
     </div>
+</div>
+
 </div>
 
 
@@ -891,7 +892,43 @@
 
         
         
-            
+
+                <!-- Sub-Page View: Options (Sunset to Sunrise / Custom Schedule) -->
+        <div class="settings-subview" id="optionsView">
+            <div class="subview-header">
+                <div class="liquid-back-btn" id="backToDisplayFromOptions">
+                    <span class="back-chevron">‹</span>
+                </div>
+                <h2 class="subview-title">Options</h2>
+            </div>
+
+            <div class="subview-scroll-container">
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable option-select-row" data-option="Sunset to Sunrise">
+                        <div class="row-left">
+                            <span class="row-label-text">Sunset to Sunrise</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="option-checkmark">✓</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable option-select-row" data-option="Custom Schedule">
+                        <div class="row-left">
+                            <span class="row-label-text">Custom Schedule</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="option-checkmark"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-footer-note">
+                    Automatically turn on Dark appearance at sunset and switch to Light appearance at sunrise.
+                </div>
+            </div>
+        </div>
+
+        
         
 
     <!-- Bottom Sheet Modal with Liquid Glass Effect -->
