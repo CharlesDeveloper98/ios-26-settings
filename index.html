@@ -1,29 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="color-scheme" content="light dark">
     <title>iOS 26 Settings</title>
-    <!-- Immediate theme injector to fix APK build webview evaluation -->
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem("ios26_theme");
-            const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
-            let activeTheme = "dark"; // Default fallback
-
-            if (savedAutomatic) {
-                const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-                activeTheme = prefersLight ? "light" : "dark";
-            } else if (savedTheme) {
-                activeTheme = savedTheme;
-            }
-            document.documentElement.setAttribute("data-theme", activeTheme);
-        })();
-    </script>
     <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
@@ -50,7 +33,7 @@
                     <div class="card-divider"></div>
                     <div class="settings-row clickable">
                         <div class="row-left">
-                            <span class="row-label-text">Update Payment Details</span>
+                            <span class="row-label-text">Finish Setting Up Your iPhone</span>
                         </div>
                         <div class="row-right">
                             <span class="notification-badge">1</span>
@@ -320,39 +303,47 @@
 
             <div class="subview-scroll-container">
                 <!-- Section 1: Appearance -->
-<div class="subview-section-label">Appearance</div>
-<div class="settings-card appearance-card">
-    <div class="appearance-options">
-        <div class="appearance-option" id="lightModeOption">
-            <div class="preview-screen light-preview">
-                <img src="assets/light_wallpaper.png" alt="Light Wallpaper" class="preview-wallpaper-img">
-            </div>
-            <span class="appearance-text">Light</span>
-            <div class="radio-check"></div>
-        </div>
-        <div class="appearance-option" id="darkModeOption">
-            <div class="preview-screen dark-preview">
-                <img src="assets/dark_wallpaper.png" alt="Dark Wallpaper" class="preview-wallpaper-img">
-            </div>
-            <span class="appearance-text">Dark</span>
-            <div class="radio-check"></div>
-        </div>
-    </div>
-    <div class="card-divider"></div>
-    <div class="settings-row">
-        <div class="row-left">
-            <span class="row-label-text">Automatic</span>
-        </div>
-        <div class="row-right">
-            <label class="ios-switch">
-                <input type="checkbox" id="automaticToggle">
-                <span class="slider"></span>
+                <div class="subview-section-label">Appearance</div>
+                <div class="settings-card appearance-card">
+                    <div class="appearance-options">
+                        <div class="appearance-option" id="lightModeOption">
+                            <div class="preview-screen light-preview">
+                                <img src="assets/light_wallpaper.png" alt="Light Wallpaper" class="preview-wallpaper-img">
+                                <div class="preview-notch"></div>
+                                <div class="preview-time">9:41</div>
+                                <div class="preview-widget"></div>
+                                <div class="preview-widget"></div>
+                            </div>
+                            <span class="appearance-text">Light</span>
+                            <div class="radio-check"></div>
+                        </div>
+                        <div class="appearance-option" id="darkModeOption">
+                            <div class="preview-screen dark-preview">
+                                <img src="assets/dark_wallpaper.png" alt="Dark Wallpaper" class="preview-wallpaper-img">
+                                <div class="preview-notch"></div>
+                                <div class="preview-time">9:41</div>
+                                <div class="preview-widget"></div>
+                                <div class="preview-widget"></div>
+                            </div>
+                            <span class="appearance-text">Dark</span>
+                            <div class="radio-check"></div>
+                        </div>
+                    </div>
+                    <div class="card-divider"></div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">Automatic</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox" id="automaticToggle">
+                                <span class="slider"></span>
             </label>
         </div>
     </div>
     <!-- Missing Container under Automatic Options -->
     <div class="automatic-options-container" id="automaticOptionsContainer">
-        <div class="card-divider indent"></div>
+        <div class="card-divider"></div>
         <div class="settings-row clickable">
             <div class="row-left">
                 <span class="row-label-text">Options</span>
@@ -366,6 +357,27 @@
 </div>
 
 
+            
+            <!-- Liquid Glass Container -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Liquid Glass</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Clear</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-footer-note">
+                    Choose your preferred look for Liquid Glass.
+                </div>
+
+
+
+
+
                 <!-- Section 2: Text Controls -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
@@ -376,7 +388,7 @@
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
-                    <div class="card-divider indent"></div>
+                    <div class="card-divider"></div>
                     <div class="settings-row">
                         <div class="row-left">
                             <span class="row-label-text">Bold Text</span>
@@ -391,30 +403,28 @@
                 </div>
 
                 <!-- Section 3: Brightness & True Tone -->
-<div class="subview-section-label">Brightness</div>
-<div class="settings-card group-card">
-    <div class="brightness-slider-row">
-        <img src="assets/low_brightness.png" alt="Low Brightness" class="brightness-icon-left">
-        <div class="slider-track-container">
-            <input type="range" min="0" max="100" value="45" class="ios-range-slider" id="brightnessRange">
-        </div>
-        <img src="assets/high_brightness.png" alt="High Brightness" class="brightness-icon-right">
-    </div>
-    <div class="card-divider indent"></div>
-    <div class="settings-row">
-        <div class="row-left">
-            <span class="row-label-text">True Tone</span>
-        </div>
-        <div class="row-right">
-            <label class="ios-switch">
-                <input type="checkbox" checked>
-                <span class="slider"></span>
-            </label>
-        </div>
-    </div>
-</div>
-
-                
+                <div class="subview-section-label">Brightness</div>
+                <div class="settings-card group-card">
+                    <div class="brightness-slider-row">
+                        <img src="assets/low_brightness.png" alt="Low Brightness" class="brightness-custom-icon">
+                        <div class="slider-track-container">
+                            <input type="range" min="0" max="100" value="45" class="ios-range-slider" id="brightnessRange">
+                        </div>
+                        <img src="assets/high_brightness.png" alt="High Brightness" class="brightness-custom-icon large">
+                    </div>
+                    <div class="card-divider"></div>
+                    <div class="settings-row">
+                        <div class="row-left">
+                            <span class="row-label-text">True Tone</span>
+                        </div>
+                        <div class="row-right">
+                            <label class="ios-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="settings-footer-note">
                     Automatically adapt iPhone display based on ambient lighting conditions to make colors appear consistent in different environments.
                 </div>
@@ -442,7 +452,7 @@
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
-                    <div class="card-divider indent"></div>
+                    <div class="card-divider"></div>
                     <div class="settings-row">
                         <div class="row-left">
                             <span class="row-label-text">Raise to Wake</span>
@@ -569,17 +579,17 @@
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
-                    <div class="card-divider indent"></div>
+                    <div class="card-divider"></div>
                     <div class="settings-row clickable">
                         <div class="row-left"><span class="row-label-text">Charging</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
-                    <div class="card-divider indent"></div>
+                    <div class="card-divider"></div>
                     <div class="settings-row clickable">
                         <div class="row-left"><span class="row-label-text">Power Mode</span></div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
-                    <div class="card-divider indent"></div>
+                    <div class="card-divider"></div>
                     <div class="settings-row">
                         <div class="row-left"><span class="row-label-text">Battery Percentage</span></div>
                         <div class="row-right">
@@ -835,7 +845,7 @@
                             <img src="assets/wifi.png" alt="Signal" class="wifi-meta-icon">
                         </div>
                     </div>
-                    <div class="card-divider indent"></div>
+                    <div class="card-divider"></div>
                     <div class="settings-row clickable">
                         <div class="row-left">
                             <span class="row-label-text">Other...</span>
