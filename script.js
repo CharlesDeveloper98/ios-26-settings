@@ -35,6 +35,57 @@ document.addEventListener("DOMContentLoaded", () => {
     const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
 
+
+
+
+        // Options Sub-Page View Elements
+    const optionsNav = document.getElementById("optionsNav");
+    const optionsView = document.getElementById("optionsView");
+    const backToDisplayFromOptions = document.getElementById("backToDisplayFromOptions");
+    const selectedOptionText = document.getElementById("selectedOptionText");
+    const optionRows = document.querySelectorAll(".option-select-row");
+
+    // Load saved option state
+    let savedAppearanceOption = localStorage.getItem("ios26_appearance_option") || "Sunset to Sunrise";
+    if (selectedOptionText) selectedOptionText.textContent = savedAppearanceOption;
+
+    optionRows.forEach(row => {
+        if (row.getAttribute("data-option") === savedAppearanceOption) {
+            row.querySelector(".option-checkmark").textContent = "✓";
+        } else {
+            row.querySelector(".option-checkmark").textContent = "";
+        }
+
+        row.addEventListener("click", () => {
+            const chosen = row.getAttribute("data-option");
+            localStorage.setItem("ios26_appearance_option", chosen);
+            if (selectedOptionText) selectedOptionText.textContent = chosen;
+
+            optionRows.forEach(r => {
+                r.querySelector(".option-checkmark").textContent = "";
+            });
+            row.querySelector(".option-checkmark").textContent = "✓";
+        });
+    });
+
+    // Slide Transition for Options Sub-page
+    if (optionsNav && optionsView && backToDisplayFromOptions) {
+        optionsNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                displayBrightnessView.classList.add("slide-left");
+                optionsView.classList.add("active");
+            });
+        });
+
+        backToDisplayFromOptions.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                optionsView.classList.remove("active");
+                displayBrightnessView.classList.remove("slide-left");
+            });
+        });
+    }
+
+    
     // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
     const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
