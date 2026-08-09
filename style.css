@@ -1263,11 +1263,15 @@ html.bold-text-enabled .subview-title {
 }
 
 
-/* 100% Accurate Local Wallpapers for Preview Screens */
+
+/* Appearance Selector & Wallpaper Integration */
+.appearance-options { display: flex; justify-content: space-around; padding: 16px 12px 12px 12px; gap: 16px; }
+.appearance-option { display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 10px; flex: 1; }
+
 .preview-screen {
     width: 100%; 
-    max-width: 110px; 
-    height: 150px; 
+    max-width: 140px; 
+    height: 240px; 
     border-radius: 14px;
     position: relative; 
     overflow: hidden; 
@@ -1277,39 +1281,44 @@ html.bold-text-enabled .subview-title {
 }
 
 .preview-wallpaper-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
+    z-index: 0;
 }
 
-/* Local Brightness Icons Sizing */
-.brightness-icon-left {
-    width: 16px;
-    height: 16px;
+.appearance-option.active .preview-screen { border-color: #007aff; }
+
+.preview-notch { width: 40px; height: 8px; background: var(--preview-notch-bg); border-radius: 4px; margin: 6px auto 0 auto; position: relative; z-index: 1; }
+.preview-time { font-size: 11px; font-weight: 600; text-align: center; color: var(--preview-time-color); margin-top: 4px; position: relative; z-index: 1; }
+.preview-widget { width: 80%; height: 20px; background: var(--preview-widget-bg); border-radius: 6px; margin: 8px auto 0 auto; position: relative; z-index: 1; backdrop-filter: blur(4px); }
+.appearance-text { font-size: 14px; font-weight: 500; color: var(--text-main); }
+
+.radio-check {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-sub);
+    display: flex; justify-content: center; align-items: center; font-size: 12px; color: transparent; transition: all 0.15s ease;
+}
+.radio-check.checked { background-color: #007aff; border-color: #007aff; color: #fff; }
+
+
+
+
+/* Brightness Controls & Custom Icons */
+.brightness-slider-row { display: flex; align-items: center; padding: 14px 16px; gap: 12px; flex-shrink: 0; }
+.brightness-custom-icon {
+    width: 16px !important;
+    height: 16px !important;
     object-fit: contain;
     opacity: 0.6;
 }
-
-.brightness-icon-right {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-    opacity: 0.6;
+.brightness-custom-icon.large {
+    width: 20px !important;
+    height: 20px !important;
 }
 
-[data-theme="dark"] .brightness-icon-left,
-[data-theme="dark"] .brightness-icon-right,
-:root:not([data-theme="light"]) .brightness-icon-left,
-:root:not([data-theme="light"]) .brightness-icon-right {
+[data-theme="dark"] .brightness-custom-icon,
+:root:not([data-theme="light"]) .brightness-custom-icon {
     filter: brightness(0) invert(1);
 }
-
-/* Automatic Options Container Animation/Display Control */
-.automatic-options-container {
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
