@@ -18,11 +18,11 @@
             <div class="settings-container">
                 <h1 class="main-title">Settings</h1>
 
-                <!-- Apple Account Profile Card -->
+                                <!-- Apple Account Profile Card -->
                 <div class="settings-card profile-card-link">
                     <div class="profile-row">
                         <div class="profile-avatar">
-                            <img src="assets/appleid.png" alt="Profile Avatar">
+                            <img src="assets/appleid.png" alt="Profile Avatar" id="appleIdAvatarImg">
                         </div>
                         <div class="profile-info">
                             <h2 class="profile-name" id="displayProfileName">Sign in to your Apple Account</h2>
@@ -31,7 +31,7 @@
                         <span class="chevron-icon">›</span>
                     </div>
                     <div class="card-divider"></div>
-                    <div class="settings-row clickable">
+                    <div class="settings-row clickable" id="finishSetupNav">
                         <div class="row-left">
                             <span class="row-label-text">Finish Setting Up Your iPhone</span>
                         </div>
@@ -41,6 +41,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Group 1: Connectivity & System -->
                 <div class="settings-card group-card">
@@ -930,6 +931,55 @@
             </div>
         </div>
 
+
+
+
+                <!-- Sub-Page View: Finish Setting Up Your iPhone -->
+        <div class="settings-subview" id="finishSetupView">
+            <div class="subview-header">
+                <div class="liquid-back-btn" id="backToMainFromFinishSetup">
+                    <span class="back-chevron">‹</span>
+                </div>
+                <h2 class="subview-title">Setup iPhone</h2>
+            </div>
+
+            <div class="subview-scroll-container">
+                <div class="settings-card wifi-hero-card">
+                    <div class="wifi-hero-icon-container clickable" id="changeProfilePicBtn" title="Change Profile Picture">
+                        <img src="assets/contact_info.png" alt="Contact Icon" id="subviewContactIconImg">
+                    </div>
+                    <div class="wifi-hero-text-block">
+                        <div class="wifi-hero-title" id="setupPageNameDisplay">Set Up Your iPhone</div>
+                        <div class="wifi-hero-subtitle">
+                            Finish setting up your Apple Account, iCloud, and device security features. Tap the contact icon above to customize your profile photo.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Restore from iCloud Backup</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <span class="row-label-text">Enable Siri & Voice Control</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden File Input for Image Selection -->
+        <input type="file" id="deviceImageSelector" accept="image/*" style="display: none;">
 
         
         
