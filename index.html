@@ -934,8 +934,10 @@
 
 
 
+    
+
                 
-        <!-- Sub-Page View: Finish Setting Up Your iPhone -->
+                <!-- Sub-Page View: Finish Setting Up Your iPhone -->
         <div class="settings-subview" id="finishSetupView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromFinishSetup">
@@ -945,18 +947,20 @@
             </div>
 
             <div class="subview-scroll-container">
-                <div class="settings-card wifi-hero-card">
-                    <div class="wifi-hero-icon-container">
-                        <img src="assets/contact_info.png" alt="Contact Info" id="setupPageContactIcon">
-                    </div>
-                    <div class="wifi-hero-text-block">
-                        <div class="wifi-hero-title" id="setupPageUserName">Set Up Your Device</div>
-                        <div class="wifi-hero-subtitle">
-                            Tap your contact icon above to select a custom photo from your device. This will instantly sync your profile picture across your Apple Account and settings.
+                <!-- Profile Header Card matching Apple Account / Finish Setup Style -->
+                <div class="settings-card profile-card-link" style="margin-bottom: 20px;">
+                    <div class="profile-row" style="padding: 16px;">
+                        <div class="profile-avatar" id="setupPageAvatarContainer" style="width: 60px; height: 60px;">
+                            <img src="assets/appleid.png" alt="Profile Avatar" id="setupPageDisplayAvatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        </div>
+                        <div class="profile-info" style="margin-left: 16px;">
+                            <h2 class="profile-name" id="setupPageDisplayName" style="font-size: 20px; font-weight: 600;">Your Name</h2>
+                            <p class="profile-sub" id="setupPageDisplaySub" style="font-size: 14px; color: var(--text-secondary);">Tap to set up Apple Account, iCloud, and more</p>
                         </div>
                     </div>
                 </div>
 
+                <!-- Setup Action Options Group Card -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable" id="triggerImagePickerRow">
                         <div class="row-left">
@@ -969,6 +973,31 @@
                             <span class="chevron-icon">›</span>
                         </div>
                     </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable" id="setupAppleIdRow">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon">
+                                <img src="assets/appleid.png" alt="Apple Account">
+                            </div>
+                            <span class="row-label-text">Apple Account Services</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Action Required</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable" id="icloudSyncRow">
+                        <div class="row-left">
+                            <div class="setting-icon blue">
+                                <img src="assets/icloud.png" alt="iCloud">
+                            </div>
+                            <span class="row-label-text">Enable iCloud Backup</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -976,7 +1005,6 @@
         <!-- Hidden File Input for Device Image Selection -->
         <input type="file" id="deviceImageSelector" accept="image/*" style="display: none;">
 
-                
         
         
 
