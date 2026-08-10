@@ -758,12 +758,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-                        localStorage.setItem("ios26_firstname", fName);
+                                    localStorage.setItem("ios26_firstname", fName);
             localStorage.setItem("ios26_lastname", lName);
             localStorage.setItem("ios26_setup_completed", "true");
 
-            if (displayProfileName) {
-                displayProfileName.textContent = `${fName} ${lName}`.trim();
+            const finalFullName = `${fName} ${lName}`.trim();
+            if (displayProfileName) displayProfileName.textContent = finalFullName;
+            if (setupPageNameDisplay) setupPageNameDisplay.textContent = finalFullName;
+
             }
 
             closeSheet();
