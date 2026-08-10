@@ -24,8 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
            
-
-        // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
+    // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -35,9 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
 
-
-
-        // --- Finish Setting Up Your iPhone & Image Selector Engine ---
+    // --- Finish Setting Up Your iPhone & Image Selector Engine ---
     const finishSetupNav = document.getElementById("finishSetupNav");
     const finishSetupView = document.getElementById("finishSetupView");
     const backToMainFromFinishSetup = document.getElementById("backToMainFromFinishSetup");
@@ -110,9 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setupPageNameDisplay.textContent = fullName;
     }
 
-
-
-        // Options Sub-Page View Elements
+    // Options Sub-Page View Elements
     const optionsNav = document.getElementById("optionsNav");
     const optionsView = document.getElementById("optionsView");
     const backToDisplayFromOptions = document.getElementById("backToDisplayFromOptions");
@@ -159,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    
     // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
     const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
@@ -195,37 +189,28 @@ document.addEventListener("DOMContentLoaded", () => {
         if (name.length > maxLength) {
             displayName = name.substring(0, maxLength) + "…";
         }
-        // Update Wi-Fi sub-page connected network card label
         if (connectedNetworkName) {
             connectedNetworkName.textContent = displayName;
         }
-        // Synchronize and display the active custom Wi-Fi name on the main settings page view
         if (mainWifiStatusText && isWifiOn) {
             mainWifiStatusText.textContent = displayName;
         }
     }
 
-
-
-                                        function updateLiveWifiUI() {
+    function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
         const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
 
-        // Check browser / network connection type precisely
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         const effectiveType = connection ? connection.type : null;
         const networkTypeStr = (state.type || effectiveType || "").toLowerCase();
 
-        // Check if device is actively on cellular/mobile data
         const isCellular = effectiveType === 'cellular' || networkTypeStr.includes('cellular') || networkTypeStr.includes('data');
-
-        // Check if device is strictly connected to Wi-Fi
         const isWifiConnected = state.connected && !isCellular && (networkTypeStr.includes('wifi') || networkTypeStr.includes('wireless') || networkTypeStr === 'unknown');
 
         if (!isWifiOn) {
-            // Condition 1: Wi-Fi toggle is OFF -> Hide everything and animate connected card away
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             animatableElements.forEach(el => el.classList.add("wifi-hidden"));
             if (connectedNetworkCardContainer) {
@@ -233,19 +218,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            // Condition 2: Wi-Fi toggle is ON -> Show general Wi-Fi sections
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
-            // Check real-time connection state for the connected card
             if (isWifiConnected) {
-                // Toggle ON & Wi-Fi Connected -> Animate and display connected card
                 updateTruncatedWifiName(savedCustomWifiName);
                 if (connectedNetworkCardContainer) {
                     connectedNetworkCardContainer.classList.remove("wifi-hidden");
                 }
             } else {
-                // Toggle ON, but Wi-Fi Disconnected or using Mobile Data -> Animate connected card away
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
                 if (connectedNetworkCardContainer) {
                     connectedNetworkCardContainer.classList.add("wifi-hidden");
@@ -254,20 +235,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-
-
-
-
-    
-
-
-    // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
         wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
     }
 
-    // Wi-Fi Popup Event Listeners
     if (wifiInfoBtn && wifiRenameOverlay) {
         wifiInfoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -294,8 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    
-
     document.addEventListener("online", updateLiveWifiUI, false);
     document.addEventListener("offline", updateLiveWifiUI, false);
     window.addEventListener('online', updateLiveWifiUI);
@@ -314,7 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateLiveWifiUI();
 
-    // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
         wifiNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -331,12 +299,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // General View Elements
+    // General & Battery View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
     const backToMainFromGeneral = document.getElementById("backToMainFromGeneral");
 
-    // Battery View Elements
     const batteryNav = document.getElementById("batteryNav");
     const batteryView = document.getElementById("batteryView");
     const backToMainFromBattery = document.getElementById("backToMainFromBattery");
@@ -647,12 +614,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const savedFirstName = localStorage.getItem("ios26_firstname");
-    const savedLastName = localStorage.getItem("ios26_lastname");
-    if ((savedFirstName || savedLastName) && displayProfileName) {
-        displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
-    }
-
     // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
     if (!isSetupFinished && sheetOverlay) {
@@ -758,15 +719,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-                                    localStorage.setItem("ios26_firstname", fName);
+            localStorage.setItem("ios26_firstname", fName);
             localStorage.setItem("ios26_lastname", lName);
             localStorage.setItem("ios26_setup_completed", "true");
 
             const finalFullName = `${fName} ${lName}`.trim();
             if (displayProfileName) displayProfileName.textContent = finalFullName;
             if (setupPageNameDisplay) setupPageNameDisplay.textContent = finalFullName;
-
-            }
 
             closeSheet();
         });
