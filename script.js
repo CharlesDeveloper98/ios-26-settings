@@ -85,6 +85,80 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+
+        // --- Finish Setting Up Your iPhone & Contact Avatar Engine ---
+    const finishSetupNav = document.getElementById("finishSetupNav");
+    const finishSetupView = document.getElementById("finishSetupView");
+    const backToMainFromFinishSetup = document.getElementById("backToMainFromFinishSetup");
+    const triggerImagePickerRow = document.getElementById("triggerImagePickerRow");
+    const profileAvatarContainer = document.getElementById("profileAvatarContainer");
+    const deviceImageSelector = document.getElementById("deviceImageSelector");
+    const displayProfileAvatar = document.getElementById("displayProfileAvatar");
+    const setupPageContactIcon = document.getElementById("setupPageContactIcon");
+    const setupPageUserName = document.getElementById("setupPageUserName");
+
+    // Default contact asset fallback if no custom photo is chosen yet
+    const defaultContactIconSrc = "assets/contact_info.png";
+
+    // Load saved custom avatar if available
+    const savedAvatarData = localStorage.getItem("ios26_custom_avatar");
+    if (savedAvatarData) {
+        if (displayProfileAvatar) displayProfileAvatar.src = savedAvatarData;
+        if (setupPageContactIcon) setupPageContactIcon.src = savedAvatarData;
+    } else {
+        if (setupPageContactIcon) setupPageContactIcon.src = defaultContactIconSrc;
+    }
+
+    // Slide navigation for Finish Setting Up Your iPhone sub-page
+    if (finishSetupNav && finishSetupView && backToMainFromFinishSetup) {
+        finishSetupNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                finishSetupView.classList.add("active");
+            });
+        });
+
+        backToMainFromFinishSetup.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                finishSetupView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
+
+    // Trigger device image selector when tapping either the row or avatar container
+    function openImageSelector() {
+        if (deviceImageSelector) {
+            deviceImageSelector.click();
+        }
+    }
+
+    if (triggerImagePickerRow) triggerImagePickerRow.addEventListener("click", openImageSelector);
+    if (profileAvatarContainer) profileAvatarContainer.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent opening card link if any
+        openImageSelector();
+    });
+
+    // Handle image selection and update application state locally
+    if (deviceImageSelector) {
+        deviceImageSelector.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    localStorage.setItem("ios26_custom_avatar", base64Image);
+                    
+                    if (displayProfileAvatar) displayProfileAvatar.src = base64Image;
+                    if (setupPageContactIcon) setupPageContactIcon.src = base64Image;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    
     
     // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
@@ -573,11 +647,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const savedFirstName = localStorage.getItem("ios26_firstname");
+    
+        const savedFirstName = localStorage.getItem("ios26_firstname");
     const savedLastName = localStorage.getItem("ios26_lastname");
-    if ((savedFirstName || savedLastName) && displayProfileName) {
-        displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
+    const fullName = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
+    
+    if (fullName && displayProfileName) {
+        displayProfileName.textContent = fullName;
     }
+    if (fullName && setupPageUserName) {
+        setupPageUserName.textContent = fullName;
+    }
+
 
     // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
