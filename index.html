@@ -937,17 +937,17 @@
     
 
                 
-                    <!-- Sub-Page View: Finish Setting Up Your iPhone -->
+                  <!-- Sub-Page View: Finish Setting Up Your iPhone -->
         <div class="settings-subview" id="finishSetupView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromFinishSetup">
                     <span class="back-chevron">‹</span>
                 </div>
-                <h2 class="subview-title">Finish Setting Up Your iPhone</h2>
+                <h2 class="subview-title">Apple Account</h2>
             </div>
 
             <div class="subview-scroll-container">
-                <!-- Top Profile Card -->
+                <!-- Top Profile Hero Card matching exact iOS reference layout -->
                 <div class="settings-card profile-card-link">
                     <div class="profile-row">
                         <div class="profile-avatar" id="setupPageAvatarContainer">
@@ -960,7 +960,7 @@
                     </div>
                 </div>
 
-                <!-- Setup Action Items -->
+                <!-- Group 1: Actions Card -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable" id="triggerImagePickerRow">
                         <div class="row-left">
@@ -1000,7 +1000,7 @@
                     </div>
                 </div>
 
-                <!-- Group 1: Account Management Containers from Reference Photos -->
+                <!-- Group 2: Account Management -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -1035,7 +1035,7 @@
                     </div>
                 </div>
 
-                <!-- Group 2: Services Containers -->
+                <!-- Group 3: Services -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -1084,14 +1084,14 @@
                     </div>
                 </div>
 
-                <!-- Group 3: Devices Container -->
+                <!-- Group 4: Devices -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
                             <div class="setting-icon blue"><img src="assets/phone.png" alt="iPhone" onerror="this.style.display='none'"></div>
-                            <div style="display: flex; flex-direction: column;">
+                            <div class="row-text-stack">
                                 <span class="row-label-text">KingsLanding</span>
-                                <span style="font-size: 12px; color: var(--text-secondary);">This iPhone 11 Pro Max</span>
+                                <span class="row-sub-label">This iPhone 11 Pro Max</span>
                             </div>
                         </div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
@@ -1100,16 +1100,16 @@
                     <div class="settings-row clickable">
                         <div class="row-left">
                             <div class="setting-icon grey-icon"><img src="assets/laptop.png" alt="Laptop" onerror="this.style.display='none'"></div>
-                            <div style="display: flex; flex-direction: column;">
+                            <div class="row-text-stack">
                                 <span class="row-label-text">LAPTOP-PC</span>
-                                <span style="font-size: 12px; color: var(--text-secondary);">Windows</span>
+                                <span class="row-sub-label">Windows</span>
                             </div>
                         </div>
                         <div class="row-right"><span class="chevron-icon">›</span></div>
                     </div>
                 </div>
 
-                <!-- Group 4: Security & Sign Out Container -->
+                <!-- Group 5: Verification -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable">
                         <div class="row-left">
@@ -1123,10 +1123,11 @@
                     </div>
                 </div>
 
+                <!-- Group 6: Sign Out -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable center-action-row">
-                        <div class="row-left" style="width: 100%; text-align: center;">
-                            <span class="row-label-text" style="color: #ff3b30; width: 100%; display: block; font-weight: 500;">Sign Out</span>
+                        <div class="row-left" style="width: 100%; justify-content: center;">
+                            <span class="row-label-text" style="color: #ff3b30; font-weight: 500;">Sign Out</span>
                         </div>
                     </div>
                 </div>
@@ -1137,6 +1138,7 @@
         <input type="file" id="deviceImageSelector" accept="image/*" style="display: none;">
 
 
+             
         
         
 
