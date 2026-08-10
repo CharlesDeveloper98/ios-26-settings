@@ -762,10 +762,9 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("ios26_lastname", lName);
             localStorage.setItem("ios26_setup_completed", "true");
 
-            const finalFullName = `${fName} ${lName}`.trim();
-            if (displayProfileName) displayProfileName.textContent = finalFullName;
-            if (setupPageNameDisplay) setupPageNameDisplay.textContent = finalFullName;
-
+            if (displayProfileName) {
+                displayProfileName.textContent = `${fName} ${lName}`.trim();
+            }
 
             closeSheet();
         });
