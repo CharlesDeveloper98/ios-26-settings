@@ -37,6 +37,80 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+        // --- Finish Setting Up Your iPhone & Image Selector Engine ---
+    const finishSetupNav = document.getElementById("finishSetupNav");
+    const finishSetupView = document.getElementById("finishSetupView");
+    const backToMainFromFinishSetup = document.getElementById("backToMainFromFinishSetup");
+    const changeProfilePicBtn = document.getElementById("changeProfilePicBtn");
+    const deviceImageSelector = document.getElementById("deviceImageSelector");
+    const subviewContactIconImg = document.getElementById("subviewContactIconImg");
+    const appleIdAvatarImg = document.getElementById("appleIdAvatarImg");
+    const setupPageNameDisplay = document.getElementById("setupPageNameDisplay");
+
+    // Load saved custom profile picture if available
+    const savedCustomImage = localStorage.getItem("ios26_custom_profile_image");
+    if (savedCustomImage) {
+        if (subviewContactIconImg) subviewContactIconImg.src = savedCustomImage;
+        if (appleIdAvatarImg) appleIdAvatarImg.src = savedCustomImage;
+    } else {
+        if (subviewContactIconImg) subviewContactIconImg.src = "assets/contact_info.png";
+    }
+
+    // Slide navigation for Finish Setup sub-page
+    if (finishSetupNav && finishSetupView && backToMainFromFinishSetup) {
+        finishSetupNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                finishSetupView.classList.add("active");
+            });
+        });
+
+        backToMainFromFinishSetup.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                finishSetupView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
+
+    // Trigger image picker when contact icon is clicked
+    if (changeProfilePicBtn && deviceImageSelector) {
+        changeProfilePicBtn.addEventListener("click", () => {
+            deviceImageSelector.click();
+        });
+    }
+
+    // Handle image selection and persistence
+    if (deviceImageSelector) {
+        deviceImageSelector.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    localStorage.setItem("ios26_custom_profile_image", base64Image);
+                    
+                    if (subviewContactIconImg) subviewContactIconImg.src = base64Image;
+                    if (appleIdAvatarImg) appleIdAvatarImg.src = base64Image;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Update name dynamically from localStorage setup overlay inputs
+    const savedFirstName = localStorage.getItem("ios26_firstname");
+    const savedLastName = localStorage.getItem("ios26_lastname");
+    const fullName = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
+    
+    if (fullName && displayProfileName) {
+        displayProfileName.textContent = fullName;
+    }
+    if (fullName && setupPageNameDisplay) {
+        setupPageNameDisplay.textContent = fullName;
+    }
+
+
 
         // Options Sub-Page View Elements
     const optionsNav = document.getElementById("optionsNav");
@@ -684,13 +758,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            localStorage.setItem("ios26_firstname", fName);
+                        localStorage.setItem("ios26_firstname", fName);
             localStorage.setItem("ios26_lastname", lName);
             localStorage.setItem("ios26_setup_completed", "true");
 
-            if (displayProfileName) {
-                displayProfileName.textContent = `${fName} ${lName}`.trim();
-            }
+            const finalFullName = `${fName} ${lName}`.trim();
+            if (displayProfileName) displayProfileName.textContent = finalFullName;
+            if (setupPageNameDisplay) setupPageNameDisplay.textContent = finalFullName;
+
 
             closeSheet();
         });
