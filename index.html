@@ -934,46 +934,265 @@
 
 
 
-                <!-- Sub-Page View: Finish Setting Up Your iPhone -->
-        <div class="settings-subview" id="finishSetupView">
-            <div class="subview-header">
-                <div class="liquid-back-btn" id="backToMainFromFinishSetup">
-                    <span class="back-chevron">‹</span>
-                </div>
-                <h2 class="subview-title">Finish Setting Up Your iPhone</h2>
+                <!-- Sub-Page View: Apple Account -->
+<div class="settings-subview" id="finishSetupView">
+
+    <div class="subview-header apple-account-header">
+        <div class="liquid-back-btn" id="backToMainFromFinishSetup">
+            <span class="back-chevron">‹</span>
+        </div>
+
+        <h2 class="subview-title">Apple Account</h2>
+    </div>
+
+    <div class="subview-scroll-container apple-account-page">
+
+        <!-- Apple Account Profile -->
+        <div class="apple-account-profile">
+            <div class="apple-account-photo-wrapper">
+                <img
+                    src="assets/contact_info.png"
+                    alt="Profile"
+                    class="apple-account-photo"
+                    id="setupPageContactIcon"
+                >
             </div>
 
-            <div class="subview-scroll-container">
-                <div class="settings-card wifi-hero-card">
-                    <div class="wifi-hero-icon-container">
-                        <img src="assets/contact_info.png" alt="Contact Info" id="setupPageContactIcon">
-                    </div>
-                    <div class="wifi-hero-text-block">
-                        <div class="wifi-hero-title" id="setupPageUserName">Set Up Your Device</div>
-                        <div class="wifi-hero-subtitle">
-                            Tap your contact icon above to select a custom photo from your device. This will instantly sync your profile picture across your Apple Account and settings.
-                        </div>
-                    </div>
-                </div>
+            <div class="apple-account-name" id="setupPageUserName">
+                Your Name
+            </div>
 
-                <div class="settings-card group-card">
-                    <div class="settings-row clickable" id="triggerImagePickerRow">
-                        <div class="row-left">
-                            <div class="setting-icon blue">
-                                <img src="assets/contact_info.png" alt="Photo">
-                            </div>
-                            <span class="row-label-text">Change Profile Picture</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="chevron-icon">›</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="apple-account-email">
+                yourname@gmail.com
             </div>
         </div>
 
-        <!-- Hidden File Input for Device Image Selection -->
-        <input type="file" id="deviceImageSelector" accept="image/*" style="display: none;">
+
+        <!-- Personal Account Settings -->
+        <div class="apple-settings-group">
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon personal-icon">
+                    <span>♙</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Personal Information
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon security-icon">
+                    <span>🔑</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Sign-In &amp; Security
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon payment-icon">
+                    <span>▣</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Payment &amp; Shipping
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon subscription-icon">
+                    <span>⊕</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Subscriptions
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+        </div>
+
+
+        <!-- iCloud / Family / Find My -->
+        <div class="apple-settings-group">
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon icloud-icon">
+                    <span>☁</span>
+                </div>
+
+                <div class="apple-row-title">
+                    iCloud
+                </div>
+
+                <div class="apple-row-value">
+                    50 GB
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon family-icon">
+                    <span>👥</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Family
+                </div>
+
+                <div class="apple-row-value">
+                    Set Up
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon findmy-icon">
+                    <span>◎</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Find My
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon media-icon">
+                    <span>𝘈</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Media &amp; Purchases
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+            <div class="apple-settings-row clickable">
+                <div class="apple-row-icon sign-apple-icon">
+                    <span>●</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Sign in with Apple
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+        </div>
+
+
+        <!-- Connected Devices -->
+        <div class="apple-settings-group apple-devices-group">
+
+            <div class="apple-settings-row clickable device-row">
+                <div class="apple-device-icon iphone-device-icon">
+                    <span>📱</span>
+                </div>
+
+                <div class="apple-device-information">
+                    <div class="apple-row-title">
+                        iPhone
+                    </div>
+
+                    <div class="apple-device-subtitle">
+                        This iPhone
+                    </div>
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+
+            <div class="apple-settings-row clickable device-row">
+                <div class="apple-device-icon windows-device-icon">
+                    <span class="windows-logo">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </span>
+                </div>
+
+                <div class="apple-device-information">
+                    <div class="apple-row-title">
+                        Windows PC
+                    </div>
+
+                    <div class="apple-device-subtitle">
+                        Windows
+                    </div>
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+            </div>
+
+        </div>
+
+
+        <!-- Contact Key Verification -->
+        <div class="apple-settings-group">
+
+            <div class="apple-settings-row clickable">
+
+                <div class="apple-row-icon verification-icon">
+                    <span>♧</span>
+                </div>
+
+                <div class="apple-row-title">
+                    Contact Key Verification
+                </div>
+
+                <div class="apple-row-value">
+                    Off
+                </div>
+
+                <div class="apple-row-chevron">›</div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Sign Out -->
+        <div class="apple-signout-group">
+
+            <button
+                type="button"
+                class="apple-signout-button"
+                id="appleAccountSignOut"
+            >
+                Sign Out
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Profile Photo Picker -->
+<input
+    type="file"
+    id="deviceImageSelector"
+    accept="image/*"
+    style="display:none;"
+>
+        
 
         
         
