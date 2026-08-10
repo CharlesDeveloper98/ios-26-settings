@@ -937,7 +937,7 @@
     
 
                 
-                <!-- Sub-Page View: Finish Setting Up Your iPhone -->
+                    <!-- Sub-Page View: Finish Setting Up Your iPhone -->
         <div class="settings-subview" id="finishSetupView">
             <div class="subview-header">
                 <div class="liquid-back-btn" id="backToMainFromFinishSetup">
@@ -947,25 +947,25 @@
             </div>
 
             <div class="subview-scroll-container">
-                <!-- Profile Header Card matching Apple Account / Finish Setup Style -->
-                <div class="settings-card profile-card-link" style="margin-bottom: 20px;">
-                    <div class="profile-row" style="padding: 16px;">
-                        <div class="profile-avatar" id="setupPageAvatarContainer" style="width: 60px; height: 60px;">
-                            <img src="assets/appleid.png" alt="Profile Avatar" id="setupPageDisplayAvatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                <!-- Top Profile Card -->
+                <div class="settings-card profile-card-link">
+                    <div class="profile-row">
+                        <div class="profile-avatar" id="setupPageAvatarContainer">
+                            <img src="assets/appleid.png" alt="Profile Avatar" id="setupPageDisplayAvatar">
                         </div>
-                        <div class="profile-info" style="margin-left: 16px;">
-                            <h2 class="profile-name" id="setupPageDisplayName" style="font-size: 20px; font-weight: 600;">Your Name</h2>
-                            <p class="profile-sub" id="setupPageDisplaySub" style="font-size: 14px; color: var(--text-secondary);">Tap to set up Apple Account, iCloud, and more</p>
+                        <div class="profile-info">
+                            <h2 class="profile-name" id="setupPageDisplayName">Your Name</h2>
+                            <p class="profile-sub">Tap to set up Apple Account, iCloud, and more</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Setup Action Options Group Card -->
+                <!-- Setup Action Items -->
                 <div class="settings-card group-card">
                     <div class="settings-row clickable" id="triggerImagePickerRow">
                         <div class="row-left">
-                            <div class="setting-icon blue">
-                                <img src="assets/contact_info.png" alt="Photo">
+                            <div class="setting-icon grey-icon">
+                                <img src="assets/contact_info.png" alt="Photo" onerror="this.style.display='none'">
                             </div>
                             <span class="row-label-text">Change Profile Picture</span>
                         </div>
@@ -974,10 +974,10 @@
                         </div>
                     </div>
                     <div class="card-divider indent"></div>
-                    <div class="settings-row clickable" id="setupAppleIdRow">
+                    <div class="settings-row clickable">
                         <div class="row-left">
-                            <div class="setting-icon grey-icon">
-                                <img src="assets/appleid.png" alt="Apple Account">
+                            <div class="setting-icon gradient-siri">
+                                <img src="assets/appleid.png" alt="Apple Account" onerror="this.style.display='none'">
                             </div>
                             <span class="row-label-text">Apple Account Services</span>
                         </div>
@@ -987,10 +987,10 @@
                         </div>
                     </div>
                     <div class="card-divider indent"></div>
-                    <div class="settings-row clickable" id="icloudSyncRow">
+                    <div class="settings-row clickable">
                         <div class="row-left">
                             <div class="setting-icon blue">
-                                <img src="assets/icloud.png" alt="iCloud">
+                                <img src="assets/icloud.png" alt="iCloud" onerror="this.style.display='none'">
                             </div>
                             <span class="row-label-text">Enable iCloud Backup</span>
                         </div>
@@ -999,11 +999,143 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Group 1: Account Management Containers from Reference Photos -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon"><img src="assets/phone.png" alt="Personal Information" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Personal Information</span>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon"><img src="assets/faceid.png" alt="Sign-In & Security" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Sign-In & Security</span>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon"><img src="assets/wallet.png" alt="Payment & Shipping" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Payment & Shipping</span>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon"><img src="assets/apps.png" alt="Subscriptions" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Subscriptions</span>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                </div>
+
+                <!-- Group 2: Services Containers -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue"><img src="assets/icloud.png" alt="iCloud" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">iCloud</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">50 GB</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon purple"><img src="assets/family.png" alt="Family" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Family</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Set Up</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon green"><img src="assets/findmy.png" alt="Find My" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Find My</span>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue"><img src="assets/apps.png" alt="Media & Purchases" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Media & Purchases</span>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon"><img src="assets/appleid.png" alt="Sign in with Apple" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Sign in with Apple</span>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                </div>
+
+                <!-- Group 3: Devices Container -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon blue"><img src="assets/phone.png" alt="iPhone" onerror="this.style.display='none'"></div>
+                            <div style="display: flex; flex-direction: column;">
+                                <span class="row-label-text">KingsLanding</span>
+                                <span style="font-size: 12px; color: var(--text-secondary);">This iPhone 11 Pro Max</span>
+                            </div>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                    <div class="card-divider indent"></div>
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon"><img src="assets/laptop.png" alt="Laptop" onerror="this.style.display='none'"></div>
+                            <div style="display: flex; flex-direction: column;">
+                                <span class="row-label-text">LAPTOP-PC</span>
+                                <span style="font-size: 12px; color: var(--text-secondary);">Windows</span>
+                            </div>
+                        </div>
+                        <div class="row-right"><span class="chevron-icon">›</span></div>
+                    </div>
+                </div>
+
+                <!-- Group 4: Security & Sign Out Container -->
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable">
+                        <div class="row-left">
+                            <div class="setting-icon grey-icon"><img src="assets/faceid.png" alt="Contact Key Verification" onerror="this.style.display='none'"></div>
+                            <span class="row-label-text">Contact Key Verification</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-status-text">Off</span>
+                            <span class="chevron-icon">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card group-card">
+                    <div class="settings-row clickable center-action-row">
+                        <div class="row-left" style="width: 100%; text-align: center;">
+                            <span class="row-label-text" style="color: #ff3b30; width: 100%; display: block; font-weight: 500;">Sign Out</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Hidden File Input for Device Image Selection -->
         <input type="file" id="deviceImageSelector" accept="image/*" style="display: none;">
+
 
         
         
