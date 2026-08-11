@@ -1456,3 +1456,62 @@ html.bold-text-enabled .subview-title {
     max-width: 300px;
 }
 
+
+
+/* --- Segmented Switcher & Country Code Tag Styles --- */
+.signup-type-switcher {
+    display: flex;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 3px;
+    border-radius: 12px;
+    border: 0.5px solid rgba(255, 255, 255, 0.12);
+    margin: 0 4px;
+}
+
+.type-switch-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-sub);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 0;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.type-switch-btn.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-main);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.input-field-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-field-wrapper input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 16px;
+    outline: none;
+}
+
+.country-display-tag {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-sub);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-left: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
