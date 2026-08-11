@@ -346,21 +346,55 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Dynamic Button State Controller Function
+    // Dynamic Button State Controller Function with full phone mask completion checks
     function updateAppleButtonState() {
         if (!appleIdentifier || !passwordInput || !continueBtn) return;
         const identifierVal = appleIdentifier.value.trim();
         const passwordVal = passwordInput.value.trim();
 
-        // If either field is empty, make button dull/grey
         if (identifierVal === "" || passwordVal === "") {
             continueBtn.classList.add('disabled-state');
             continueBtn.classList.remove('active-state');
-        } else {
-            // Once both have inputs, turn blue
-            continueBtn.classList.remove('disabled-state');
-            continueBtn.classList.add('active-state');
+            return;
         }
+
+        const isPhoneMode = usePhoneBtn && usePhoneBtn.classList.contains("active");
+
+        if (isPhoneMode) {
+            let cleanDigits = identifierVal.replace(/[^\d+]/g, "");
+            let matchedRule = null;
+            let activePrefix = "";
+
+            const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
+            for (let prefix of sortedPrefixes) {
+                if (cleanDigits.startsWith(prefix)) {
+                    matchedRule = countryRules[prefix];
+                    activePrefix = prefix;
+                    break;
+                }
+            }
+
+            if (matchedRule) {
+                let requiredDigitsCount = (matchedRule.mask.match(/#/g) || []).length;
+                let rawNums = cleanDigits.slice(activePrefix.length);
+
+                // Check if user has completely filled out all required digits for the country format mask
+                if (rawNums.length < requiredDigitsCount) {
+                    continueBtn.classList.add('disabled-state');
+                    continueBtn.classList.remove('active-state');
+                    return;
+                }
+            } else {
+                // If prefix or mask isn't completely matched yet, keep it disabled
+                continueBtn.classList.add('disabled-state');
+                continueBtn.classList.remove('active-state');
+                return;
+            }
+        }
+
+        // Once requirements are met, turn blue
+        continueBtn.classList.remove('disabled-state');
+        continueBtn.classList.add('active-state');
     }
 
     // Listen to inputs for real-time button coloring and error clearance
@@ -404,11 +438,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         errorContainer.classList.add('visible');
                     }
 
-                    // Turn continue button dull/grey immediately
                     continueBtn.classList.add('disabled-state');
                     continueBtn.classList.remove('active-state');
 
-                    // Trigger shake animation
                     continueBtn.classList.remove('shake-animation');
                     void continueBtn.offsetWidth; 
                     continueBtn.classList.add('shake-animation');
@@ -416,7 +448,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            // Validation passed successfully
             if (errorContainer) {
                 errorContainer.classList.remove('visible');
                 errorContainer.textContent = "";
