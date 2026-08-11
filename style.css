@@ -1549,3 +1549,35 @@ html.bold-text-enabled .subview-title {
     color: #ffffff;
 }
 
+
+
+
+/* Red alert message style below Continue button */
+#errorAlertMessage {
+    color: #ff453a; /* iOS System Red */
+    font-size: 13px;
+    text-align: center;
+    margin-top: 10px;
+    min-height: 18px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#errorAlertMessage.visible {
+    opacity: 1;
+}
+
+/* Shake animation matching iOS tactile feedback */
+@keyframes iosShake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-animation {
+    animation: iosShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
