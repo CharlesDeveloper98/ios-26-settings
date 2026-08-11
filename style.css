@@ -1438,3 +1438,53 @@ html.bold-text-enabled .subview-title {
 
 
     
+
+/* --- iOS 26 Unique Startup Sheet Overrides --- */
+.ios26-startup-sheet {
+    height: 420px !important;
+    border-top-left-radius: 36px !important;
+    border-top-right-radius: 36px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 36px;
+}
+
+.ios26-startup-body {
+    padding: 24px 24px 0 24px;
+}
+
+.ios26-startup-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 28px;
+    width: 100%;
+}
+
+.ios26-start-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(0, 122, 255, 0.9);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.3, 1.2, 0.2, 1);
+}
+
+.ios26-start-btn:active {
+    transform: scale(0.92);
+}
+
+.ios26-start-btn .chevron {
+    font-size: 28px;
+    color: #ffffff;
+    font-weight: 400;
+    line-height: 1;
+    margin-left: 2px;
+}
