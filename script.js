@@ -208,27 +208,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- iOS 26 Apple Account Signup Advanced Logic (Native Placeholder Star Masking Engine) ---
+    // --- iOS 26 Apple Account Signup Advanced Logic ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
 
-    // Comprehensive country code configuration mapping with native placeholder formats
+    // Country code prefix mapping dictionary & formatting definitions
     const countryRules = {
-        "+1": { name: "USA", placeholder: "+1 (***) ***-****", maxDigits: 10 },
-        "+44": { name: "UK", placeholder: "+44 **** ######", maxDigits: 10 },
-        "+33": { name: "France", placeholder: "+33 # ## ## ## ##", maxDigits: 9 },
-        "+49": { name: "Germany", placeholder: "+49 ### #######", maxDigits: 10 },
-        "+81": { name: "Japan", placeholder: "+81 ## #### ####", maxDigits: 10 },
-        "+86": { name: "China", placeholder: "+86 ### #### ####", maxDigits: 11 },
-        "+91": { name: "India", placeholder: "+91 ##### #####", maxDigits: 10 },
-        "+61": { name: "Australia", placeholder: "+61 ### ### ###", maxDigits: 9 },
-        "+55": { name: "Brazil", placeholder: "+55 ## ##### ####", maxDigits: 11 },
-        "+52": { name: "Mexico", placeholder: "+52 ## #### ####", maxDigits: 10 },
-        "+234": { name: "Nigeria", placeholder: "+234 ### ### ####", maxDigits: 10 },
-        "+27": { name: "South Africa", placeholder: "+27 ## ### ####", maxDigits: 9 }
+        "+1": { name: "USA", mask: "+1 (###) ###-####" },
+        "+44": { name: "UK", mask: "+44 #### ######" },
+        "+33": { name: "France", mask: "+33 # ## ## ## ##" },
+        "+49": { name: "Germany", mask: "+49 ### #######" },
+        "+81": { name: "Japan", mask: "+81 ## #### ####" },
+        "+86": { name: "China", mask: "+86 ### #### ####" },
+        "+91": { name: "India", mask: "+91 ##### #####" },
+        "+61": { name: "Australia", mask: "+61 ### ### ###" },
+        "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
+        "+52": { name: "Mexico", mask: "+52 ## #### ####" },
+        "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
+        "+27": { name: "South Africa", mask: "+27 ## ### ####" }
     };
 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
@@ -278,55 +278,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 if (matchedRule) {
-                    // Update input placeholder dynamically to display the star format pattern
-                    appleIdentifier.placeholder = matchedRule.placeholder;
-
                     let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
                     let rawNums = cleanDigits.slice(activePrefix.length);
-
-                    // Strictly enforce maximum digit limit preventing extra input values
-                    if (rawNums.length > matchedRule.maxDigits) {
-                        rawNums = rawNums.slice(0, matchedRule.maxDigits);
-                    }
-
-                    // Format user-typed numbers into the matching structural layout without embedding hardcoded stars into value text
-                    let templateSkeleton = matchedRule.placeholder;
-                    let resultString = "";
-                    let rIdx = 0;
+                    let formatted = activePrefix + " ";
+                    let digitIdx = 0;
                     
-                    for (let i = 0; i < templateSkeleton.length; i++) {
-                        let skeletonChar = templateSkeleton[i];
-                        if (skeletonChar === '#') {
-                            if (rIdx < rawNums.length) {
-                                resultString += rawNums[rIdx];
-                                rIdx++;
-                            } else {
-                                break; // Stop formatting as soon as user input runs out, leaving placeholders visible behind!
-                            }
-                        } else if (skeletonChar === '*') {
-                            // If template uses stars as placeholders, we stop appending once user digits run out
-                            if (rIdx < rawNums.length) {
-                                resultString += rawNums[rIdx];
-                                rIdx++;
-                            } else {
-                                break;
+                    for (let char of matchedRule.mask.slice(formatted.length)) {
+                        if (char === '#' && digitIdx < rawNums.length) {
+                            formatted += rawNums[digitIdx];
+                            digitIdx++;
+                        } else if (char !== '#' && digitIdx < rawNums.length) {
+                            formatted += char;
+                            if (rawNums[digitIdx]) {
+                                formatted += rawNums[digitIdx];
+                                digitIdx++;
                             }
                         } else {
-                            // Keep spacing/symbols (e.g. spaces, dashes, brackets) if the user has typed enough digits to reach them
-                            if (rIdx > 0 || i < activePrefix.length) {
-                                resultString += skeletonChar;
-                            }
+                            break;
                         }
                     }
-
-                    // Append any remaining typed digits safely
-                    if (rIdx < rawNums.length) {
-                        resultString += rawNums.slice(rIdx);
+                    if (digitIdx < rawNums.length) {
+                        formatted += rawNums.slice(digitIdx);
                     }
-
-                    appleIdentifier.value = resultString;
+                    appleIdentifier.value = formatted;
                 } else {
-                    appleIdentifier.placeholder = "+*** *** ***";
                     appleIdentifier.value = cleanDigits;
                 }
             }
