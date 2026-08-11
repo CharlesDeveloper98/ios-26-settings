@@ -85,6 +85,57 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+
+
+        // --- iOS 26 Apple Account Signup Modal Engine ---
+    const finishSetupNav = document.getElementById("finishSetupNav");
+    const profileCardLink = document.querySelector(".profile-card-link");
+    const appleSignupOverlay = document.getElementById("appleSignupOverlay");
+    const closeAppleSignupBtn = document.getElementById("closeAppleSignupBtn");
+    const appleSignInSubmitBtn = document.getElementById("appleSignInSubmitBtn");
+
+    function openAppleSignupModal() {
+        if (appleSignupOverlay) {
+            appleSignupOverlay.classList.add("active");
+            document.body.style.overflow = "hidden";
+        }
+    }
+
+    function closeAppleSignupModal() {
+        if (appleSignupOverlay) {
+            appleSignupOverlay.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+    }
+
+    if (finishSetupNav) {
+        finishSetupNav.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openAppleSignupModal();
+        });
+    }
+
+    if (profileCardLink) {
+        profileCardLink.addEventListener("click", () => {
+            openAppleSignupModal();
+        });
+    }
+
+    if (closeAppleSignupBtn) {
+        closeAppleSignupBtn.addEventListener("click", () => {
+            closeAppleSignupModal();
+        });
+    }
+
+    if (appleSignInSubmitBtn) {
+        appleSignInSubmitBtn.addEventListener("click", () => {
+            closeAppleSignupModal();
+        });
+    }
+
+    
+
     
     // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
