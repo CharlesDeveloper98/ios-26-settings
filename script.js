@@ -122,9 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (appleSignInSubmitBtn) {
-        appleSignInSubmitBtn.addEventListener("click", () => {
-            closeAppleSignupModal();
-        });
+        appleSignInSubmitBtn.textContent = "Continue";
     }
     
     // Rename Popup Elements
@@ -230,13 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
         "+27": { name: "South Africa", mask: "+27 ## ### ####" }
     };
-
-
-
-
-
                 
-        if (useEmailBtn && usePhoneBtn && appleIdentifier) {
+    if (useEmailBtn && usePhoneBtn && appleIdentifier) {
         useEmailBtn.addEventListener("click", () => {
             useEmailBtn.classList.add("active");
             usePhoneBtn.classList.remove("active");
@@ -245,6 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
             appleIdentifier.placeholder = "example@icloud.com";
             appleIdentifier.value = "";
             if (countryDisplayTag) countryDisplayTag.textContent = "";
+            updateAppleButtonState();
         });
 
         usePhoneBtn.addEventListener("click", () => {
@@ -255,6 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
             appleIdentifier.placeholder = "+*** *** ***";
             appleIdentifier.value = "+";
             if (countryDisplayTag) countryDisplayTag.textContent = "";
+            updateAppleButtonState();
         });
 
         appleIdentifier.addEventListener("input", (e) => {
@@ -312,7 +307,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     }
                     
-                    // Append any remaining valid raw numbers safely up to the mask boundary
                     if (digitIdx < rawNums.length) {
                         formatted += rawNums.slice(digitIdx);
                     }
@@ -325,79 +319,112 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    
-
-    if (appleSignInSubmitBtn) {
-        appleSignInSubmitBtn.textContent = "Continue";
-    }
-
-
-
-
-
     const passwordInput = document.getElementById("applePassword");
-const togglePasswordBtn = document.getElementById("togglePassword");
-const eyeIcon = document.getElementById("eyeIcon");
-
-if (togglePasswordBtn && passwordInput) {
-    togglePasswordBtn.addEventListener("click", () => {
-        const isPassword = passwordInput.type === "password";
-        passwordInput.type = isPassword ? "text" : "password";
-
-        if (isPassword) {
-            // Switch to Open Eye (Show Password)
-            eyeIcon.innerHTML = `
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            `;
-            togglePasswordBtn.setAttribute("aria-label", "Hide password");
-        } else {
-            // Switch to Closed/Slashing Eye (Hide Password)
-            eyeIcon.innerHTML = `
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                <line x1="1" y1="1" x2="23" y2="23"></line>
-            `;
-            togglePasswordBtn.setAttribute("aria-label", "Show password");
-        }
-    });
-}
-
-    
-
-
-    document.getElementById('continueButton').addEventListener('click', function() {
-    const emailInput = document.getElementById('appleIdentifier').value.trim();
-    const errorContainer = document.getElementById('errorAlertMessage');
+    const togglePasswordBtn = document.getElementById("togglePassword");
+    const eyeIcon = document.getElementById("eyeIcon");
     const continueBtn = document.getElementById('continueButton');
-    
-    // Required rule: Email must end strictly with "@icloud.com" and have characters before it
-    const requiredSuffix = "@icloud.com";
-    const isValid = emailInput.endsWith(requiredSuffix) && emailInput.length > requiredSuffix.length;
+    const errorContainer = document.getElementById('errorAlertMessage');
 
-    if (!isValid) {
-        // iOS 26 Contextual Error Message
-        errorContainer.textContent = "Apple Account identifiers require a valid @icloud.com address suffix.";
-        errorContainer.classList.add('visible');
+    if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener("click", () => {
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
 
-        // Trigger shake effect on the button container/button
-        continueBtn.classList.remove('shake-animation');
-        void continueBtn.offsetWidth; // Trigger reflow to restart animation if clicked repeatedly
-        continueBtn.classList.add('shake-animation');
-    } else {
-        // Clear error and proceed successfully
-        errorContainer.classList.remove('visible');
-        errorContainer.textContent = "";
-        continueBtn.classList.remove('shake-animation');
-        
-        // Add your next-step transition code here
-        console.log("Validation passed successfully!");
+            if (isPassword) {
+                eyeIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                `;
+                togglePasswordBtn.setAttribute("aria-label", "Hide password");
+            } else {
+                eyeIcon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                `;
+                togglePasswordBtn.setAttribute("aria-label", "Show password");
+            }
+        });
     }
-});
 
+    // Dynamic Button State Controller Function
+    function updateAppleButtonState() {
+        if (!appleIdentifier || !passwordInput || !continueBtn) return;
+        const identifierVal = appleIdentifier.value.trim();
+        const passwordVal = passwordInput.value.trim();
 
-    
-                
+        // If either field is empty, make button dull/grey
+        if (identifierVal === "" || passwordVal === "") {
+            continueBtn.classList.add('disabled-state');
+            continueBtn.classList.remove('active-state');
+        } else {
+            // Once both have inputs, turn blue
+            continueBtn.classList.remove('disabled-state');
+            continueBtn.classList.add('active-state');
+        }
+    }
+
+    // Listen to inputs for real-time button coloring and error clearance
+    if (appleIdentifier) {
+        appleIdentifier.addEventListener('input', () => {
+            if (errorContainer) {
+                errorContainer.classList.remove('visible');
+                errorContainer.textContent = "";
+            }
+            updateAppleButtonState();
+        });
+    }
+
+    if (passwordInput) {
+        passwordInput.addEventListener('input', () => {
+            updateAppleButtonState();
+        });
+    }
+
+    // Initialize state on load
+    updateAppleButtonState();
+
+    if (continueBtn) {
+        continueBtn.addEventListener('click', function() {
+            const identifierVal = appleIdentifier ? appleIdentifier.value.trim() : "";
+            const passwordVal = passwordInput ? passwordInput.value.trim() : "";
+
+            if (identifierVal === "" || passwordVal === "") {
+                return;
+            }
+
+            const isEmailMode = inputLabel && inputLabel.textContent.includes('Email');
+
+            if (isEmailMode) {
+                const requiredSuffix = "@icloud.com";
+                const isValidEmail = identifierVal.endsWith(requiredSuffix) && identifierVal.length > requiredSuffix.length;
+
+                if (!isValidEmail) {
+                    if (errorContainer) {
+                        errorContainer.textContent = "Apple Account identifiers require a valid @icloud.com address suffix.";
+                        errorContainer.classList.add('visible');
+                    }
+
+                    // Turn continue button dull/grey immediately
+                    continueBtn.classList.add('disabled-state');
+                    continueBtn.classList.remove('active-state');
+
+                    // Trigger shake animation
+                    continueBtn.classList.remove('shake-animation');
+                    void continueBtn.offsetWidth; 
+                    continueBtn.classList.add('shake-animation');
+                    return;
+                }
+            }
+
+            // Validation passed successfully
+            if (errorContainer) {
+                errorContainer.classList.remove('visible');
+                errorContainer.textContent = "";
+            }
+            continueBtn.classList.remove('shake-animation');
+            console.log("Validation passed successfully!");
+        });
+    }
     
     // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
@@ -465,93 +492,6 @@ if (togglePasswordBtn && passwordInput) {
             });
         });
     }
-
-
-
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const identifierInput = document.getElementById('appleIdentifier'); // Email or Phone field
-    const passwordInput = document.getElementById('applePassword');
-    const continueBtn = document.getElementById('continueButton');
-    const errorContainer = document.getElementById('errorAlertMessage');
-    
-    // Track whether we are in Email or Phone mode based on active tab or label text
-    const inputLabel = document.getElementById('inputLabel');
-
-    function updateButtonState() {
-        const identifierVal = identifierInput.value.trim();
-        const passwordVal = passwordInput.value.trim();
-
-        // If any field is completely empty, make button dull grey
-        if (identifierVal === "" || passwordVal === "") {
-            continueBtn.classList.add('disabled-state');
-            continueBtn.classList.remove('active-state');
-        } else {
-            // Once both have text, turn blue
-            continueBtn.classList.remove('disabled-state');
-            continueBtn.classList.add('active-state');
-        }
-    }
-
-    // Listen for any single change/input across fields to reset error and manage colors
-    identifierInput.addEventListener('input', function() {
-        // Clear error message as soon as user types anything new
-        errorContainer.classList.remove('visible');
-        errorContainer.textContent = "";
-        
-        updateButtonState();
-    });
-
-    passwordInput.addEventListener('input', function() {
-        updateButtonState();
-    });
-
-    // Handle Continue Click Logic & Validation
-    continueBtn.addEventListener('click', function(e) {
-        const identifierVal = identifierInput.value.trim();
-        const passwordVal = passwordInput.value.trim();
-
-        // Check if fields are empty first
-        if (identifierVal === "" || passwordVal === "") {
-            return; // Do nothing or let native/visual cues handle it
-        }
-
-        const isEmailMode = inputLabel.textContent.includes('Email');
-        
-        if (isEmailMode) {
-            const requiredSuffix = "@icloud.com";
-            const isValidEmail = identifierVal.endsWith(requiredSuffix) && identifierVal.length > requiredSuffix.length;
-
-            if (!isValidEmail) {
-                // 1. Show error message in red
-                errorContainer.textContent = "Apple Account identifiers require a valid @icloud.com address suffix.";
-                errorContainer.classList.add('visible');
-
-                // 2. Turn continue button dull/grey back immediately
-                continueBtn.classList.add('disabled-state');
-                continueBtn.classList.remove('active-state');
-
-                // 3. Trigger shake animation
-                continueBtn.classList.remove('shake-animation');
-                void continueBtn.offsetWidth; // Trigger reflow
-                continueBtn.classList.add('shake-animation');
-                return;
-            }
-        }
-
-        // If validation passes successfully
-        errorContainer.classList.remove('visible');
-        errorContainer.textContent = "";
-        console.log("Success! Proceeding to next step...");
-    });
-
-    // Initialize state on load
-    updateButtonState();
-});
-
-
-    
 
     // General View Elements
     const generalNav = document.getElementById("generalNav");
