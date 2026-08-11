@@ -208,17 +208,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-
-
-
-        // --- iOS 26 Apple Account Signup Advanced Logic ---
+    // --- iOS 26 Apple Account Signup Advanced Logic ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
-    const appleSignInSubmitBtn = document.getElementById("appleSignInSubmitBtn");
 
     // Country code prefix mapping dictionary & formatting definitions
     const countryRules = {
@@ -252,7 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
             useEmailBtn.classList.remove("active");
             if (inputLabel) inputLabel.textContent = "Phone";
             appleIdentifier.type = "tel";
-            // Default "+" prompt prefix added so user knows to type country code
             appleIdentifier.placeholder = "+*** *** ***";
             appleIdentifier.value = "+";
             if (countryDisplayTag) countryDisplayTag.textContent = "";
@@ -262,7 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (usePhoneBtn.classList.contains("active")) {
                 let val = e.target.value;
                 
-                // Ensure the field always starts with a "+"
                 if (!val.startsWith("+")) {
                     val = "+" + val.replace(/\+/g, "");
                 }
@@ -271,7 +264,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 let detectedCountry = "";
                 let matchedRule = null;
 
-                // Match sorted country code prefixes
                 const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
                 for (let prefix of sortedPrefixes) {
                     if (cleanDigits.startsWith(prefix)) {
@@ -285,13 +277,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     countryDisplayTag.textContent = detectedCountry;
                 }
 
-                // Format numbers dynamically based on standard division blocks
                 if (matchedRule) {
-                    let rawNums = cleanDigits.slice(Object.keys(countryRules).find(p => cleanDigits.startsWith(p)).length);
-                    let formatted = Object.keys(countryRules).find(p => cleanDigits.startsWith(p)) + " ";
+                    let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
+                    let rawNums = cleanDigits.slice(activePrefix.length);
+                    let formatted = activePrefix + " ";
                     let digitIdx = 0;
                     
-                    // Simple slot-based formatting injection
                     for (let char of matchedRule.mask.slice(formatted.length)) {
                         if (char === '#' && digitIdx < rawNums.length) {
                             formatted += rawNums[digitIdx];
@@ -321,9 +312,6 @@ document.addEventListener("DOMContentLoaded", () => {
         appleSignInSubmitBtn.textContent = "Continue";
     }
 
-
-    
-    
     // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
         wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
