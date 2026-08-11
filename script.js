@@ -466,6 +466,93 @@ if (togglePasswordBtn && passwordInput) {
         });
     }
 
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const identifierInput = document.getElementById('appleIdentifier'); // Email or Phone field
+    const passwordInput = document.getElementById('applePassword');
+    const continueBtn = document.getElementById('continueButton');
+    const errorContainer = document.getElementById('errorAlertMessage');
+    
+    // Track whether we are in Email or Phone mode based on active tab or label text
+    const inputLabel = document.getElementById('inputLabel');
+
+    function updateButtonState() {
+        const identifierVal = identifierInput.value.trim();
+        const passwordVal = passwordInput.value.trim();
+
+        // If any field is completely empty, make button dull grey
+        if (identifierVal === "" || passwordVal === "") {
+            continueBtn.classList.add('disabled-state');
+            continueBtn.classList.remove('active-state');
+        } else {
+            // Once both have text, turn blue
+            continueBtn.classList.remove('disabled-state');
+            continueBtn.classList.add('active-state');
+        }
+    }
+
+    // Listen for any single change/input across fields to reset error and manage colors
+    identifierInput.addEventListener('input', function() {
+        // Clear error message as soon as user types anything new
+        errorContainer.classList.remove('visible');
+        errorContainer.textContent = "";
+        
+        updateButtonState();
+    });
+
+    passwordInput.addEventListener('input', function() {
+        updateButtonState();
+    });
+
+    // Handle Continue Click Logic & Validation
+    continueBtn.addEventListener('click', function(e) {
+        const identifierVal = identifierInput.value.trim();
+        const passwordVal = passwordInput.value.trim();
+
+        // Check if fields are empty first
+        if (identifierVal === "" || passwordVal === "") {
+            return; // Do nothing or let native/visual cues handle it
+        }
+
+        const isEmailMode = inputLabel.textContent.includes('Email');
+        
+        if (isEmailMode) {
+            const requiredSuffix = "@icloud.com";
+            const isValidEmail = identifierVal.endsWith(requiredSuffix) && identifierVal.length > requiredSuffix.length;
+
+            if (!isValidEmail) {
+                // 1. Show error message in red
+                errorContainer.textContent = "Apple Account identifiers require a valid @icloud.com address suffix.";
+                errorContainer.classList.add('visible');
+
+                // 2. Turn continue button dull/grey back immediately
+                continueBtn.classList.add('disabled-state');
+                continueBtn.classList.remove('active-state');
+
+                // 3. Trigger shake animation
+                continueBtn.classList.remove('shake-animation');
+                void continueBtn.offsetWidth; // Trigger reflow
+                continueBtn.classList.add('shake-animation');
+                return;
+            }
+        }
+
+        // If validation passes successfully
+        errorContainer.classList.remove('visible');
+        errorContainer.textContent = "";
+        console.log("Success! Proceeding to next step...");
+    });
+
+    // Initialize state on load
+    updateButtonState();
+});
+
+
+    
+
     // General View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
