@@ -208,17 +208,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- iOS 26 Apple Account Signup Advanced Logic ---
+  
+
+
+                        
+
+        // --- iOS 26 Apple Account Signup Advanced Logic ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
 
-    // Country code prefix mapping dictionary & formatting definitions
+    // Country code prefix mapping dictionary with strict iOS 26 mask definitions (*)
     const countryRules = {
-        "+1": { name: "USA", mask: "+1 (###) ###-####" },
-        "+44": { name: "UK", mask: "+44 #### ######" },
+        "+1": { name: "USA", mask: "+1 (***) ***-****" },
+        "+44": { name: "UK", mask: "+44 **** ######" },
         "+33": { name: "France", mask: "+33 # ## ## ## ##" },
         "+49": { name: "Germany", mask: "+49 ### #######" },
         "+81": { name: "Japan", mask: "+81 ## #### ####" },
@@ -247,9 +252,9 @@ document.addEventListener("DOMContentLoaded", () => {
             useEmailBtn.classList.remove("active");
             if (inputLabel) inputLabel.textContent = "Phone";
             appleIdentifier.type = "tel";
-            appleIdentifier.placeholder = "+*** *** ***";
+            appleIdentifier.placeholder = "+1 (***) ***-****";
             appleIdentifier.value = "+";
-            if (countryDisplayTag) countryDisplayTag.textContent = "";
+            if (countryDisplayTag) countryDisplayTag.textContent = "USA";
         });
 
         appleIdentifier.addEventListener("input", (e) => {
@@ -261,9 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 let cleanDigits = val.replace(/[^\d+]/g, "");
-                let detectedCountry = "";
-                let matchedRule = null;
+                let detectedCountry = "USA";
+                let matchedRule = countryRules["+1"]; // Default to +1 USA mask template
 
+                // Sort prefixes by length descending to match longer codes first (e.g., +234 before +2)
                 const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
                 for (let prefix of sortedPrefixes) {
                     if (cleanDigits.startsWith(prefix)) {
@@ -277,40 +283,48 @@ document.addEventListener("DOMContentLoaded", () => {
                     countryDisplayTag.textContent = detectedCountry;
                 }
 
-                if (matchedRule) {
-                    let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
-                    let rawNums = cleanDigits.slice(activePrefix.length);
-                    let formatted = activePrefix + " ";
-                    let digitIdx = 0;
-                    
-                    for (let char of matchedRule.mask.slice(formatted.length)) {
-                        if (char === '#' && digitIdx < rawNums.length) {
-                            formatted += rawNums[digitIdx];
-                            digitIdx++;
-                        } else if (char !== '#' && digitIdx < rawNums.length) {
-                            formatted += char;
-                            if (rawNums[digitIdx]) {
-                                formatted += rawNums[digitIdx];
-                                digitIdx++;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
-                    if (digitIdx < rawNums.length) {
-                        formatted += rawNums.slice(digitIdx);
-                    }
-                    appleIdentifier.value = formatted;
-                } else {
-                    appleIdentifier.value = cleanDigits;
+                // Extract active country code prefix and user input numbers
+                let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p)) || "+1";
+                let rawNums = cleanDigits.slice(activePrefix.length);
+
+                // Count total allowed slots (number of '*' characters in the mask template)
+                let maxAllowedDigits = (matchedRule.mask.match(/\*/g) || []).length;
+                
+                // Enforce strict limit: do not allow any more numbers once maximum is reached
+                if (rawNums.length > maxAllowedDigits) {
+                    rawNums = rawNums.slice(0, maxAllowedDigits);
                 }
+
+                // Construct formatted string blending user digits with remaining '*' placeholders
+                let formatted = matchedRule.mask;
+                let digitIdx = 0;
+
+                let resultString = "";
+                for (let i = 0; i < formatted.length; i++) {
+                    let char = formatted[i];
+                    if (char === '*') {
+                        if (digitIdx < rawNums.length) {
+                            resultString += rawNums[digitIdx];
+                            digitIdx++;
+                        } else {
+                            resultString += '*';
+                        }
+                    } else {
+                        resultString += char;
+                    }
+                }
+
+                // If user somehow types past the mask structure, append cleanly without breaking
+                if (digitIdx < rawNums.length) {
+                    resultString += rawNums.slice(digitIdx);
+                }
+
+                appleIdentifier.value = resultString;
             }
         });
     }
 
-    if (appleSignInSubmitBtn) {
-        appleSignInSubmitBtn.textContent = "Continue";
-    }
+    
 
     // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
