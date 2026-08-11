@@ -166,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return { status: "Connected", connected: true, type: "unknown" };
     }
 
+
     function updateTruncatedWifiName(name) {
         const maxLength = 18;
         let displayName = name;
@@ -234,7 +235,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+    // --- iOS 26 Apple Account Signup Advanced Logic ---
+    const useEmailBtn = document.getElementById("useEmailBtn");
+    const usePhoneBtn = document.getElementById("usePhoneBtn");
+    const appleIdentifier = document.getElementById("appleIdentifier");
+    const inputLabel = document.getElementById("inputLabel");
+    const countryDisplayTag = document.getElementById("countryDisplayTag");
+    const appleSignInSubmitBtn = document.getElementById("appleSignInSubmitBtn");
 
+    // Country code prefix mapping dictionary
+    const countryCodesMap = {
+        "+1": "USA",
+        "+44": "UK",
+        "+33": "France",
+        "+49": "Germany",
+        "+81": "Japan",
+        "+86": "China",
+        "+91": "India",
+        "+61": "Australia",
+        "+55": "Brazil",
+        "+52": "Mexico",
+        "+234": "Nigeria",
+        "+27": "South Africa"
+    };
+
+    if (useEmailBtn && usePhoneBtn && appleIdentifier) {
+        useEmailBtn.addEventListener("click", () => {
+            useEmailBtn.classList.add("active");
+            usePhoneBtn.classList.remove("active");
+            inputLabel.textContent = "Email";
+            appleIdentifier.type = "email";
+            appleIdentifier.placeholder = "example@icloud.com";
+            appleIdentifier.value = "";
+            if (countryDisplayTag) countryDisplayTag.textContent = "";
+        });
+
+        usePhoneBtn.addEventListener("click", () => {
+            usePhoneBtn.classList.add("active");
+            useEmailBtn.classList.remove("active");
+            inputLabel.textContent = "Phone";
+            appleIdentifier.type = "tel";
+            appleIdentifier.placeholder = "*** *** *** ***";
+            appleIdentifier.value = "";
+        });
+
+        appleIdentifier.addEventListener("input", (e) => {
+            if (usePhoneBtn.classList.contains("active")) {
+                let val = e.target.value.trim();
+                let detectedCountry = "";
+                
+                // Check matching prefixes sorted by length descending (+234 before +2)
+                const sortedPrefixes = Object.keys(countryCodesMap).sort((a, b) => b.length - a.length);
+                for (let prefix of sortedPrefixes) {
+                    if (val.startsWith(prefix)) {
+                        detectedCountry = countryCodesMap[prefix];
+                        break;
+                    }
+                }
+
+                if (countryDisplayTag) {
+                    countryDisplayTag.textContent = detectedCountry;
+                }
+            }
+        });
+    }
+
+    if (appleSignInSubmitBtn) {
+        appleSignInSubmitBtn.textContent = "Continue";
+    }
+
+    
 
     
 
