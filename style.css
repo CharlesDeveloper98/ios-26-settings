@@ -1517,3 +1517,35 @@ html.bold-text-enabled .subview-title {
     pointer-events: none;
 }
 
+
+
+
+.password-container .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px; /* Make space for the eye icon */
+}
+
+#togglePassword {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8e8e93; /* iOS secondary label color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+#togglePassword:hover {
+    color: #ffffff;
+}
+
