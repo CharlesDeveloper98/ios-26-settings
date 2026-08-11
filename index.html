@@ -31,15 +31,17 @@
                         <span class="chevron-icon">›</span>
                     </div>
                     <div class="card-divider"></div>
-                    <div class="settings-row clickable">
-                        <div class="row-left">
-                            <span class="row-label-text">Finish Setting Up Your iPhone</span>
-                        </div>
-                        <div class="row-right">
-                            <span class="notification-badge">1</span>
-                            <span class="chevron-icon">›</span>
-                        </div>
-                    </div>
+                    <!-- In index.html, inside the Apple Account Profile Card -->
+<div class="settings-row clickable" id="finishSetupNav">
+    <div class="row-left">
+        <span class="row-label-text">Finish Setting Up Your iPhone</span>
+    </div>
+    <div class="row-right">
+        <span class="notification-badge">1</span>
+        <span class="chevron-icon">›</span>
+    </div>
+</div>
+
                 </div>
 
                 <!-- Group 1: Connectivity & System -->
@@ -1042,6 +1044,52 @@
         </div>
     </div>
 
+
+
+
+            <!-- iOS 26 Apple Account Signup Overlay Modal -->
+    <div class="apple-signup-overlay" id="appleSignupOverlay">
+        <div class="apple-signup-sheet">
+            <div class="apple-signup-header">
+                <div class="liquid-back-btn" id="closeAppleSignupBtn">
+                    <span class="back-chevron">✕</span>
+                </div>
+                <h2 class="subview-title">Apple Account</h2>
+            </div>
+            
+            <div class="apple-signup-scroll-content">
+                <div class="apple-signup-hero">
+                    <div class="apple-signup-logo">
+                        <img src="assets/appleid.png" alt="Apple Account">
+                    </div>
+                    <h3>Sign in with your Apple Account</h3>
+                    <p>Use your Apple Account to access iCloud, the App Store, iMessage, and more.</p>
+                </div>
+
+                <div class="settings-card group-card">
+                    <div class="input-row">
+                        <label for="appleEmail">Email or Phone</label>
+                        <input type="text" id="appleEmail" placeholder="Name or Email" autocomplete="off">
+                    </div>
+                    <div class="input-divider"></div>
+                    <div class="input-row">
+                        <label for="applePassword">Password</label>
+                        <input type="password" id="applePassword" placeholder="Required" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="settings-footer-note text-center blue-link" id="forgotAppleIdBtn">
+                    Forgot password or don't have an Apple Account?
+                </div>
+
+                <div class="popup-button-row" style="padding: 0 16px; margin-top: 20px;">
+                    <button class="liquid-glass-btn ios-blue" id="appleSignInSubmitBtn" style="width: 100%; border-radius: 14px; height: 50px;">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
         
 </body>
 </html>
