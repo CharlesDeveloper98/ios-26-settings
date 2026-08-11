@@ -208,27 +208,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- iOS 26 Apple Account Signup Advanced Logic (Email/Phone Toggle & Country Detection) ---
+
+
+
+
+        // --- iOS 26 Apple Account Signup Advanced Logic ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
+    const appleSignInSubmitBtn = document.getElementById("appleSignInSubmitBtn");
 
-    // Country code prefix mapping dictionary
-    const countryCodesMap = {
-        "+1": "USA",
-        "+44": "UK",
-        "+33": "France",
-        "+49": "Germany",
-        "+81": "Japan",
-        "+86": "China",
-        "+91": "India",
-        "+61": "Australia",
-        "+55": "Brazil",
-        "+52": "Mexico",
-        "+234": "Nigeria",
-        "+27": "South Africa"
+    // Country code prefix mapping dictionary & formatting definitions
+    const countryRules = {
+        "+1": { name: "USA", mask: "+1 (###) ###-####" },
+        "+44": { name: "UK", mask: "+44 #### ######" },
+        "+33": { name: "France", mask: "+33 # ## ## ## ##" },
+        "+49": { name: "Germany", mask: "+49 ### #######" },
+        "+81": { name: "Japan", mask: "+81 ## #### ####" },
+        "+86": { name: "China", mask: "+86 ### #### ####" },
+        "+91": { name: "India", mask: "+91 ##### #####" },
+        "+61": { name: "Australia", mask: "+61 ### ### ###" },
+        "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
+        "+52": { name: "Mexico", mask: "+52 ## #### ####" },
+        "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
+        "+27": { name: "South Africa", mask: "+27 ## ### ####" }
     };
 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
@@ -247,25 +252,66 @@ document.addEventListener("DOMContentLoaded", () => {
             useEmailBtn.classList.remove("active");
             if (inputLabel) inputLabel.textContent = "Phone";
             appleIdentifier.type = "tel";
-            appleIdentifier.placeholder = "*** *** *** ***";
-            appleIdentifier.value = "";
+            // Default "+" prompt prefix added so user knows to type country code
+            appleIdentifier.placeholder = "+*** *** ***";
+            appleIdentifier.value = "+";
+            if (countryDisplayTag) countryDisplayTag.textContent = "";
         });
 
         appleIdentifier.addEventListener("input", (e) => {
             if (usePhoneBtn.classList.contains("active")) {
-                let val = e.target.value.trim();
-                let detectedCountry = "";
+                let val = e.target.value;
                 
-                const sortedPrefixes = Object.keys(countryCodesMap).sort((a, b) => b.length - a.length);
+                // Ensure the field always starts with a "+"
+                if (!val.startsWith("+")) {
+                    val = "+" + val.replace(/\+/g, "");
+                }
+
+                let cleanDigits = val.replace(/[^\d+]/g, "");
+                let detectedCountry = "";
+                let matchedRule = null;
+
+                // Match sorted country code prefixes
+                const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
                 for (let prefix of sortedPrefixes) {
-                    if (val.startsWith(prefix)) {
-                        detectedCountry = countryCodesMap[prefix];
+                    if (cleanDigits.startsWith(prefix)) {
+                        detectedCountry = countryRules[prefix].name;
+                        matchedRule = countryRules[prefix];
                         break;
                     }
                 }
 
                 if (countryDisplayTag) {
                     countryDisplayTag.textContent = detectedCountry;
+                }
+
+                // Format numbers dynamically based on standard division blocks
+                if (matchedRule) {
+                    let rawNums = cleanDigits.slice(Object.keys(countryRules).find(p => cleanDigits.startsWith(p)).length);
+                    let formatted = Object.keys(countryRules).find(p => cleanDigits.startsWith(p)) + " ";
+                    let digitIdx = 0;
+                    
+                    // Simple slot-based formatting injection
+                    for (let char of matchedRule.mask.slice(formatted.length)) {
+                        if (char === '#' && digitIdx < rawNums.length) {
+                            formatted += rawNums[digitIdx];
+                            digitIdx++;
+                        } else if (char !== '#' && digitIdx < rawNums.length) {
+                            formatted += char;
+                            if (rawNums[digitIdx]) {
+                                formatted += rawNums[digitIdx];
+                                digitIdx++;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    if (digitIdx < rawNums.length) {
+                        formatted += rawNums.slice(digitIdx);
+                    }
+                    appleIdentifier.value = formatted;
+                } else {
+                    appleIdentifier.value = cleanDigits;
                 }
             }
         });
@@ -275,6 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
         appleSignInSubmitBtn.textContent = "Continue";
     }
 
+
+    
+    
     // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
         wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
