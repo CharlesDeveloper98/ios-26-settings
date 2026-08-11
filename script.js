@@ -365,6 +365,39 @@ if (togglePasswordBtn && passwordInput) {
 
     
 
+
+    document.getElementById('continueButton').addEventListener('click', function() {
+    const emailInput = document.getElementById('appleIdentifier').value.trim();
+    const errorContainer = document.getElementById('errorAlertMessage');
+    const continueBtn = document.getElementById('continueButton');
+    
+    // Required rule: Email must end strictly with "@icloud.com" and have characters before it
+    const requiredSuffix = "@icloud.com";
+    const isValid = emailInput.endsWith(requiredSuffix) && emailInput.length > requiredSuffix.length;
+
+    if (!isValid) {
+        // iOS 26 Contextual Error Message
+        errorContainer.textContent = "Apple Account identifiers require a valid @icloud.com address suffix.";
+        errorContainer.classList.add('visible');
+
+        // Trigger shake effect on the button container/button
+        continueBtn.classList.remove('shake-animation');
+        void continueBtn.offsetWidth; // Trigger reflow to restart animation if clicked repeatedly
+        continueBtn.classList.add('shake-animation');
+    } else {
+        // Clear error and proceed successfully
+        errorContainer.classList.remove('visible');
+        errorContainer.textContent = "";
+        continueBtn.classList.remove('shake-animation');
+        
+        // Add your next-step transition code here
+        console.log("Validation passed successfully!");
+    }
+});
+
+
+    
+                
     
     // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
