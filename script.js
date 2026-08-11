@@ -213,6 +213,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
 
+    // Dynamic message container for inactive toggle notifications
+    let inactiveAlertBanner = document.getElementById("inactiveAlertBanner");
+    if (!inactiveAlertBanner && appleSignInSubmitBtn && appleSignInSubmitBtn.parentNode) {
+        inactiveAlertBanner = document.createElement("div");
+        inactiveAlertBanner.id = "inactiveAlertBanner";
+        inactiveAlertBanner.className = "ios-inline-notification-banner";
+        // Insert right below the continue container parent context
+        appleSignInSubmitBtn.parentNode.insertBefore(inactiveAlertBanner, appleSignInSubmitBtn.nextSibling);
+    }
+
+    let messageTimer = null;
+    function showTemporaryMessage(text) {
+        if (!inactiveAlertBanner) return;
+        inactiveAlertBanner.textContent = text;
+        inactiveAlertBanner.classList.add("visible");
+
+        if (messageTimer) clearTimeout(messageTimer);
+        messageTimer = setTimeout(() => {
+            inactiveAlertBanner.classList.remove("visible");
+        }, 5000);
+    }
+
     // Country code prefix mapping dictionary & formatting definitions
     const countryRules = {
         "+1": { name: "USA", mask: "+1 (###) ###-####" },
@@ -220,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "+33": { name: "France", mask: "+33 # ## ## ## ##" },
         "+49": { name: "Germany", mask: "+49 ### #######" },
         "+81": { name: "Japan", mask: "+81 ## #### ####" },
-        "+86": { name: "China", mask: "+86 ### #### ####" },
+        "+86": { name: "China", mask: "+81 ### #### ####" },
         "+91": { name: "India", mask: "+91 ##### #####" },
         "+61": { name: "Australia", mask: "+61 ### ### ###" },
         "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
@@ -231,6 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
         useEmailBtn.addEventListener("click", () => {
+            if (useEmailBtn.classList.contains("inactive-tab")) return;
             useEmailBtn.classList.add("active");
             usePhoneBtn.classList.remove("active");
             if (inputLabel) inputLabel.textContent = "Email";
@@ -242,6 +265,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         usePhoneBtn.addEventListener("click", () => {
+            if (usePhoneBtn.classList.contains("inactive-tab")) {
+                showTemporaryMessage("Choose either email or phone number to continue setting up your Apple Account.");
+                return;
+            }
             usePhoneBtn.classList.add("active");
             useEmailBtn.classList.remove("active");
             if (inputLabel) inputLabel.textContent = "Phone";
@@ -253,19 +280,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         appleIdentifier.addEventListener("input", (e) => {
-            if (usePhoneBtn.classList.contains("active")) {
-                let val = e.target.value;
-                
-                // Ensure it always starts with '+'
-                if (!val.startsWith("+")) {
-                    val = "+" + val.replace(/\+/g, "");
+            const isPhoneActive = usePhoneBtn.classList.contains("active");
+            const val = e.target.value.trim();
+
+            if (val.length > 0) {
+                if (isPhoneActive) {
+                    useEmailBtn.classList.add("inactive-tab");
+                } else {
+                    usePhoneBtn.classList.add("inactive-tab");
+                }
+            } else {
+                useEmailBtn.classList.remove("inactive-tab");
+                usePhoneBtn.classList.remove("inactive-tab");
+            }
+
+            if (isPhoneActive) {
+                let phoneVal = e.target.value;
+                if (!phoneVal.startsWith("+")) {
+                    phoneVal = "+" + phoneVal.replace(/\+/g, "");
                 }
 
-                let cleanDigits = val.replace(/[^\d+]/g, "");
+                let cleanDigits = phoneVal.replace(/[^\d+]/g, "");
                 let detectedCountry = "";
                 let matchedRule = null;
 
-                // Sort prefixes by length descending to match longer codes first (e.g., +234 before +2)
                 const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
                 for (let prefix of sortedPrefixes) {
                     if (cleanDigits.startsWith(prefix)) {
@@ -283,10 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
                     let rawNums = cleanDigits.slice(activePrefix.length);
                     
-                    // Count how many placeholders ('#') exist in the mask to enforce maximum limit
                     let maxAllowedDigits = (matchedRule.mask.match(/#/g) || []).length;
                     if (rawNums.length > maxAllowedDigits) {
-                        rawNums = rawNums.slice(0, maxAllowedDigits); // Truncate excess digits
+                        rawNums = rawNums.slice(0, maxAllowedDigits);
                     }
 
                     let formatted = activePrefix + " ";
@@ -378,26 +415,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 let requiredDigitsCount = (matchedRule.mask.match(/#/g) || []).length;
                 let rawNums = cleanDigits.slice(activePrefix.length);
 
-                // Check if user has completely filled out all required digits for the country format mask
                 if (rawNums.length < requiredDigitsCount) {
                     continueBtn.classList.add('disabled-state');
                     continueBtn.classList.remove('active-state');
                     return;
                 }
             } else {
-                // If prefix or mask isn't completely matched yet, keep it disabled
                 continueBtn.classList.add('disabled-state');
                 continueBtn.classList.remove('active-state');
                 return;
             }
         }
 
-        // Once requirements are met, turn blue
         continueBtn.classList.remove('disabled-state');
         continueBtn.classList.add('active-state');
     }
 
-    // Listen to inputs for real-time button coloring and error clearance
     if (appleIdentifier) {
         appleIdentifier.addEventListener('input', () => {
             if (errorContainer) {
@@ -414,7 +447,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Initialize state on load
     updateAppleButtonState();
 
     if (continueBtn) {
@@ -453,16 +485,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 errorContainer.textContent = "";
             }
             continueBtn.classList.remove('shake-animation');
-            console.log("Validation passed successfully!");
         });
     }
     
-    // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
         wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
     }
 
-    // Wi-Fi Popup Event Listeners
     if (wifiInfoBtn && wifiRenameOverlay) {
         wifiInfoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -507,7 +536,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateLiveWifiUI();
 
-    // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
         wifiNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -524,12 +552,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // General View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
     const backToMainFromGeneral = document.getElementById("backToMainFromGeneral");
 
-    // Battery View Elements
     const batteryNav = document.getElementById("batteryNav");
     const batteryView = document.getElementById("batteryView");
     const backToMainFromBattery = document.getElementById("backToMainFromBattery");
@@ -538,7 +564,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const batteryLevelFill = document.getElementById("batteryLevelFill");
     const lastChargedText = document.getElementById("lastChargedText");
 
-    // --- Real-Time iOS App Activity Tracker Engine ---
     const systemApps = [
         { id: "display", name: "Display & Home", icon: "assets/home.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 5 },
         { id: "settings", name: "Settings", icon: "assets/settings.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 3 },
@@ -621,7 +646,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderActivityList();
 
-    // Precise Battery Tracking Engine
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
             let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
@@ -689,7 +713,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
-    // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
@@ -772,7 +795,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
     const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
 
@@ -791,7 +813,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Sub-page sliding navigations
     if (generalNav && generalView && backToMainFromGeneral) {
         generalNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -846,7 +867,6 @@ document.addEventListener("DOMContentLoaded", () => {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
-    // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
     if (!isSetupFinished && sheetOverlay) {
         setTimeout(() => openSheet(), 400);
@@ -865,7 +885,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "";
     }
 
-    // Add scroll listener to subviews for advanced iOS header blur behavior
     document.querySelectorAll('.settings-subview').forEach(subview => {
         subview.addEventListener('scroll', () => {
             const header = subview.querySelector('.subview-header');
