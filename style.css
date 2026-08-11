@@ -1348,7 +1348,7 @@ html.bold-text-enabled .subview-title {
 
 
 
-/* --- iOS 26 Floating Liquid Glass Signup Modal --- */
+/* --- Butter-Smooth iOS 26 Modal Animation Engine --- */
 .apple-signup-overlay {
     position: absolute;
     top: 0;
@@ -1363,7 +1363,9 @@ html.bold-text-enabled .subview-title {
     align-items: flex-end;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.35s ease, visibility 0.35s ease;
+    /* Hardware acceleration and smooth cubic-bezier timing */
+    transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: opacity, visibility;
 }
 
 .apple-signup-overlay.active {
@@ -1373,21 +1375,21 @@ html.bold-text-enabled .subview-title {
 
 .apple-signup-sheet {
     width: 100%;
-    /* Leaves space at the top so it doesn't reach the user device status bar */
     height: calc(100% - 54px);
     max-height: calc(100% - 54px);
     background: var(--bg-app);
     border-top-left-radius: 28px;
     border-top-right-radius: 28px;
     border: 0.5px solid rgba(255, 255, 255, 0.25);
-    /* Liquid glass rim shadow and blur effect */
     box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(30px) saturate(190%);
     -webkit-backdrop-filter: blur(30px) saturate(190%);
     display: flex;
     flex-direction: column;
     transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Smooth spring-like slide interpolation without jank */
+    transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
     overflow: hidden;
     position: relative;
 }
