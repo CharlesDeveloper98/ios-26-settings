@@ -24,8 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
            
-
-        // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
+    // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
@@ -35,10 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
 
-
-
-
-        // Options Sub-Page View Elements
+    // Options Sub-Page View Elements
     const optionsNav = document.getElementById("optionsNav");
     const optionsView = document.getElementById("optionsView");
     const backToDisplayFromOptions = document.getElementById("backToDisplayFromOptions");
@@ -85,10 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-
-
-        // --- iOS 26 Apple Account Signup Modal Engine ---
+    // --- iOS 26 Apple Account Signup Modal Engine ---
     const finishSetupNav = document.getElementById("finishSetupNav");
     const profileCardLink = document.querySelector(".profile-card-link");
     const appleSignupOverlay = document.getElementById("appleSignupOverlay");
@@ -133,9 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
             closeAppleSignupModal();
         });
     }
-
-    
-
     
     // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
@@ -166,44 +156,34 @@ document.addEventListener("DOMContentLoaded", () => {
         return { status: "Connected", connected: true, type: "unknown" };
     }
 
-
     function updateTruncatedWifiName(name) {
         const maxLength = 18;
         let displayName = name;
         if (name.length > maxLength) {
             displayName = name.substring(0, maxLength) + "…";
         }
-        // Update Wi-Fi sub-page connected network card label
         if (connectedNetworkName) {
             connectedNetworkName.textContent = displayName;
         }
-        // Synchronize and display the active custom Wi-Fi name on the main settings page view
         if (mainWifiStatusText && isWifiOn) {
             mainWifiStatusText.textContent = displayName;
         }
     }
 
-
-
-                                        function updateLiveWifiUI() {
+    function updateLiveWifiUI() {
         const state = getNativeAppNetworkState();
         const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
         const animatableElements = document.querySelectorAll(".wifi-animatable-section");
         const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
 
-        // Check browser / network connection type precisely
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         const effectiveType = connection ? connection.type : null;
         const networkTypeStr = (state.type || effectiveType || "").toLowerCase();
 
-        // Check if device is actively on cellular/mobile data
         const isCellular = effectiveType === 'cellular' || networkTypeStr.includes('cellular') || networkTypeStr.includes('data');
-
-        // Check if device is strictly connected to Wi-Fi
         const isWifiConnected = state.connected && !isCellular && (networkTypeStr.includes('wifi') || networkTypeStr.includes('wireless') || networkTypeStr === 'unknown');
 
         if (!isWifiOn) {
-            // Condition 1: Wi-Fi toggle is OFF -> Hide everything and animate connected card away
             if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
             animatableElements.forEach(el => el.classList.add("wifi-hidden"));
             if (connectedNetworkCardContainer) {
@@ -211,19 +191,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             localStorage.setItem("ios26_wifi_on", "false");
         } else {
-            // Condition 2: Wi-Fi toggle is ON -> Show general Wi-Fi sections
             animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
             localStorage.setItem("ios26_wifi_on", "true");
 
-            // Check real-time connection state for the connected card
             if (isWifiConnected) {
-                // Toggle ON & Wi-Fi Connected -> Animate and display connected card
                 updateTruncatedWifiName(savedCustomWifiName);
                 if (connectedNetworkCardContainer) {
                     connectedNetworkCardContainer.classList.remove("wifi-hidden");
                 }
             } else {
-                // Toggle ON, but Wi-Fi Disconnected or using Mobile Data -> Animate connected card away
                 if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
                 if (connectedNetworkCardContainer) {
                     connectedNetworkCardContainer.classList.add("wifi-hidden");
@@ -232,16 +208,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-
-
-    // --- iOS 26 Apple Account Signup Advanced Logic ---
+    // --- iOS 26 Apple Account Signup Advanced Logic (Email/Phone Toggle & Country Detection) ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
-    const appleSignInSubmitBtn = document.getElementById("appleSignInSubmitBtn");
 
     // Country code prefix mapping dictionary
     const countryCodesMap = {
@@ -263,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
         useEmailBtn.addEventListener("click", () => {
             useEmailBtn.classList.add("active");
             usePhoneBtn.classList.remove("active");
-            inputLabel.textContent = "Email";
+            if (inputLabel) inputLabel.textContent = "Email";
             appleIdentifier.type = "email";
             appleIdentifier.placeholder = "example@icloud.com";
             appleIdentifier.value = "";
@@ -273,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
         usePhoneBtn.addEventListener("click", () => {
             usePhoneBtn.classList.add("active");
             useEmailBtn.classList.remove("active");
-            inputLabel.textContent = "Phone";
+            if (inputLabel) inputLabel.textContent = "Phone";
             appleIdentifier.type = "tel";
             appleIdentifier.placeholder = "*** *** *** ***";
             appleIdentifier.value = "";
@@ -284,7 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 let val = e.target.value.trim();
                 let detectedCountry = "";
                 
-                // Check matching prefixes sorted by length descending (+234 before +2)
                 const sortedPrefixes = Object.keys(countryCodesMap).sort((a, b) => b.length - a.length);
                 for (let prefix of sortedPrefixes) {
                     if (val.startsWith(prefix)) {
@@ -303,11 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (appleSignInSubmitBtn) {
         appleSignInSubmitBtn.textContent = "Continue";
     }
-
-    
-
-    
-
 
     // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
@@ -340,8 +306,6 @@ document.addEventListener("DOMContentLoaded", () => {
             wifiRenameOverlay.classList.remove("active");
         });
     }
-
-    
 
     document.addEventListener("online", updateLiveWifiUI, false);
     document.addEventListener("offline", updateLiveWifiUI, false);
