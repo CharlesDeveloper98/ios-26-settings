@@ -1047,7 +1047,7 @@
 
 
 
-            <!-- iOS 26 Apple Account Signup Overlay Modal -->
+                <!-- iOS 26 Apple Account Signup Overlay Modal -->
     <div class="apple-signup-overlay" id="appleSignupOverlay">
         <div class="apple-signup-sheet">
             <div class="apple-signup-header">
@@ -1062,14 +1062,23 @@
                     <div class="apple-signup-logo">
                         <img src="assets/appleid.png" alt="Apple Account">
                     </div>
-                    <h3>Sign in with your Apple Account</h3>
-                    <p>Use your Apple Account to access iCloud, the App Store, iMessage, and more.</p>
+                    <h3>Create Your Apple Account</h3>
+                    <p>Enter your details to set up iCloud, the App Store, iMessage, and more on this device.</p>
+                </div>
+
+                <!-- Input Type Switcher Tabs -->
+                <div class="signup-type-switcher">
+                    <button class="type-switch-btn active" id="useEmailBtn">Email</button>
+                    <button class="type-switch-btn" id="usePhoneBtn">Phone Number</button>
                 </div>
 
                 <div class="settings-card group-card">
-                    <div class="input-row">
-                        <label for="appleEmail">Email or Phone</label>
-                        <input type="text" id="appleEmail" placeholder="Name or Email" autocomplete="off">
+                    <div class="input-row" id="inputRowContainer">
+                        <label id="inputLabel" for="appleIdentifier">Email</label>
+                        <div class="input-field-wrapper">
+                            <input type="email" id="appleIdentifier" placeholder="example@icloud.com" autocomplete="off">
+                            <span id="countryDisplayTag" class="country-display-tag"></span>
+                        </div>
                     </div>
                     <div class="input-divider"></div>
                     <div class="input-row">
@@ -1078,16 +1087,13 @@
                     </div>
                 </div>
 
-                <div class="settings-footer-note text-center blue-link" id="forgotAppleIdBtn">
-                    Forgot password or don't have an Apple Account?
-                </div>
-
-                <div class="popup-button-row" style="padding: 0 16px; margin-top: 20px;">
-                    <button class="liquid-glass-btn ios-blue" id="appleSignInSubmitBtn" style="width: 100%; border-radius: 14px; height: 50px;">Sign In</button>
+                <div class="popup-button-row" style="padding: 0 16px; margin-top: 10px;">
+                    <button class="liquid-glass-btn ios-blue" id="appleSignInSubmitBtn" style="width: 100%; border-radius: 14px; height: 50px;">Continue</button>
                 </div>
             </div>
         </div>
     </div>
+
 
         
         
