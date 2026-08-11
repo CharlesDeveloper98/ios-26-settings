@@ -231,7 +231,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "+27": { name: "South Africa", mask: "+27 ## ### ####" }
     };
 
-    if (useEmailBtn && usePhoneBtn && appleIdentifier) {
+
+
+
+
+                
+        if (useEmailBtn && usePhoneBtn && appleIdentifier) {
         useEmailBtn.addEventListener("click", () => {
             useEmailBtn.classList.add("active");
             usePhoneBtn.classList.remove("active");
@@ -256,6 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (usePhoneBtn.classList.contains("active")) {
                 let val = e.target.value;
                 
+                // Ensure it always starts with '+'
                 if (!val.startsWith("+")) {
                     val = "+" + val.replace(/\+/g, "");
                 }
@@ -264,6 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let detectedCountry = "";
                 let matchedRule = null;
 
+                // Sort prefixes by length descending to match longer codes first (e.g., +234 before +2)
                 const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
                 for (let prefix of sortedPrefixes) {
                     if (cleanDigits.startsWith(prefix)) {
@@ -280,6 +287,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (matchedRule) {
                     let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
                     let rawNums = cleanDigits.slice(activePrefix.length);
+                    
+                    // Count how many placeholders ('#') exist in the mask to enforce maximum limit
+                    let maxAllowedDigits = (matchedRule.mask.match(/#/g) || []).length;
+                    if (rawNums.length > maxAllowedDigits) {
+                        rawNums = rawNums.slice(0, maxAllowedDigits); // Truncate excess digits
+                    }
+
                     let formatted = activePrefix + " ";
                     let digitIdx = 0;
                     
@@ -297,9 +311,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             break;
                         }
                     }
+                    
+                    // Append any remaining valid raw numbers safely up to the mask boundary
                     if (digitIdx < rawNums.length) {
                         formatted += rawNums.slice(digitIdx);
                     }
+                    
                     appleIdentifier.value = formatted;
                 } else {
                     appleIdentifier.value = cleanDigits;
@@ -307,6 +324,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+
+    
 
     if (appleSignInSubmitBtn) {
         appleSignInSubmitBtn.textContent = "Continue";
