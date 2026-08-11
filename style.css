@@ -1581,3 +1581,25 @@ html.bold-text-enabled .subview-title {
     animation: iosShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
 }
 
+
+
+
+/* Continue Button States */
+#continueButton {
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+#continueButton.disabled-state {
+    background-color: #2c2c2e !important; /* iOS dark dull grey */
+    color: #8e8e93 !important; /* Muted text */
+    cursor: not-allowed;
+    pointer-events: auto; /* Allows click to trigger shake and error */
+}
+
+#continueButton.active-state {
+    background-color: #0071e3 !important; /* iOS vibrant blue */
+    color: white !important;
+    cursor: pointer;
+}
+
+
