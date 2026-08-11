@@ -208,27 +208,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- iOS 26 Apple Account Signup Advanced Logic ---
+    // --- iOS 26 Apple Account Signup Advanced Logic (with Stricter Star Formatting & Max Limit Enforcer) ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
 
-    // Country code prefix mapping dictionary & formatting definitions
+    // Comprehensive country prefix configuration map with explicit max character limits for numbers
     const countryRules = {
-        "+1": { name: "USA", mask: "+1 (###) ###-####" },
-        "+44": { name: "UK", mask: "+44 #### ######" },
-        "+33": { name: "France", mask: "+33 # ## ## ## ##" },
-        "+49": { name: "Germany", mask: "+49 ### #######" },
-        "+81": { name: "Japan", mask: "+81 ## #### ####" },
-        "+86": { name: "China", mask: "+86 ### #### ####" },
-        "+91": { name: "India", mask: "+91 ##### #####" },
-        "+61": { name: "Australia", mask: "+61 ### ### ###" },
-        "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
-        "+52": { name: "Mexico", mask: "+52 ## #### ####" },
-        "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
-        "+27": { name: "South Africa", mask: "+27 ## ### ####" }
+        "+1": { name: "USA", mask: "+1 (###) ###-####", maxDigits: 10 },
+        "+44": { name: "UK", mask: "+44 #### ######", maxDigits: 10 },
+        "+33": { name: "France", mask: "+33 # ## ## ## ##", maxDigits: 9 },
+        "+49": { name: "Germany", mask: "+49 ### #######", maxDigits: 10 },
+        "+81": { name: "Japan", mask: "+81 ## #### ####", maxDigits: 10 },
+        "+86": { name: "China", mask: "+86 ### #### ####", maxDigits: 11 },
+        "+91": { name: "India", mask: "+91 ##### #####", maxDigits: 10 },
+        "+61": { name: "Australia", mask: "+61 ### ### ###", maxDigits: 9 },
+        "+55": { name: "Brazil", mask: "+55 ## ##### ####", maxDigits: 11 },
+        "+52": { name: "Mexico", mask: "+52 ## #### ####", maxDigits: 10 },
+        "+234": { name: "Nigeria", mask: "+234 ### ### ####", maxDigits: 10 },
+        "+27": { name: "South Africa", mask: "+27 ## ### ####", maxDigits: 9 }
     };
 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
@@ -280,27 +280,69 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (matchedRule) {
                     let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
                     let rawNums = cleanDigits.slice(activePrefix.length);
+
+                    // Strictly enforce maximum digit limit per country rule
+                    if (rawNums.length > matchedRule.maxDigits) {
+                        rawNums = rawNums.slice(0, matchedRule.maxDigits);
+                    }
+
+                    // Build formatted string using numbers provided and '*' for remaining placeholders
                     let formatted = activePrefix + " ";
+                    let maskChars = matchedRule.mask.slice(activePrefix.length).trim();
                     let digitIdx = 0;
+
+                    let structuralOutput = activePrefix;
+                    let maskTemplate = matchedRule.mask.replace(activePrefix, "").trim();
                     
-                    for (let char of matchedRule.mask.slice(formatted.length)) {
-                        if (char === '#' && digitIdx < rawNums.length) {
-                            formatted += rawNums[digitIdx];
-                            digitIdx++;
-                        } else if (char !== '#' && digitIdx < rawNums.length) {
-                            formatted += char;
-                            if (rawNums[digitIdx]) {
-                                formatted += rawNums[digitIdx];
+                    let finalBuiltString = activePrefix + " ";
+                    let maskIndex = 0;
+                    let templateChars = matchedRule.mask.slice(activePrefix.length + 1); // skip space after prefix
+
+                    for (let i = 0; i < templateChars.length; i++) {
+                        let char = templateChars[i];
+                        if (char === '#') {
+                            if (digitIdx < rawNums.length) {
+                                finalBuiltString += rawNums[digitIdx];
                                 digitIdx++;
+                            } else {
+                                finalBuiltString += "*";
                             }
                         } else {
-                            break;
+                            // Keep spacing/symbols formatting characters intact
+                            if (digitIdx < rawNums.length || (i > 0 && finalBuiltString.replace(/\s/g, '').length < activePrefix.length + rawNums.length)) {
+                                finalBuiltString += char;
+                            } else {
+                                // Stop appending structural symbols if all active user digits are processed and trailing placeholders remain
+                                // Let's check clean truncation
+                            }
                         }
                     }
-                    if (digitIdx < rawNums.length) {
-                        formatted += rawNums.slice(digitIdx);
+
+                    // Clean approach: Construct cleanly using standard masking layout
+                    let templateSkeleton = matchedRule.mask;
+                    let resultString = "";
+                    let rIdx = 0;
+                    
+                    for (let i = 0; i < templateSkeleton.length; i++) {
+                        let skeletonChar = templateSkeleton[i];
+                        if (skeletonChar === '#') {
+                            if (rIdx < rawNums.length) {
+                                resultString += rawNums[rIdx];
+                                rIdx++;
+                            } else {
+                                resultString += "*";
+                            }
+                        } else {
+                            resultString += skeletonChar;
+                        }
                     }
-                    appleIdentifier.value = formatted;
+
+                    // If user typed more characters than raw mask capacity (fallback catch)
+                    if (rIdx < rawNums.length) {
+                        resultString += rawNums.slice(rIdx);
+                    }
+
+                    appleIdentifier.value = resultString;
                 } else {
                     appleIdentifier.value = cleanDigits;
                 }
