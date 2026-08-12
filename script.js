@@ -206,6 +206,82 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+
+
+
+        // --- iOS 26 Apple Account Mutual Signup Engine ---
+    const emailInput = document.getElementById("appleIdentifier");
+    const phoneInput = document.getElementById("phoneIdentifier");
+    const emailContainerRow = document.getElementById("emailContainerRow");
+    const phoneContainerRow = document.getElementById("phoneContainerRow");
+    const ios26AlertMessage = document.getElementById("ios26AlertMessage");
+    
+    let alertFadeTimer = null;
+
+    function triggerIos26Alert(message) {
+        if (!ios26AlertMessage) return;
+        
+        clearTimeout(alertFadeTimer);
+        ios26AlertMessage.textContent = message;
+        ios26AlertMessage.classList.add("show-alert");
+
+        // Automatically hide after exactly 5 seconds with a smooth fade
+        alertFadeTimer = setTimeout(() => {
+            ios26AlertMessage.classList.remove("show-alert");
+        }, 5000);
+    }
+
+    // Handle Email Input Behavior
+    if (emailInput && phoneInput) {
+        emailInput.addEventListener("input", () => {
+            const emailVal = emailInput.value.trim();
+            if (emailVal.length > 0) {
+                phoneContainerRow.classList.add("dull-container");
+                phoneInput.value = ""; // Clear opposite field
+            } else {
+                phoneContainerRow.classList.remove("dull-container");
+            }
+            updateAppleButtonState();
+        });
+
+        // Handle Phone Input Behavior
+        phoneInput.addEventListener("input", (e) => {
+            let phoneVal = phoneInput.value.trim();
+            if (phoneVal.length > 0) {
+                emailContainerRow.classList.add("dull-container");
+                emailInput.value = ""; // Clear opposite field
+            } else {
+                emailContainerRow.classList.remove("dull-container");
+            }
+
+            // Standard phone formatting logic
+            if (!phoneVal.startsWith("+")) {
+                phoneVal = "+" + phoneVal.replace(/\+/g, "");
+            }
+            phoneInput.value = phoneVal;
+            updateAppleButtonState();
+        });
+
+        // Intercept taps/clicks on dull containers to trigger the 5-second alert message
+        if (emailContainerRow) {
+            emailContainerRow.addEventListener("click", () => {
+                if (emailContainerRow.classList.contains("dull-container")) {
+                    triggerIos26Alert("You have chosen to sign up using your phone number. Clear the phone field to switch to email.");
+                }
+            });
+        }
+
+        if (phoneContainerRow) {
+            phoneContainerRow.addEventListener("click", () => {
+                if (phoneContainerRow.classList.contains("dull-container")) {
+                    triggerIos26Alert("You have chosen to sign up using your email. Clear the email field to switch to a phone number.");
+                }
+            });
+        }
+    }
+
+    
+
     // --- iOS 26 Apple Account Signup Advanced Logic ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
