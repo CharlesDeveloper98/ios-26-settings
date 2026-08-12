@@ -1047,7 +1047,7 @@
 
 
 
-             <!-- iOS 26 Apple Account Signup Overlay Modal -->
+                <!-- iOS 26 Apple Account Signup Overlay Modal -->
 <div class="apple-signup-overlay" id="appleSignupOverlay">
     <div class="apple-signup-sheet">
         <div class="apple-signup-header">
@@ -1074,36 +1074,20 @@
 
             <!-- Settings Card: Email & Password Fields -->
             <div class="settings-card group-card">
-                <!-- Email Container Wrapper -->
-                <div class="settings-row input-container-row" id="emailContainerRow">
-                    <div class="input-row" id="inputRowContainer" style="width: 100%;">
-                        <label id="inputLabel" for="appleIdentifier">Email</label>
-                        <div class="input-field-wrapper" style="flex-grow: 1; display: flex; align-items: center;">
-                            <input type="email" id="appleIdentifier" placeholder="example@icloud.com" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none;">
-                            <span id="countryDisplayTag" class="country-display-tag"></span>
-                        </div>
+                <div class="input-row" id="inputRowContainer">
+                    <label id="inputLabel" for="appleIdentifier">Email</label>
+                    <div class="input-field-wrapper" style="flex-grow: 1; display: flex; align-items: center;">
+                        <input type="email" id="appleIdentifier" placeholder="example@icloud.com" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none;">
+                        <span id="countryDisplayTag" class="country-display-tag"></span>
                     </div>
                 </div>
-
-                <div class="card-divider indent"></div>
-
-                <!-- Phone Number Container Wrapper -->
-                <div class="settings-row input-container-row" id="phoneContainerRow">
-                    <div class="input-row" style="width: 100%;">
-                        <label for="phoneIdentifier">Phone Number</label>
-                        <div class="input-field-wrapper" style="flex-grow: 1; display: flex; align-items: center;">
-                            <input type="tel" id="phoneIdentifier" placeholder="+1 (555) 000-0000" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none;">
-                            <span id="phoneCountryDisplayTag" class="country-display-tag"></span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="input-divider"></div>
                 <div class="input-row">
                     <label for="applePassword">Password</label>
                     <div class="input-field-wrapper" style="flex-grow: 1; display: flex; align-items: center; position: relative;">
                         <input type="password" id="applePassword" placeholder="Required" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none; padding-right: 32px;">
                         <button type="button" id="togglePassword" aria-label="Show password" style="background: none; border: none; cursor: pointer; position: absolute; right: 0; display: flex; align-items: center; color: var(--text-sub);">
+                            <!-- Eye Icon (Closed / Slash by default) -->
                             <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                                 <line x1="1" y1="1" x2="23" y2="23"></line>
@@ -1118,13 +1102,12 @@
                 <button type="button" id="continueButton" class="liquid-glass-btn ios-blue" style="width: 100%; background-color: #0071e3; color: white; border: none; border-radius: 14px; height: 50px; font-size: 16px; font-weight: 500; cursor: pointer;">
                     Continue
                 </button>
-                <!-- iOS 26 Dynamic 5-Second Fade Alert -->
-                <div id="ios26AlertMessage" class="ios-alert-banner"></div>
+                <!-- iOS 26 Error Alert Container -->
+                <div id="errorAlertMessage"></div>
             </div>
         </div>
     </div>
 </div>
-
 
         
         
