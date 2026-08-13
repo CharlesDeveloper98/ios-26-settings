@@ -1605,17 +1605,17 @@ html.bold-text-enabled .subview-title {
 
 
 
-/* iOS 26 Container Dimming & Fading Alert Styles */
+/* iOS 26 Container Dimming & Non-Interactive Inactive Styles */
 .type-switch-btn {
     transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-/* Inactive/Dull Container Style */
+/* Inactive/Dull Container Style - Completely Non-Touchable */
 .type-switch-btn.dimmed {
     opacity: 0.35;
     filter: grayscale(60%);
     cursor: not-allowed;
-    pointer-events: auto; /* Keeps clicks targetable to fire the warning alert */
+    pointer-events: none; /* Disables all touch and click interactions */
 }
 
 /* iOS 26 Alert Fading Message Container Styles */
@@ -1641,5 +1641,6 @@ html.bold-text-enabled .subview-title {
     opacity: 1;
     visibility: visible;
 }
+
 
 
