@@ -206,7 +206,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-        // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
+        
+
+            // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
@@ -219,7 +221,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function showIOS26Alert(message) {
         if (!ios26AlertBox) return;
         
-        // Clear previous active timer if user clicks multiple times rapidly
         if (alertFadeTimer) {
             clearTimeout(alertFadeTimer);
         }
@@ -227,26 +228,25 @@ document.addEventListener("DOMContentLoaded", () => {
         ios26AlertBox.textContent = message;
         ios26AlertBox.classList.add("show");
 
-        // Set exact 5-second duration before triggering fade out transition
+        // 5-second automatic fade-out mechanism
         alertFadeTimer = setTimeout(() => {
             ios26AlertBox.classList.remove("show");
         }, 5000);
     }
 
-    // Helper logic to sync switch container dimming states based on input values
     function updateSwitchContainerStates() {
         const val = appleIdentifier ? appleIdentifier.value.trim() : "";
         const isUsingPhone = usePhoneBtn && usePhoneBtn.classList.contains("active");
 
-        // If text is entered in the current mode, dull/deactivate the opposite tab button
         if (val.length > 0 && val !== "+") {
             if (isUsingPhone) {
                 useEmailBtn.classList.add("dimmed");
+                usePhoneBtn.classList.remove("dimmed");
             } else {
                 usePhoneBtn.classList.add("dimmed");
+                useEmailBtn.classList.remove("dimmed");
             }
         } else {
-            // Re-enable both if field is completely cleared
             useEmailBtn.classList.remove("dimmed");
             usePhoneBtn.classList.remove("dimmed");
         }
@@ -254,11 +254,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
         useEmailBtn.addEventListener("click", () => {
-            // Block switching if phone container has text input
-            if (usePhoneBtn.classList.contains("dimmed")) {
-                showIOS26Alert("You have to use only one method for sign up.");
-                return;
-            }
+            if (useEmailBtn.classList.contains("dimmed")) return;
+            
             useEmailBtn.classList.add("active");
             usePhoneBtn.classList.remove("active");
             if (inputLabel) inputLabel.textContent = "Email";
@@ -271,11 +268,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         usePhoneBtn.addEventListener("click", () => {
-            // Block switching if email container has text input
-            if (useEmailBtn.classList.contains("dimmed")) {
-                showIOS26Alert("You have to use only one method for sign up.");
-                return;
-            }
+            if (usePhoneBtn.classList.contains("dimmed")) return;
+
             usePhoneBtn.classList.add("active");
             useEmailBtn.classList.remove("active");
             if (inputLabel) inputLabel.textContent = "Phone";
@@ -290,7 +284,6 @@ document.addEventListener("DOMContentLoaded", () => {
         appleIdentifier.addEventListener("input", (e) => {
             updateSwitchContainerStates();
             
-            // Retain your precise phone formatting handler rules below
             if (usePhoneBtn.classList.contains("active")) {
                 let val = e.target.value;
                 if (!val.startsWith("+")) {
@@ -345,6 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
 
 
     // Country code prefix mapping dictionary & formatting definitions
