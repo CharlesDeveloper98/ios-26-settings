@@ -1112,6 +1112,42 @@
 
         
         
+
+        <!-- iOS 26 Smooth Pop-up Country Picker Mini Page Overlay -->
+<div class="country-picker-overlay" id="countryPickerOverlay">
+    <div class="country-picker-sheet">
+        <div class="sheet-indicator"></div>
+        <div class="country-picker-header">
+            <h2 class="subview-title">Select Country</h2>
+            <button class="country-picker-close-btn" id="closeCountryPickerBtn">Done</button>
+        </div>
+
+        <!-- Liquid Glass Search Container -->
+        <div class="country-search-sticky-container">
+            <div class="liquidglass-wrapper search-bar-liquid">
+                <div class="liquidglass-effect"></div>
+                <div class="liquidglass-content">
+                    <img src="assets/search.png" alt="Search" class="search-icon-img">
+                    <input type="text" id="countrySearchInput" placeholder="Search Country or Code" autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
+
+        <div class="country-picker-body-wrapper">
+            <!-- Alphabetical Country List Container -->
+            <div class="country-list-container" id="countryListContainer">
+                <!-- Populated dynamically via script.js -->
+            </div>
+
+            <!-- Right-side Alphabet Gliding Index / Dragging Bar -->
+            <div class="alphabet-glide-sidebar" id="alphabetGlideSidebar">
+                <!-- Populated dynamically via script.js -->
+            </div>
+        </div>
+    </div>
+</div>
+
+        
         
 </body>
 </html>
