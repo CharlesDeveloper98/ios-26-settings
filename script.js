@@ -206,12 +206,146 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- iOS 26 Apple Account Signup Advanced Logic ---
+        // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
     const countryDisplayTag = document.getElementById("countryDisplayTag");
+    const ios26AlertBox = document.getElementById("ios26AlertBox");
+
+    let alertFadeTimer = null;
+
+    function showIOS26Alert(message) {
+        if (!ios26AlertBox) return;
+        
+        // Clear previous active timer if user clicks multiple times rapidly
+        if (alertFadeTimer) {
+            clearTimeout(alertFadeTimer);
+        }
+
+        ios26AlertBox.textContent = message;
+        ios26AlertBox.classList.add("show");
+
+        // Set exact 5-second duration before triggering fade out transition
+        alertFadeTimer = setTimeout(() => {
+            ios26AlertBox.classList.remove("show");
+        }, 5000);
+    }
+
+    // Helper logic to sync switch container dimming states based on input values
+    function updateSwitchContainerStates() {
+        const val = appleIdentifier ? appleIdentifier.value.trim() : "";
+        const isUsingPhone = usePhoneBtn && usePhoneBtn.classList.contains("active");
+
+        // If text is entered in the current mode, dull/deactivate the opposite tab button
+        if (val.length > 0 && val !== "+") {
+            if (isUsingPhone) {
+                useEmailBtn.classList.add("dimmed");
+            } else {
+                usePhoneBtn.classList.add("dimmed");
+            }
+        } else {
+            // Re-enable both if field is completely cleared
+            useEmailBtn.classList.remove("dimmed");
+            usePhoneBtn.classList.remove("dimmed");
+        }
+    }
+
+    if (useEmailBtn && usePhoneBtn && appleIdentifier) {
+        useEmailBtn.addEventListener("click", () => {
+            // Block switching if phone container has text input
+            if (usePhoneBtn.classList.contains("dimmed")) {
+                showIOS26Alert("You have to use only one method for sign up.");
+                return;
+            }
+            useEmailBtn.classList.add("active");
+            usePhoneBtn.classList.remove("active");
+            if (inputLabel) inputLabel.textContent = "Email";
+            appleIdentifier.type = "email";
+            appleIdentifier.placeholder = "example@icloud.com";
+            appleIdentifier.value = "";
+            if (countryDisplayTag) countryDisplayTag.textContent = "";
+            updateSwitchContainerStates();
+            updateAppleButtonState();
+        });
+
+        usePhoneBtn.addEventListener("click", () => {
+            // Block switching if email container has text input
+            if (useEmailBtn.classList.contains("dimmed")) {
+                showIOS26Alert("You have to use only one method for sign up.");
+                return;
+            }
+            usePhoneBtn.classList.add("active");
+            useEmailBtn.classList.remove("active");
+            if (inputLabel) inputLabel.textContent = "Phone";
+            appleIdentifier.type = "tel";
+            appleIdentifier.placeholder = "+*** *** ***";
+            appleIdentifier.value = "+";
+            if (countryDisplayTag) countryDisplayTag.textContent = "";
+            updateSwitchContainerStates();
+            updateAppleButtonState();
+        });
+
+        appleIdentifier.addEventListener("input", (e) => {
+            updateSwitchContainerStates();
+            
+            // Retain your precise phone formatting handler rules below
+            if (usePhoneBtn.classList.contains("active")) {
+                let val = e.target.value;
+                if (!val.startsWith("+")) {
+                    val = "+" + val.replace(/\+/g, "");
+                }
+                let cleanDigits = val.replace(/[^\d+]/g, "");
+                let detectedCountry = "";
+                let matchedRule = null;
+
+                const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
+                for (let prefix of sortedPrefixes) {
+                    if (cleanDigits.startsWith(prefix)) {
+                        detectedCountry = countryRules[prefix].name;
+                        matchedRule = countryRules[prefix];
+                        break;
+                    }
+                }
+
+                if (countryDisplayTag) countryDisplayTag.textContent = detectedCountry;
+
+                if (matchedRule) {
+                    let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
+                    let rawNums = cleanDigits.slice(activePrefix.length);
+                    let maxAllowedDigits = (matchedRule.mask.match(/#/g) || []).length;
+                    if (rawNums.length > maxAllowedDigits) {
+                        rawNums = rawNums.slice(0, maxAllowedDigits);
+                    }
+
+                    let formatted = activePrefix + " ";
+                    let digitIdx = 0;
+                    for (let char of matchedRule.mask.slice(formatted.length)) {
+                        if (char === '#' && digitIdx < rawNums.length) {
+                            formatted += rawNums[digitIdx];
+                            digitIdx++;
+                        } else if (char !== '#' && digitIdx < rawNums.length) {
+                            formatted += char;
+                            if (rawNums[digitIdx]) {
+                                formatted += rawNums[digitIdx];
+                                digitIdx++;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    if (digitIdx < rawNums.length) {
+                        formatted += rawNums.slice(digitIdx);
+                    }
+                    appleIdentifier.value = formatted;
+                } else {
+                    appleIdentifier.value = cleanDigits;
+                }
+            }
+        });
+    }
+
 
     // Country code prefix mapping dictionary & formatting definitions
     const countryRules = {
