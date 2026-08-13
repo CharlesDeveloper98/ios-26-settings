@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         
 
-            // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
+                // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
@@ -254,7 +254,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
         useEmailBtn.addEventListener("click", () => {
-            if (useEmailBtn.classList.contains("dimmed")) return;
+            // Check if dimmed; if so, block action and show alert message
+            if (useEmailBtn.classList.contains("dimmed")) {
+                showIOS26Alert("You have to use only one method for sign up.");
+                return;
+            }
             
             useEmailBtn.classList.add("active");
             usePhoneBtn.classList.remove("active");
@@ -268,7 +272,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         usePhoneBtn.addEventListener("click", () => {
-            if (usePhoneBtn.classList.contains("dimmed")) return;
+            // Check if dimmed; if so, block action and show alert message
+            if (usePhoneBtn.classList.contains("dimmed")) {
+                showIOS26Alert("You have to use only one method for sign up.");
+                return;
+            }
 
             usePhoneBtn.classList.add("active");
             useEmailBtn.classList.remove("active");
@@ -339,6 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+            
 
 
     // Country code prefix mapping dictionary & formatting definitions
