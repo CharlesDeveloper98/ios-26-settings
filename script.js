@@ -208,7 +208,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         
 
-                // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
+
+
+        // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
@@ -253,9 +255,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
-        useEmailBtn.addEventListener("click", () => {
-            // Check if dimmed; if so, block action and show alert message
+        useEmailBtn.addEventListener("click", (e) => {
+            // Strictly intercept and block execution if dimmed, while displaying the alert
             if (useEmailBtn.classList.contains("dimmed")) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
                 showIOS26Alert("You have to use only one method for sign up.");
                 return;
             }
@@ -271,9 +275,11 @@ document.addEventListener("DOMContentLoaded", () => {
             updateAppleButtonState();
         });
 
-        usePhoneBtn.addEventListener("click", () => {
-            // Check if dimmed; if so, block action and show alert message
+        usePhoneBtn.addEventListener("click", (e) => {
+            // Strictly intercept and block execution if dimmed, while displaying the alert
             if (usePhoneBtn.classList.contains("dimmed")) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
                 showIOS26Alert("You have to use only one method for sign up.");
                 return;
             }
@@ -346,6 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
 
             
 
