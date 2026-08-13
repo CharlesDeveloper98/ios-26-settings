@@ -1603,3 +1603,43 @@ html.bold-text-enabled .subview-title {
 }
 
 
+
+
+/* iOS 26 Container Dimming & Fading Alert Styles */
+.type-switch-btn {
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+/* Inactive/Dull Container Style */
+.type-switch-btn.dimmed {
+    opacity: 0.35;
+    filter: grayscale(60%);
+    cursor: not-allowed;
+    pointer-events: auto; /* Keeps clicks targetable to fire the warning alert */
+}
+
+/* iOS 26 Alert Fading Message Container Styles */
+.ios26-fading-alert {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(255, 69, 58, 0.15);
+    border: 0.5px solid rgba(255, 69, 58, 0.3);
+    color: #ff453a;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.ios26-fading-alert.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
