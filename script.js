@@ -197,37 +197,122 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 4. COUNTRY DATABASE & RULES
-    // ==========================================
-    const countriesDatabase = [
-        { name: "Afghanistan", code: "+93", flag: "🇦🇫", letter: "A" },
-        { name: "Albania", code: "+355", flag: "🇦🇱", letter: "A" },
-        { name: "Algeria", code: "+213", flag: "🇩🇿", letter: "A" },
-        { name: "Andorra", code: "+376", flag: "🇦🇩", letter: "A" },
-        { name: "Angola", code: "+244", flag: "🇦🇴", letter: "A" },
-        { name: "Argentina", code: "+54", flag: "🇦🇷", letter: "A" },
-        { name: "Armenia", code: "+374", flag: "🇦🇲", letter: "A" },
-        { name: "Australia", code: "+61", flag: "🇦🇺", letter: "A" },
-        { name: "Austria", code: "+43", flag: "🇦🇹", letter: "A" },
-        { name: "Azerbaijan", code: "+994", flag: "🇦🇿", letter: "A" },
-        { name: "Bahamas", code: "+1242", flag: "🇧🇸", letter: "B" },
-        { name: "Bahrain", code: "+973", flag: "🇧🇭", letter: "B" },
-        { name: "Bangladesh", code: "+880", flag: "🇧🇩", letter: "B" },
-        { name: "Belarus", code: "+375", flag: "🇧🇾", letter: "B" },
-        { name: "Belgium", code: "+32", flag: "🇧🇪", letter: "B" },
-        { name: "Brazil", code: "+55", flag: "🇧🇷", letter: "B" },
-        { name: "Canada", code: "+1", flag: "🇨🇦", letter: "C" },
-        { name: "China", code: "+86", flag: "🇨🇳", letter: "C" },
-        { name: "Egypt", code: "+20", flag: "🇪🇬", letter: "E" },
-        { name: "France", code: "+33", flag: "🇫🇷", letter: "F" },
-        { name: "Germany", code: "+49", flag: "🇩🇪", letter: "G" },
-        { name: "India", code: "+91", flag: "🇮🇳", letter: "I" },
-        { name: "Italy", code: "+39", flag: "🇮🇹", letter: "I" },
-        { name: "Japan", code: "+81", flag: "🇯🇵", letter: "J" },
-        { name: "Nigeria", code: "+234", flag: "🇳🇬", letter: "N" },
-        { name: "UK", code: "+44", flag: "🇬🇧", letter: "U" },
-        { name: "USA / Canada", code: "+1", flag: "🇺🇸", letter: "🇺" }
-    ];
+// COUNTRY CODE PICKER & PHONE INPUT ENGINE
+// ==========================================
+const countriesDatabase = [
+    { name: "Afghanistan", code: "+93", flag: "🇦🇫", letter: "A" },
+    { name: "Albania", code: "+355", flag: "🇦🇱", letter: "A" },
+    { name: "Algeria", code: "+213", flag: "🇩🇿", letter: "A" },
+    { name: "Andorra", code: "+376", flag: "🇦🇩", letter: "A" },
+    { name: "Angola", code: "+244", flag: "🇦🇴", letter: "A" },
+    { name: "Argentina", code: "+54", flag: "🇦🇷", letter: "A" },
+    { name: "Australia", code: "+61", flag: "🇦🇺", letter: "A" },
+    { name: "Austria", code: "+43", flag: "🇦🇹", letter: "A" },
+    { name: "Brazil", code: "+55", flag: "🇧🇷", letter: "B" },
+    { name: "Canada", code: "+1", flag: "🇨🇦", letter: "C" },
+    { name: "China", code: "+86", flag: "🇨🇳", letter: "C" },
+    { name: "Egypt", code: "+20", flag: "🇪🇬", letter: "E" },
+    { name: "France", code: "+33", flag: "🇫🇷", letter: "F" },
+    { name: "Germany", code: "+49", flag: "🇩🇪", letter: "G" },
+    { name: "India", code: "+91", flag: "🇮🇳", letter: "I" },
+    { name: "Italy", code: "+39", flag: "🇮🇹", letter: "I" },
+    { name: "Japan", code: "+81", flag: "🇯🇵", letter: "J" },
+    { name: "Nigeria", code: "+234", flag: "🇳🇬", letter: "N" },
+    { name: "UK", code: "+44", flag: "🇬🇧", letter: "U" },
+    { name: "USA", code: "+1", flag: "🇺🇸", letter: "🇺" }
+];
+
+const countryPickerOverlay = document.getElementById("countryPickerOverlay");
+const countrySelectorTrigger = document.getElementById("countrySelectorTrigger");
+const closeCountryPickerBtn = document.getElementById("closeCountryPickerBtn");
+const countryListContainer = document.getElementById("countryListContainer");
+const alphabetGlideSidebar = document.getElementById("alphabetGlideSidebar");
+const countrySearchInput = document.getElementById("countrySearchInput");
+const selectedCountryFlag = document.getElementById("selectedCountryFlag");
+const selectedCountryCodeText = document.getElementById("selectedCountryCodeText");
+const phoneNumberField = document.getElementById("phoneNumberField");
+
+function renderCountryList(filterText = "") {
+    if (!countryListContainer) return;
+    countryListContainer.innerHTML = "";
+    
+    const filtered = countriesDatabase.filter(c => 
+        c.name.toLowerCase().includes(filterText.toLowerCase()) || c.code.includes(filterText)
+    );
+
+    let currentLetterHeader = "";
+    filtered.forEach(country => {
+        if (country.letter !== currentLetterHeader && !filterText) {
+            currentLetterHeader = country.letter;
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "country-alphabet-header";
+            headerDiv.textContent = currentLetterHeader;
+            headerDiv.id = `letter-header-${currentLetterHeader}`;
+            countryListContainer.appendChild(headerDiv);
+        }
+
+        const row = document.createElement("div");
+        row.className = "country-item-row clickable";
+        row.innerHTML = `
+            <div class="country-row-left">
+                <span class="country-item-flag">${country.flag}</span>
+                <span class="country-item-name">${country.name}</span>
+            </div>
+            <span class="country-item-code">${country.code}</span>
+        `;
+
+        row.addEventListener("click", () => {
+            selectCountry(country);
+            closeCountryPickerModal();
+        });
+
+        countryListContainer.appendChild(row);
+    });
+}
+
+function renderAlphabetSidebar() {
+    if (!alphabetGlideSidebar) return;
+    alphabetGlideSidebar.innerHTML = "";
+    const uniqueLetters = [...new Set(countriesDatabase.map(c => c.letter))];
+
+    uniqueLetters.forEach(letter => {
+        const span = document.createElement("span");
+        span.className = "alphabet-glide-letter";
+        span.textContent = letter;
+        span.addEventListener("click", () => {
+            const targetHeader = document.getElementById(`letter-header-${letter}`);
+            if (targetHeader) targetHeader.scrollIntoView({ behavior: "smooth" });
+        });
+        alphabetGlideSidebar.appendChild(span);
+    });
+}
+
+function selectCountry(country) {
+    if (selectedCountryFlag) selectedCountryFlag.textContent = country.flag;
+    if (selectedCountryCodeText) selectedCountryCodeText.textContent = country.code;
+    if (phoneNumberField) {
+        phoneNumberField.value = country.code + " ";
+        phoneNumberField.focus();
+    }
+}
+
+function openCountryPickerModal() {
+    if (countryPickerOverlay) {
+        countryPickerOverlay.classList.add("active");
+        renderCountryList();
+        renderAlphabetSidebar();
+    }
+}
+
+function closeCountryPickerModal() {
+    if (countryPickerOverlay) countryPickerOverlay.classList.remove("active");
+}
+
+if (countrySelectorTrigger) countrySelectorTrigger.addEventListener("click", openCountryPickerModal);
+if (closeCountryPickerBtn) closeCountryPickerBtn.addEventListener("click", closeCountryPickerModal);
+if (countrySearchInput) countrySearchInput.addEventListener("input", (e) => renderCountryList(e.target.value.trim()));
+
+    
 
     const countryRules = {
         "+1": { name: "USA / Canada", mask: "+1 (###) ###-####" },
