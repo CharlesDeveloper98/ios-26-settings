@@ -124,6 +124,82 @@ document.addEventListener("DOMContentLoaded", () => {
     if (appleSignInSubmitBtn) {
         appleSignInSubmitBtn.textContent = "Continue";
     }
+
+
+
+
+    // --- iOS 26 Country Picker Mini-Page Engine ---
+const countryDisplayTag = document.getElementById("countryDisplayTag");
+const countryPickerMiniPage = document.getElementById("countryPickerMiniPage");
+const closeCountryPickerBtn = document.getElementById("closeCountryPickerBtn");
+const countryListContainer = document.getElementById("countryListContainer");
+const countrySearchInput = document.getElementById("countrySearchInput");
+
+function renderCountryList(filterText = "") {
+    if (!countryListContainer) return;
+    countryListContainer.innerHTML = "";
+
+    Object.entries(countryRules).forEach(([code, data]) => {
+        const query = filterText.toLowerCase();
+        if (data.name.toLowerCase().includes(query) || code.includes(query)) {
+            const row = document.createElement("div");
+            row.className = "settings-row clickable country-item-row";
+            row.innerHTML = `
+                <div class="row-left" style="display: flex; align-items: center; gap: 12px;">
+                    <span class="country-flag" style="font-size: 20px;">${data.flag || "🌍"}</span>
+                    <span class="row-label-text">${data.name}</span>
+                </div>
+                <div class="row-right">
+                    <span class="row-status-text" style="color: var(--text-sub);">${code}</span>
+                </div>
+            `;
+            row.addEventListener("click", () => {
+                if (appleIdentifier) {
+                    appleIdentifier.value = code + " ";
+                    if (countryDisplayTag) countryDisplayTag.textContent = data.name;
+                    updateAppleButtonState();
+                }
+                closeCountryPickerMiniPage();
+            });
+            countryListContainer.appendChild(row);
+            
+            // Add divider between rows
+            const divider = document.createElement("div");
+            divider.className = "card-divider indent";
+            countryListContainer.appendChild(divider);
+        }
+    });
+}
+
+function openCountryPickerMiniPage() {
+    if (countryPickerMiniPage) {
+        renderCountryList();
+        countryPickerMiniPage.classList.add("active");
+    }
+}
+
+function closeCountryPickerMiniPage() {
+    if (countryPickerMiniPage) {
+        countryPickerMiniPage.classList.remove("active");
+        if (countrySearchInput) countrySearchInput.value = "";
+    }
+}
+
+if (countryDisplayTag) {
+    countryDisplayTag.addEventListener("click", openCountryPickerMiniPage);
+}
+
+if (closeCountryPickerBtn) {
+    closeCountryPickerBtn.addEventListener("click", closeCountryPickerMiniPage);
+}
+
+if (countrySearchInput) {
+    countrySearchInput.addEventListener("input", (e) => {
+        renderCountryList(e.target.value.trim());
+    });
+}
+
+
     
     // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
