@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ==========================================
-    // 1. DOM ELEMENT REFERENCES & INITIALIZATION
-    // ==========================================
     const sheetOverlay = document.getElementById("sheetOverlay");
     const sheetTitle = document.getElementById("sheetTitle");
     
@@ -27,18 +24,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayBrightnessNav = document.getElementById("displayBrightnessNav");
     const backToMainSettings = document.getElementById("backToMainSettings");
            
-    // Wi-Fi Engine Elements
+    // --- Native APK / Build.yml Wi-Fi State & Rename Engine Elements ---
     const wifiNav = document.getElementById("wifiNav");
     const wifiView = document.getElementById("wifiView");
     const backToMainFromWifi = document.getElementById("backToMainFromWifi");
     const wifiToggle = document.getElementById("wifiToggle");
     const mainWifiStatusText = document.getElementById("mainWifiStatusText");
+    const wifiDynamicContentWrapper = document.getElementById("wifiDynamicContentWrapper");
+    const connectedNetworkCard = document.getElementById("connectedNetworkCard");
     const connectedNetworkName = document.getElementById("connectedNetworkName");
-    const wifiInfoBtn = document.getElementById("wifiInfoBtn");
-    const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
-    const wifiRenameInput = document.getElementById("wifiRenameInput");
-    const wifiCancelRenameBtn = document.getElementById("wifiCancelRenameBtn");
-    const wifiConfirmRenameBtn = document.getElementById("wifiConfirmRenameBtn");
 
     // Options Sub-Page View Elements
     const optionsNav = document.getElementById("optionsNav");
@@ -47,59 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedOptionText = document.getElementById("selectedOptionText");
     const optionRows = document.querySelectorAll(".option-select-row");
 
-    // Apple Account Signup Elements
-    const finishSetupNav = document.getElementById("finishSetupNav");
-    const profileCardLink = document.querySelector(".profile-card-link");
-    const appleSignupOverlay = document.getElementById("appleSignupOverlay");
-    const closeAppleSignupBtn = document.getElementById("closeAppleSignupBtn");
-    const appleSignInSubmitBtn = document.getElementById("appleSignInSubmitBtn");
-    const useEmailBtn = document.getElementById("useEmailBtn");
-    const usePhoneBtn = document.getElementById("usePhoneBtn");
-    const appleIdentifier = document.getElementById("appleIdentifier");
-    const inputLabel = document.getElementById("inputLabel");
-    const countryDisplayTag = document.getElementById("countryDisplayTag");
-    const ios26AlertBox = document.getElementById("ios26AlertBox");
-    const emailInputRow = document.getElementById("emailInputRow");
-    const phoneInputRow = document.getElementById("phoneInputRow");
-
-    // Country Code Picker Elements
-    const countryPickerOverlay = document.getElementById("countryPickerOverlay");
-    const countrySelectorTrigger = document.getElementById("countrySelectorTrigger");
-    const closeCountryPickerBtn = document.getElementById("closeCountryPickerBtn");
-    const countryListContainer = document.getElementById("countryListContainer");
-    const alphabetGlideSidebar = document.getElementById("alphabetGlideSidebar");
-    const countrySearchInput = document.getElementById("countrySearchInput");
-    const selectedCountryFlag = document.getElementById("selectedCountryFlag");
-    const selectedCountryCodeText = document.getElementById("selectedCountryCodeText");
-    const phoneNumberField = document.getElementById("phoneNumberField");
-
-    // Password & Authentication Elements
-    const passwordInput = document.getElementById("applePassword");
-    const togglePasswordBtn = document.getElementById("togglePassword");
-    const eyeIcon = document.getElementById("eyeIcon");
-    const continueBtn = document.getElementById('continueButton');
-    const errorContainer = document.getElementById('errorAlertMessage');
-
-    // General & Battery Elements
-    const generalNav = document.getElementById("generalNav");
-    const generalView = document.getElementById("generalView");
-    const backToMainFromGeneral = document.getElementById("backToMainFromGeneral");
-    const batteryNav = document.getElementById("batteryNav");
-    const batteryView = document.getElementById("batteryView");
-    const backToMainFromBattery = document.getElementById("backToMainFromBattery");
-    const batteryPercentText = document.getElementById("batteryPercentText");
-    const mainBatteryStatusText = document.getElementById("mainBatteryStatusText");
-    const batteryLevelFill = document.getElementById("batteryLevelFill");
-
-    // Display, Brightness & Theme Elements
-    const lightModeOption = document.getElementById("lightModeOption");
-    const darkModeOption = document.getElementById("darkModeOption");
-    const boldTextToggle = document.getElementById("boldTextToggle");
-    const htmlElement = document.documentElement;
-
-    // ==========================================
-    // 2. APPEARANCE & OPTIONS SUB-PAGE ENGINE
-    // ==========================================
+    // Load saved option state
     let savedAppearanceOption = localStorage.getItem("ios26_appearance_option") || "Sunset to Sunrise";
     if (selectedOptionText) selectedOptionText.textContent = savedAppearanceOption;
 
@@ -122,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // Slide Transition for Options Sub-page
     if (optionsNav && optionsView && backToDisplayFromOptions) {
         optionsNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -138,22 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ==========================================
-    // 3. APPLE ACCOUNT SIGNUP & MODAL ENGINE
-    // ==========================================
-    let alertFadeTimer = null;
-
-    function showIOS26Alert(message) {
-        if (!ios26AlertBox) return;
-        if (alertFadeTimer) clearTimeout(alertFadeTimer);
-
-        ios26AlertBox.textContent = message;
-        ios26AlertBox.classList.add("show");
-
-        alertFadeTimer = setTimeout(() => {
-            ios26AlertBox.classList.remove("show");
-        }, 5000);
-    }
+    // --- iOS 26 Apple Account Signup Modal Engine ---
+    const finishSetupNav = document.getElementById("finishSetupNav");
+    const profileCardLink = document.querySelector(".profile-card-link");
+    const appleSignupOverlay = document.getElementById("appleSignupOverlay");
+    const closeAppleSignupBtn = document.getElementById("closeAppleSignupBtn");
+    const appleSignInSubmitBtn = document.getElementById("appleSignInSubmitBtn");
 
     function openAppleSignupModal() {
         if (appleSignupOverlay) {
@@ -169,10 +102,139 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    if (finishSetupNav) finishSetupNav.addEventListener("click", (e) => { e.stopPropagation(); openAppleSignupModal(); });
-    if (profileCardLink) profileCardLink.addEventListener("click", openAppleSignupModal);
-    if (closeAppleSignupBtn) closeAppleSignupBtn.addEventListener("click", closeAppleSignupModal);
-    if (appleSignInSubmitBtn) appleSignInSubmitBtn.textContent = "Continue";
+    if (finishSetupNav) {
+        finishSetupNav.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openAppleSignupModal();
+        });
+    }
+
+    if (profileCardLink) {
+        profileCardLink.addEventListener("click", () => {
+            openAppleSignupModal();
+        });
+    }
+
+    if (closeAppleSignupBtn) {
+        closeAppleSignupBtn.addEventListener("click", () => {
+            closeAppleSignupModal();
+        });
+    }
+
+    if (appleSignInSubmitBtn) {
+        appleSignInSubmitBtn.textContent = "Continue";
+    }
+    
+    // Rename Popup Elements
+    const wifiInfoBtn = document.getElementById("wifiInfoBtn");
+    const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
+    const wifiRenameInput = document.getElementById("wifiRenameInput");
+    const wifiCancelRenameBtn = document.getElementById("wifiCancelRenameBtn");
+    const wifiConfirmRenameBtn = document.getElementById("wifiConfirmRenameBtn");
+
+    let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
+    if (wifiToggle) wifiToggle.checked = isWifiOn;
+
+    function getNativeAppNetworkState() {
+        if (navigator.connection) {
+            const networkState = navigator.connection.type;
+            if (typeof Connection !== 'undefined') {
+                if (networkState === Connection.WIFI) {
+                    return { status: "Connected", connected: true, type: "wifi" };
+                } else if (networkState === Connection.NONE || networkState === Connection.UNKNOWN) {
+                    return { status: "Not Connected", connected: false, type: "none" };
+                } else {
+                    return { status: "Not Connected", connected: false, type: "cellular" };
+                }
+            }
+        }
+        if (!navigator.onLine) {
+            return { status: "Not Connected", connected: false, type: "none" };
+        }
+        return { status: "Connected", connected: true, type: "unknown" };
+    }
+
+    function updateTruncatedWifiName(name) {
+        const maxLength = 18;
+        let displayName = name;
+        if (name.length > maxLength) {
+            displayName = name.substring(0, maxLength) + "…";
+        }
+        if (connectedNetworkName) {
+            connectedNetworkName.textContent = displayName;
+        }
+        if (mainWifiStatusText && isWifiOn) {
+            mainWifiStatusText.textContent = displayName;
+        }
+    }
+
+    function updateLiveWifiUI() {
+        const state = getNativeAppNetworkState();
+        const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
+        const animatableElements = document.querySelectorAll(".wifi-animatable-section");
+        const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
+
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const effectiveType = connection ? connection.type : null;
+        const networkTypeStr = (state.type || effectiveType || "").toLowerCase();
+
+        const isCellular = effectiveType === 'cellular' || networkTypeStr.includes('cellular') || networkTypeStr.includes('data');
+        const isWifiConnected = state.connected && !isCellular && (networkTypeStr.includes('wifi') || networkTypeStr.includes('wireless') || networkTypeStr === 'unknown');
+
+        if (!isWifiOn) {
+            if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
+            animatableElements.forEach(el => el.classList.add("wifi-hidden"));
+            if (connectedNetworkCardContainer) {
+                connectedNetworkCardContainer.classList.add("wifi-hidden");
+            }
+            localStorage.setItem("ios26_wifi_on", "false");
+        } else {
+            animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
+            localStorage.setItem("ios26_wifi_on", "true");
+
+            if (isWifiConnected) {
+                updateTruncatedWifiName(savedCustomWifiName);
+                if (connectedNetworkCardContainer) {
+                    connectedNetworkCardContainer.classList.remove("wifi-hidden");
+                }
+            } else {
+                if (mainWifiStatusText) mainWifiStatusText.textContent = "Not Connected";
+                if (connectedNetworkCardContainer) {
+                    connectedNetworkCardContainer.classList.add("wifi-hidden");
+                }
+            }
+        }
+    }
+
+        
+
+
+
+        // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
+    const useEmailBtn = document.getElementById("useEmailBtn");
+    const usePhoneBtn = document.getElementById("usePhoneBtn");
+    const appleIdentifier = document.getElementById("appleIdentifier");
+    const inputLabel = document.getElementById("inputLabel");
+    const countryDisplayTag = document.getElementById("countryDisplayTag");
+    const ios26AlertBox = document.getElementById("ios26AlertBox");
+
+    let alertFadeTimer = null;
+
+    function showIOS26Alert(message) {
+        if (!ios26AlertBox) return;
+        
+        if (alertFadeTimer) {
+            clearTimeout(alertFadeTimer);
+        }
+
+        ios26AlertBox.textContent = message;
+        ios26AlertBox.classList.add("show");
+
+        // 5-second automatic fade-out mechanism
+        alertFadeTimer = setTimeout(() => {
+            ios26AlertBox.classList.remove("show");
+        }, 5000);
+    }
 
     function updateSwitchContainerStates() {
         const val = appleIdentifier ? appleIdentifier.value.trim() : "";
@@ -192,184 +254,55 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ==========================================
-    // 4. COUNTRY CODE PICKER & PHONE INPUT ENGINE
-    // ==========================================
-    const countriesDatabase = [
-        { name: "Afghanistan", code: "+93", flag: "🇦🇫", letter: "A" },
-        { name: "Albania", code: "+355", flag: "🇦🇱", letter: "A" },
-        { name: "Algeria", code: "+213", flag: "🇩🇿", letter: "A" },
-        { name: "Andorra", code: "+376", flag: "🇦🇩", letter: "A" },
-        { name: "Angola", code: "+244", flag: "🇦🇴", letter: "A" },
-        { name: "Argentina", code: "+54", flag: "🇦🇷", letter: "A" },
-        { name: "Australia", code: "+61", flag: "🇦🇺", letter: "A" },
-        { name: "Austria", code: "+43", flag: "🇦🇹", letter: "A" },
-        { name: "Brazil", code: "+55", flag: "🇧🇷", letter: "B" },
-        { name: "Canada", code: "+1", flag: "🇨🇦", letter: "C" },
-        { name: "China", code: "+86", flag: "🇨🇳", letter: "C" },
-        { name: "Egypt", code: "+20", flag: "🇪🇬", letter: "E" },
-        { name: "France", code: "+33", flag: "🇫🇷", letter: "F" },
-        { name: "Germany", code: "+49", flag: "🇩🇪", letter: "G" },
-        { name: "India", code: "+91", flag: "🇮🇳", letter: "I" },
-        { name: "Italy", code: "+39", flag: "🇮🇹", letter: "I" },
-        { name: "Japan", code: "+81", flag: "🇯🇵", letter: "J" },
-        { name: "Nigeria", code: "+234", flag: "🇳🇬", letter: "N" },
-        { name: "UK", code: "+44", flag: "🇬🇧", letter: "U" },
-        { name: "USA", code: "+1", flag: "🇺🇸", letter: "🇺" }
-    ];
-
-    const countryRules = {
-        "+1": { name: "USA / Canada", mask: "+1 (###) ###-####" },
-        "+20": { name: "Egypt", mask: "+20 ### ### ####" },
-        "+33": { name: "France", mask: "+33 # ## ## ## ##" },
-        "+39": { name: "Italy", mask: "+39 ### ### ####" },
-        "+44": { name: "UK", mask: "+44 #### ######" },
-        "+49": { name: "Germany", mask: "+49 ### #######" },
-        "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
-        "+81": { name: "Japan", mask: "+81 ## #### ####" },
-        "+86": { name: "China", mask: "+86 ### #### ####" },
-        "+91": { name: "India", mask: "+91 ##### #####" },
-        "+234": { name: "Nigeria", mask: "+234 ### ### ####" }
-    };
-
-    function renderCountryList(filterText = "") {
-        if (!countryListContainer) return;
-        countryListContainer.innerHTML = "";
-        
-        const filtered = countriesDatabase.filter(c => 
-            c.name.toLowerCase().includes(filterText.toLowerCase()) || c.code.includes(filterText)
-        );
-
-        let currentLetterHeader = "";
-        filtered.forEach(country => {
-            if (country.letter !== currentLetterHeader && !filterText) {
-                currentLetterHeader = country.letter;
-                const headerDiv = document.createElement("div");
-                headerDiv.className = "country-alphabet-header";
-                headerDiv.textContent = currentLetterHeader;
-                headerDiv.id = `letter-header-${currentLetterHeader}`;
-                countryListContainer.appendChild(headerDiv);
-            }
-
-            const row = document.createElement("div");
-            row.className = "country-item-row clickable";
-            row.innerHTML = `
-                <div class="country-row-left">
-                    <span class="country-item-flag">${country.flag}</span>
-                    <span class="country-item-name">${country.name}</span>
-                </div>
-                <span class="country-item-code">${country.code}</span>
-            `;
-
-            row.addEventListener("click", () => {
-                selectCountry(country);
-                closeCountryPickerModal();
-            });
-
-            countryListContainer.appendChild(row);
-        });
-    }
-
-    function renderAlphabetSidebar() {
-        if (!alphabetGlideSidebar) return;
-        alphabetGlideSidebar.innerHTML = "";
-        const uniqueLetters = [...new Set(countriesDatabase.map(c => c.letter))];
-
-        uniqueLetters.forEach(letter => {
-            const span = document.createElement("span");
-            span.className = "alphabet-glide-letter";
-            span.textContent = letter;
-            span.addEventListener("click", () => {
-                const targetHeader = document.getElementById(`letter-header-${letter}`);
-                if (targetHeader) targetHeader.scrollIntoView({ behavior: "smooth" });
-            });
-            alphabetGlideSidebar.appendChild(span);
-        });
-    }
-
-    function selectCountry(country) {
-        if (selectedCountryFlag) selectedCountryFlag.textContent = country.flag;
-        if (selectedCountryCodeText) selectedCountryCodeText.textContent = country.code;
-        if (countryDisplayTag) countryDisplayTag.textContent = country.name;
-        if (phoneNumberField) {
-            phoneNumberField.value = country.code + " ";
-            phoneNumberField.focus();
-        }
-        updateAppleButtonState();
-    }
-
-    function openCountryPickerModal() {
-        if (countryPickerOverlay) {
-            countryPickerOverlay.classList.add("active");
-            renderCountryList();
-            renderAlphabetSidebar();
-        }
-    }
-
-    function closeCountryPickerModal() {
-        if (countryPickerOverlay) countryPickerOverlay.classList.remove("active");
-    }
-
-    if (countrySelectorTrigger) countrySelectorTrigger.addEventListener("click", openCountryPickerModal);
-    if (closeCountryPickerBtn) closeCountryPickerBtn.addEventListener("click", closeCountryPickerModal);
-    if (countrySearchInput) countrySearchInput.addEventListener("input", (e) => renderCountryList(e.target.value.trim()));
-
-    // Unified Email / Phone Switcher Logic
-    if (useEmailBtn && usePhoneBtn) {
+    if (useEmailBtn && usePhoneBtn && appleIdentifier) {
         useEmailBtn.addEventListener("click", (e) => {
+            // Strictly intercept and block execution if dimmed, while displaying the alert
             if (useEmailBtn.classList.contains("dimmed")) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
                 showIOS26Alert("You have to use only one method for sign up.");
                 return;
             }
+            
             useEmailBtn.classList.add("active");
             usePhoneBtn.classList.remove("active");
-            if (emailInputRow) emailInputRow.style.display = "flex";
-            if (phoneInputRow) phoneInputRow.style.display = "none";
             if (inputLabel) inputLabel.textContent = "Email";
-            if (appleIdentifier) {
-                appleIdentifier.type = "email";
-                appleIdentifier.placeholder = "example@icloud.com";
-                appleIdentifier.value = "";
-            }
+            appleIdentifier.type = "email";
+            appleIdentifier.placeholder = "example@icloud.com";
+            appleIdentifier.value = "";
             if (countryDisplayTag) countryDisplayTag.textContent = "";
             updateSwitchContainerStates();
             updateAppleButtonState();
         });
 
         usePhoneBtn.addEventListener("click", (e) => {
+            // Strictly intercept and block execution if dimmed, while displaying the alert
             if (usePhoneBtn.classList.contains("dimmed")) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
                 showIOS26Alert("You have to use only one method for sign up.");
                 return;
             }
+
             usePhoneBtn.classList.add("active");
             useEmailBtn.classList.remove("active");
-            if (emailInputRow) emailInputRow.style.display = "none";
-            if (phoneInputRow) phoneInputRow.style.display = "flex";
             if (inputLabel) inputLabel.textContent = "Phone";
-            if (appleIdentifier) {
-                appleIdentifier.type = "tel";
-                appleIdentifier.placeholder = "+*** *** ***";
-                appleIdentifier.value = "+";
-            }
+            appleIdentifier.type = "tel";
+            appleIdentifier.placeholder = "+*** *** ***";
+            appleIdentifier.value = "+";
             if (countryDisplayTag) countryDisplayTag.textContent = "";
             updateSwitchContainerStates();
             updateAppleButtonState();
         });
-    }
 
-    // Phone Input Masking & Auto-Detection
-    if (appleIdentifier) {
         appleIdentifier.addEventListener("input", (e) => {
             updateSwitchContainerStates();
             
-            if (usePhoneBtn && usePhoneBtn.classList.contains("active")) {
+            if (usePhoneBtn.classList.contains("active")) {
                 let val = e.target.value;
-                if (!val.startsWith("+")) val = "+" + val.replace(/\+/g, "");
-
+                if (!val.startsWith("+")) {
+                    val = "+" + val.replace(/\+/g, "");
+                }
                 let cleanDigits = val.replace(/[^\d+]/g, "");
                 let detectedCountry = "";
                 let matchedRule = null;
@@ -389,7 +322,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
                     let rawNums = cleanDigits.slice(activePrefix.length);
                     let maxAllowedDigits = (matchedRule.mask.match(/#/g) || []).length;
-                    if (rawNums.length > maxAllowedDigits) rawNums = rawNums.slice(0, maxAllowedDigits);
+                    if (rawNums.length > maxAllowedDigits) {
+                        rawNums = rawNums.slice(0, maxAllowedDigits);
+                    }
 
                     let formatted = activePrefix + " ";
                     let digitIdx = 0;
@@ -407,35 +342,368 @@ document.addEventListener("DOMContentLoaded", () => {
                             break;
                         }
                     }
-                    if (digitIdx < rawNums.length) formatted += rawNums.slice(digitIdx);
+                    if (digitIdx < rawNums.length) {
+                        formatted += rawNums.slice(digitIdx);
+                    }
                     appleIdentifier.value = formatted;
                 } else {
                     appleIdentifier.value = cleanDigits;
                 }
             }
-
-            if (errorContainer) {
-                errorContainer.classList.remove('visible');
-                errorContainer.textContent = "";
-            }
-            updateAppleButtonState();
         });
     }
 
-    // Password Visibility Toggle
+
+            
+
+
+    // Country code prefix mapping dictionary & formatting definitions
+    const countryRules = {
+    // North America & Caribbean (Zone 1)
+    "+1": { name: "USA / Canada", mask: "+1 (###) ###-####" },
+    "+1242": { name: "Bahamas", mask: "+1 (242) ###-####" },
+    "+1246": { name: "Barbados", mask: "+1 (246) ###-####" },
+    "+1264": { name: "Anguilla", mask: "+1 (264) ###-####" },
+    "+1268": { name: "Antigua and Barbuda", mask: "+1 (268) ###-####" },
+    "+1284": { name: "British Virgin Islands", mask: "+1 (284) ###-####" },
+    "+1345": { name: "Cayman Islands", mask: "+1 (345) ###-####" },
+    "+1441": { name: "Bermuda", mask: "+1 (441) ###-####" },
+    "+1473": { name: "Grenada", mask: "+1 (473) ###-####" },
+    "+1649": { name: "Turks and Caicos Islands", mask: "+1 (649) ###-####" },
+    "+1664": { name: "Montserrat", mask: "+1 (664) ###-####" },
+    "+1671": { name: "Guam", mask: "+1 (671) ###-####" },
+    "+1684": { name: "American Samoa", mask: "+1 (684) ###-####" },
+    "+1758": { name: "Saint Lucia", mask: "+1 (758) ###-####" },
+    "+1767": { name: "Dominica", mask: "+1 (767) ###-####" },
+    "+1784": { name: "Saint Vincent and the Grenadines", mask: "+1 (784) ###-####" },
+    "+1809": { name: "Dominican Republic", mask: "+1 (809) ###-####" },
+    "+1829": { name: "Dominican Republic", mask: "+1 (829) ###-####" },
+    "+1849": { name: "Dominican Republic", mask: "+1 (849) ###-####" },
+    "+1868": { name: "Trinidad and Tobago", mask: "+1 (868) ###-####" },
+    "+1876": { name: "Jamaica", mask: "+1 (876) ###-####" },
+
+    // Africa (Zone 2)
+    "+20": { name: "Egypt", mask: "+20 ### ### ####" },
+    "+212": { name: "Morocco", mask: "+212 ## ####-###" },
+    "+213": { name: "Algeria", mask: "+213 ## ### ####" },
+    "+216": { name: "Tunisia", mask: "+216 ## ### ###" },
+    "+218": { name: "Libya", mask: "+218 ## ### ####" },
+    "+220": { name: "Gambia", mask: "+220 ### ####" },
+    "+221": { name: "Senegal", mask: "+221 ## ### ####" },
+    "+222": { name: "Mauritania", mask: "+222 ## ## ####" },
+    "+223": { name: "Mali", mask: "+223 ## ## ####" },
+    "+224": { name: "Guinea", mask: "+224 ### ## ## ##" },
+    "+225": { name: "Ivory Coast", mask: "+225 ## ## ## ##" },
+    "+226": { name: "Burkina Faso", mask: "+226 ## ## ####" },
+    "+227": { name: "Niger", mask: "+227 ## ## ####" },
+    "+228": { name: "Togo", mask: "+228 ## ## ####" },
+    "+229": { name: "Benin", mask: "+229 ## ## ####" },
+    "+230": { name: "Mauritius", mask: "+230 ### ####" },
+    "+231": { name: "Liberia", mask: "+231 ### ### ###" },
+    "+232": { name: "Sierra Leone", mask: "+232 ## ######" },
+    "+233": { name: "Ghana", mask: "+233 ## ### ####" },
+    "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
+    "+235": { name: "Chad", mask: "+235 ## ## ## ##" },
+    "+236": { name: "Central African Republic", mask: "+236 ## ## ####" },
+    "+237": { name: "Cameroon", mask: "+237 #### ####" },
+    "+238": { name: "Cape Verde", mask: "+238 ### ## ##" },
+    "+239": { name: "Sao Tome and Principe", mask: "+239 ## #####" },
+    "+240": { name: "Equatorial Guinea", mask: "+240 ### ### ###" },
+    "+241": { name: "Gabon", mask: "+241 # ## ## ##" },
+    "+242": { name: "Republic of the Congo", mask: "+242 ## ### ####" },
+    "+243": { name: "Democratic Republic of the Congo", mask: "+243 ### ### ###" },
+    "+244": { name: "Angola", mask: "+244 ### ### ###" },
+    "+245": { name: "Guinea-Bissau", mask: "+245 # ######" },
+    "+248": { name: "Seychelles", mask: "+248 # ### ###" },
+    "+249": { name: "Sudan", mask: "+249 ## ### ####" },
+    "+250": { name: "Rwanda", mask: "+250 ### ### ###" },
+    "+251": { name: "Ethiopia", mask: "+251 ## ### ####" },
+    "+252": { name: "Somalia", mask: "+252 # ### ###" },
+    "+253": { name: "Djibouti", mask: "+253 ## ## ## ##" },
+    "+254": { name: "Kenya", mask: "+254 ### ######" },
+    "+255": { name: "Tanzania", mask: "+255 ## ### ####" },
+    "+256": { name: "Uganda", mask: "+256 ### ######" },
+    "+257": { name: "Burundi", mask: "+257 ## ## ####" },
+    "+258": { name: "Mozambique", mask: "+258 ## ### ###" },
+    "+260": { name: "Zambia", mask: "+260 ## #######" },
+    "+261": { name: "Madagascar", mask: "+261 ## ## #####" },
+    "+263": { name: "Zimbabwe", mask: "+263 # ######" },
+    "+264": { name: "Namibia", mask: "+264 ## ### ####" },
+    "+265": { name: "Malawi", mask: "+265 # ### ####" },
+    "+266": { name: "Lesotho", mask: "+266 # ### ####" },
+    "+267": { name: "Botswana", mask: "+267 ## ### ###" },
+    "+268": { name: "Eswatini", mask: "+268 ## ## ####" },
+    "+269": { name: "Comoros", mask: "+269 ## ## ####" },
+    "+27": { name: "South Africa", mask: "+27 ## ### ####" },
+
+    // Europe (Zones 3 & 4)
+    "+30": { name: "Greece", mask: "+30 ### ### ####" },
+    "+31": { name: "Netherlands", mask: "+31 # ########" },
+    "+32": { name: "Belgium", mask: "+32 ### ## ## ##" },
+    "+33": { name: "France", mask: "+33 # ## ## ## ##" },
+    "+34": { name: "Spain", mask: "+34 ### ### ###" },
+    "+350": { name: "Gibraltar", mask: "+350 ########" },
+    "+351": { name: "Portugal", mask: "+351 ### ### ###" },
+    "+352": { name: "Luxembourg", mask: "+352 ### ###" },
+    "+353": { name: "Ireland", mask: "+353 ## ### ####" },
+    "+354": { name: "Iceland", mask: "+354 ### ####" },
+    "+355": { name: "Albania", mask: "+355 ## ### ###" },
+    "+356": { name: "Malta", mask: "+356 #### ####" },
+    "+357": { name: "Cyprus", mask: "+357 ## ######" },
+    "+358": { name: "Finland", mask: "+358 ## ### ## ##" },
+    "+359": { name: "Bulgaria", mask: "+359 ### ### ###" },
+    "+36": { name: "Hungary", mask: "+36 ## ### ####" },
+    "+370": { name: "Lithuania", mask: "+370 ### #####" },
+    "+371": { name: "Latvia", mask: "+371 ## ### ###" },
+    "+372": { name: "Estonia", mask: "+372 #### ####" },
+    "+373": { name: "Moldova", mask: "+373 #### ####" },
+    "+374": { name: "Armenia", mask: "+374 ## ######" },
+    "+375": { name: "Belarus", mask: "+375 ## ### ## ##" },
+    "+376": { name: "Andorra", mask: "+376 ### ###" },
+    "+377": { name: "Monaco", mask: "+377 # ## ## ## ##" },
+    "+378": { name: "San Marino", mask: "+378 #### ######" },
+    "+380": { name: "Ukraine", mask: "+380 ## ### ## ##" },
+    "+381": { name: "Serbia", mask: "+381 ## ### ####" },
+    "+382": { name: "Montenegro", mask: "+382 ## ### ###" },
+    "+383": { name: "Kosovo", mask: "+383 ## ### ###" },
+    "+385": { name: "Croatia", mask: "+385 ## ### ####" },
+    "+386": { name: "Slovenia", mask: "+386 ## ### ###" },
+    "+387": { name: "Bosnia and Herzegovina", mask: "+387 ## ######" },
+    "+389": { name: "North Macedonia", mask: "+389 ## ### ###" },
+    "+39": { name: "Italy", mask: "+39 ### ### ####" },
+    "+40": { name: "Romania", mask: "+40 ### ### ###" },
+    "+41": { name: "Switzerland", mask: "+41 ## ### ####" },
+    "+420": { name: "Czech Republic", mask: "+420 ### ### ###" },
+    "+421": { name: "Slovakia", mask: "+421 ### ### ###" },
+    "+423": { name: "Liechtenstein", mask: "+423 ### ####" },
+    "+43": { name: "Austria", mask: "+43 ### ########" },
+    "+44": { name: "UK", mask: "+44 #### ######" },
+    "+45": { name: "Denmark", mask: "+45 ## ## ## ##" },
+    "+46": { name: "Sweden", mask: "+46 ## ### ## ##" },
+    "+47": { name: "Norway", mask: "+47 ### ## ###" },
+    "+48": { name: "Poland", mask: "+48 ### ### ###" },
+    "+49": { name: "Germany", mask: "+49 ### #######" },
+
+    // South & Central America (Zone 5)
+    "+500": { name: "Falkland Islands", mask: "+500 #####" },
+    "+501": { name: "Belize", mask: "+501 ### ####" },
+    "+502": { name: "Guatemala", mask: "+502 #### ####" },
+    "+503": { name: "El Salvador", mask: "+503 #### ####" },
+    "+504": { name: "Honduras", mask: "+504 #### ####" },
+    "+505": { name: "Nicaragua", mask: "+505 #### ####" },
+    "+506": { name: "Costa Rica", mask: "+506 #### ####" },
+    "+507": { name: "Panama", mask: "+507 #### ####" },
+    "+508": { name: "Saint Pierre and Miquelon", mask: "+508 ## ## ##" },
+    "+509": { name: "Haiti", mask: "+509 #### ####" },
+    "+51": { name: "Peru", mask: "+51 ### ### ###" },
+    "+52": { name: "Mexico", mask: "+52 ## #### ####" },
+    "+53": { name: "Cuba", mask: "+53 # #######" },
+    "+54": { name: "Argentina", mask: "+54 # ########" },
+    "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
+    "+56": { name: "Chile", mask: "+56 # #### ####" },
+    "+57": { name: "Colombia", mask: "+57 ### ### ####" },
+    "+58": { name: "Venezuela", mask: "+58 ### ### ####" },
+    "+591": { name: "Bolivia", mask: "+591 # ### ####" },
+    "+592": { name: "Guyana", mask: "+592 ### ####" },
+    "+593": { name: "Ecuador", mask: "+593 # ### ####" },
+    "+595": { name: "Paraguay", mask: "+595 ### ### ###" },
+    "+597": { name: "Suriname", mask: "+597 ### ###" },
+    "+598": { name: "Uruguay", mask: "+598 # ### ####" },
+
+    // Oceania & Southeast Asia (Zone 6)
+    "+60": { name: "Malaysia", mask: "+60 ## #### ####" },
+    "+61": { name: "Australia", mask: "+61 ### ### ###" },
+    "+62": { name: "Indonesia", mask: "+62 ### ### ####" },
+    "+63": { name: "Philippines", mask: "+63 ### ### ####" },
+    "+64": { name: "New Zealand", mask: "+64 ## ### ####" },
+    "+65": { name: "Singapore", mask: "+65 #### ####" },
+    "+66": { name: "Thailand", mask: "+66 ## ### ####" },
+    "+670": { name: "East Timor", mask: "+670 #### ####" },
+    "+673": { name: "Brunei", mask: "+673 ### ####" },
+    "+674": { name: "Nauru", mask: "+674 ### ####" },
+    "+675": { name: "Papua New Guinea", mask: "+675 ### ####" },
+    "+676": { name: "Tonga", mask: "+676 #####" },
+    "+677": { name: "Solomon Islands", mask: "+677 #####" },
+    "+678": { name: "Vanuatu", mask: "+678 #####" },
+    "+679": { name: "Fiji", mask: "+679 ## #####" },
+    "+680": { name: "Palau", mask: "+680 ### ####" },
+    "+685": { name: "Samoa", mask: "+685 #####" },
+    "+686": { name: "Kiribati", mask: "+686 #####" },
+    "+688": { name: "Tuvalu", mask: "+688 #####" },
+    "+689": { name: "French Polynesia", mask: "+689 ## ## ##" },
+    "+690": { name: "Tokelau", mask: "+690 ####" },
+    "+691": { name: "Micronesia", mask: "+691 ### ####" },
+    "+692": { name: "Marshall Islands", mask: "+692 ### ####" },
+
+    // Russia & Central Asia (Zone 7)
+    "+7": { name: "Russia / Kazakhstan", mask: "+7 (###) ###-##-##" },
+
+    // East Asia & Special Services (Zone 8)
+    "+81": { name: "Japan", mask: "+81 ## #### ####" },
+    "+82": { name: "South Korea", mask: "+82 ## #### ####" },
+    "+84": { name: "Vietnam", mask: "+84 ## #### ####" },
+    "+852": { name: "Hong Kong", mask: "+852 #### ####" },
+    "+853": { name: "Macau", mask: "+853 #### ####" },
+    "+855": { name: "Cambodia", mask: "+855 ## ### ###" },
+    "+856": { name: "Laos", mask: "+856 ## ## ### ###" },
+    "+86": { name: "China", mask: "+86 ### #### ####" },
+    "+880": { name: "Bangladesh", mask: "+880 ### ########" },
+    "+886": { name: "Taiwan", mask: "+886 # #### ####" },
+
+    // West, Central & South Asia (Zone 9)
+    "+90": { name: "Turkey", mask: "+90 ### ### ####" },
+    "+91": { name: "India", mask: "+91 ##### #####" },
+    "+92": { name: "Pakistan", mask: "+92 ### #######" },
+    "+93": { name: "Afghanistan", mask: "+93 ## ### ####" },
+    "+94": { name: "Sri Lanka", mask: "+94 ## ### ####" },
+    "+95": { name: "Myanmar", mask: "+95 # ### ####" },
+    "+960": { name: "Maldives", mask: "+960 ### ####" },
+    "+961": { name: "Lebanon", mask: "+961 ## ### ###" },
+    "+962": { name: "Jordan", mask: "+962 # #### ####" },
+    "+963": { name: "Syria", mask: "+963 ## ########" },
+    "+964": { name: "Iraq", mask: "+964 ### ### ####" },
+    "+965": { name: "Kuwait", mask: "+965 ########" },
+    "+966": { name: "Saudi Arabia", mask: "+966 ## ### ####" },
+    "+967": { name: "Yemen", mask: "+967 ### ### ###" },
+    "+968": { name: "Oman", mask: "+968 ########" },
+    "+970": { name: "Palestine", mask: "+970 ## ### ####" },
+    "+971": { name: "United Arab Emirates", mask: "+971 ## ### ####" },
+    "+972": { name: "Israel", mask: "+972 ## ### ####" },
+    "+973": { name: "Bahrain", mask: "+973 ########" },
+    "+974": { name: "Qatar", mask: "+974 ########" },
+    "+975": { name: "Bhutan", mask: "+975 # ### ###" },
+    "+976": { name: "Mongolia", mask: "+976 ## ## ####" },
+    "+977": { name: "Nepal", mask: "+977 ## ### ###" },
+    "+98": { name: "Iran", mask: "+98 ### ### ####" },
+    "+992": { name: "Tajikistan", mask: "+992 ## ### ####" },
+    "+993": { name: "Turkmenistan", mask: "+993 # ######" },
+    "+994": { name: "Azerbaijan", mask: "+994 ## ### ## ##" },
+    "+995": { name: "Georgia", mask: "+995 ### ######" },
+    "+996": { name: "Kyrgyzstan", mask: "+996 ### ######" },
+    "+998": { name: "Uzbekistan", mask: "+998 ## ### ####" }
+};
+
+
+    
+                
+    if (useEmailBtn && usePhoneBtn && appleIdentifier) {
+        useEmailBtn.addEventListener("click", () => {
+            useEmailBtn.classList.add("active");
+            usePhoneBtn.classList.remove("active");
+            if (inputLabel) inputLabel.textContent = "Email";
+            appleIdentifier.type = "email";
+            appleIdentifier.placeholder = "example@icloud.com";
+            appleIdentifier.value = "";
+            if (countryDisplayTag) countryDisplayTag.textContent = "";
+            updateAppleButtonState();
+        });
+
+        usePhoneBtn.addEventListener("click", () => {
+            usePhoneBtn.classList.add("active");
+            useEmailBtn.classList.remove("active");
+            if (inputLabel) inputLabel.textContent = "Phone";
+            appleIdentifier.type = "tel";
+            appleIdentifier.placeholder = "+*** *** ***";
+            appleIdentifier.value = "+";
+            if (countryDisplayTag) countryDisplayTag.textContent = "";
+            updateAppleButtonState();
+        });
+
+        appleIdentifier.addEventListener("input", (e) => {
+            if (usePhoneBtn.classList.contains("active")) {
+                let val = e.target.value;
+                
+                // Ensure it always starts with '+'
+                if (!val.startsWith("+")) {
+                    val = "+" + val.replace(/\+/g, "");
+                }
+
+                let cleanDigits = val.replace(/[^\d+]/g, "");
+                let detectedCountry = "";
+                let matchedRule = null;
+
+                // Sort prefixes by length descending to match longer codes first (e.g., +234 before +2)
+                const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
+                for (let prefix of sortedPrefixes) {
+                    if (cleanDigits.startsWith(prefix)) {
+                        detectedCountry = countryRules[prefix].name;
+                        matchedRule = countryRules[prefix];
+                        break;
+                    }
+                }
+
+                if (countryDisplayTag) {
+                    countryDisplayTag.textContent = detectedCountry;
+                }
+
+                if (matchedRule) {
+                    let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
+                    let rawNums = cleanDigits.slice(activePrefix.length);
+                    
+                    // Count how many placeholders ('#') exist in the mask to enforce maximum limit
+                    let maxAllowedDigits = (matchedRule.mask.match(/#/g) || []).length;
+                    if (rawNums.length > maxAllowedDigits) {
+                        rawNums = rawNums.slice(0, maxAllowedDigits); // Truncate excess digits
+                    }
+
+                    let formatted = activePrefix + " ";
+                    let digitIdx = 0;
+                    
+                    for (let char of matchedRule.mask.slice(formatted.length)) {
+                        if (char === '#' && digitIdx < rawNums.length) {
+                            formatted += rawNums[digitIdx];
+                            digitIdx++;
+                        } else if (char !== '#' && digitIdx < rawNums.length) {
+                            formatted += char;
+                            if (rawNums[digitIdx]) {
+                                formatted += rawNums[digitIdx];
+                                digitIdx++;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    if (digitIdx < rawNums.length) {
+                        formatted += rawNums.slice(digitIdx);
+                    }
+                    
+                    appleIdentifier.value = formatted;
+                } else {
+                    appleIdentifier.value = cleanDigits;
+                }
+            }
+        });
+    }
+
+    const passwordInput = document.getElementById("applePassword");
+    const togglePasswordBtn = document.getElementById("togglePassword");
+    const eyeIcon = document.getElementById("eyeIcon");
+    const continueBtn = document.getElementById('continueButton');
+    const errorContainer = document.getElementById('errorAlertMessage');
+
     if (togglePasswordBtn && passwordInput) {
         togglePasswordBtn.addEventListener("click", () => {
             const isPassword = passwordInput.type === "password";
             passwordInput.type = isPassword ? "text" : "password";
 
             if (isPassword) {
-                eyeIcon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
+                eyeIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                `;
+                togglePasswordBtn.setAttribute("aria-label", "Hide password");
             } else {
-                eyeIcon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
+                eyeIcon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                `;
+                togglePasswordBtn.setAttribute("aria-label", "Show password");
             }
         });
     }
 
+    // Dynamic Button State Controller Function with full phone mask completion checks
     function updateAppleButtonState() {
         if (!appleIdentifier || !passwordInput || !continueBtn) return;
         const identifierVal = appleIdentifier.value.trim();
@@ -448,6 +716,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const isPhoneMode = usePhoneBtn && usePhoneBtn.classList.contains("active");
+
         if (isPhoneMode) {
             let cleanDigits = identifierVal.replace(/[^\d+]/g, "");
             let matchedRule = null;
@@ -465,33 +734,57 @@ document.addEventListener("DOMContentLoaded", () => {
             if (matchedRule) {
                 let requiredDigitsCount = (matchedRule.mask.match(/#/g) || []).length;
                 let rawNums = cleanDigits.slice(activePrefix.length);
+
+                // Check if user has completely filled out all required digits for the country format mask
                 if (rawNums.length < requiredDigitsCount) {
                     continueBtn.classList.add('disabled-state');
                     continueBtn.classList.remove('active-state');
                     return;
                 }
             } else {
+                // If prefix or mask isn't completely matched yet, keep it disabled
                 continueBtn.classList.add('disabled-state');
                 continueBtn.classList.remove('active-state');
                 return;
             }
         }
 
+        // Once requirements are met, turn blue
         continueBtn.classList.remove('disabled-state');
         continueBtn.classList.add('active-state');
     }
 
-    if (passwordInput) passwordInput.addEventListener('input', updateAppleButtonState);
+    // Listen to inputs for real-time button coloring and error clearance
+    if (appleIdentifier) {
+        appleIdentifier.addEventListener('input', () => {
+            if (errorContainer) {
+                errorContainer.classList.remove('visible');
+                errorContainer.textContent = "";
+            }
+            updateAppleButtonState();
+        });
+    }
+
+    if (passwordInput) {
+        passwordInput.addEventListener('input', () => {
+            updateAppleButtonState();
+        });
+    }
+
+    // Initialize state on load
     updateAppleButtonState();
 
     if (continueBtn) {
-        continueBtn.addEventListener('click', () => {
+        continueBtn.addEventListener('click', function() {
             const identifierVal = appleIdentifier ? appleIdentifier.value.trim() : "";
             const passwordVal = passwordInput ? passwordInput.value.trim() : "";
 
-            if (identifierVal === "" || passwordVal === "") return;
+            if (identifierVal === "" || passwordVal === "") {
+                return;
+            }
 
             const isEmailMode = inputLabel && inputLabel.textContent.includes('Email');
+
             if (isEmailMode) {
                 const requiredSuffix = "@icloud.com";
                 const isValidEmail = identifierVal.endsWith(requiredSuffix) && identifierVal.length > requiredSuffix.length;
@@ -501,52 +794,32 @@ document.addEventListener("DOMContentLoaded", () => {
                         errorContainer.textContent = "Apple Account identifiers require a valid @icloud.com address suffix.";
                         errorContainer.classList.add('visible');
                     }
+
                     continueBtn.classList.add('disabled-state');
                     continueBtn.classList.remove('active-state');
+
                     continueBtn.classList.remove('shake-animation');
-                    void continueBtn.offsetWidth;
+                    void continueBtn.offsetWidth; 
                     continueBtn.classList.add('shake-animation');
                     return;
                 }
             }
 
-            if (errorContainer) errorContainer.classList.remove('visible');
+            if (errorContainer) {
+                errorContainer.classList.remove('visible');
+                errorContainer.textContent = "";
+            }
             continueBtn.classList.remove('shake-animation');
+            console.log("Validation passed successfully!");
         });
     }
-
-    // ==========================================
-    // 5. WI-FI & NETWORK STATE ENGINE
-    // ==========================================
-    let isWifiOn = localStorage.getItem("ios26_wifi_on") !== "false";
-    if (wifiToggle) wifiToggle.checked = isWifiOn;
-    if (wifiRenameInput) wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
-
-    function updateTruncatedWifiName(name) {
-        const maxLength = 18;
-        let displayName = name.length > maxLength ? name.substring(0, maxLength) + "…" : name;
-        if (connectedNetworkName) connectedNetworkName.textContent = displayName;
-        if (mainWifiStatusText && isWifiOn) mainWifiStatusText.textContent = displayName;
+    
+    // Initialize Wi-Fi name input value
+    if (wifiRenameInput) {
+        wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
     }
 
-    function updateLiveWifiUI() {
-        const savedCustomWifiName = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
-        const animatableElements = document.querySelectorAll(".wifi-animatable-section");
-        const connectedNetworkCardContainer = document.getElementById("connectedNetworkCardContainer");
-
-        if (!isWifiOn) {
-            if (mainWifiStatusText) mainWifiStatusText.textContent = "Off";
-            animatableElements.forEach(el => el.classList.add("wifi-hidden"));
-            if (connectedNetworkCardContainer) connectedNetworkCardContainer.classList.add("wifi-hidden");
-            localStorage.setItem("ios26_wifi_on", "false");
-        } else {
-            animatableElements.forEach(el => el.classList.remove("wifi-hidden"));
-            localStorage.setItem("ios26_wifi_on", "true");
-            updateTruncatedWifiName(savedCustomWifiName);
-            if (connectedNetworkCardContainer) connectedNetworkCardContainer.classList.remove("wifi-hidden");
-        }
-    }
-
+    // Wi-Fi Popup Event Listeners
     if (wifiInfoBtn && wifiRenameOverlay) {
         wifiInfoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -556,17 +829,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (wifiCancelRenameBtn && wifiRenameOverlay) {
-        wifiCancelRenameBtn.addEventListener("click", () => wifiRenameOverlay.classList.remove("active"));
+        wifiCancelRenameBtn.addEventListener("click", () => {
+            wifiRenameOverlay.classList.remove("active");
+        });
     }
 
     if (wifiConfirmRenameBtn && wifiRenameOverlay) {
         wifiConfirmRenameBtn.addEventListener("click", () => {
-            let newName = wifiRenameInput.value.trim() || "Home_WiFi_5G";
+            let newName = wifiRenameInput.value.trim();
+            if (newName === "") {
+                newName = "Home_WiFi_5G";
+            }
             localStorage.setItem("ios26_custom_wifi_name", newName);
             updateTruncatedWifiName(newName);
             wifiRenameOverlay.classList.remove("active");
         });
     }
+
+    document.addEventListener("online", updateLiveWifiUI, false);
+    document.addEventListener("offline", updateLiveWifiUI, false);
+    window.addEventListener('online', updateLiveWifiUI);
+    window.addEventListener('offline', updateLiveWifiUI);
 
     if (wifiToggle) {
         wifiToggle.addEventListener("change", () => {
@@ -575,11 +858,44 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    document.addEventListener("deviceready", () => {
+        updateLiveWifiUI();
+    }, false);
+
     updateLiveWifiUI();
 
-    // ==========================================
-    // 6. BATTERY & APP ACTIVITY TRACKER ENGINE
-    // ==========================================
+    // Wi-Fi Sub-page Slide Navigation Bindings
+    if (wifiNav && wifiView && backToMainFromWifi) {
+        wifiNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                wifiView.classList.add("active");
+            });
+        });
+
+        backToMainFromWifi.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                wifiView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
+
+    // General View Elements
+    const generalNav = document.getElementById("generalNav");
+    const generalView = document.getElementById("generalView");
+    const backToMainFromGeneral = document.getElementById("backToMainFromGeneral");
+
+    // Battery View Elements
+    const batteryNav = document.getElementById("batteryNav");
+    const batteryView = document.getElementById("batteryView");
+    const backToMainFromBattery = document.getElementById("backToMainFromBattery");
+    const batteryPercentText = document.getElementById("batteryPercentText");
+    const mainBatteryStatusText = document.getElementById("mainBatteryStatusText");
+    const batteryLevelFill = document.getElementById("batteryLevelFill");
+    const lastChargedText = document.getElementById("lastChargedText");
+
+    // --- Real-Time iOS App Activity Tracker Engine ---
     const systemApps = [
         { id: "display", name: "Display & Home", icon: "assets/home.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 5 },
         { id: "settings", name: "Settings", icon: "assets/settings.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 3 },
@@ -603,9 +919,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
 
         const sortedApps = [...systemApps].sort((a, b) => b.usagePct - a.usagePct);
+
         container.innerHTML = sortedApps.map((app, index) => {
             const isDivider = index < sortedApps.length - 1;
-            const subText = app.screenSec > 0 ? `On screen: ${formatUsageTime(app.screenSec)}` : `Background: ${formatUsageTime(app.bgSec)}`;
+            const subText = app.screenSec > 0 
+                ? `On screen: ${formatUsageTime(app.screenSec)}` 
+                : `Background: ${formatUsageTime(app.bgSec)}`;
 
             return `
                 <div class="settings-row clickable">
@@ -631,12 +950,22 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
         const now = Date.now();
         const elapsedSec = Math.floor((now - lastActiveTimestamp) / 1000);
+
         if (elapsedSec >= 1) {
             lastActiveTimestamp = now;
             const settingsApp = systemApps.find(a => a.id === "settings");
             if (settingsApp) {
-                if (isAppVisible) settingsApp.screenSec += elapsedSec;
-                else settingsApp.bgSec += elapsedSec;
+                if (isAppVisible) {
+                    settingsApp.screenSec += elapsedSec;
+                } else {
+                    settingsApp.bgSec += elapsedSec;
+                }
+
+                const totalSec = systemApps.reduce((acc, a) => acc + a.screenSec + a.bgSec, 0);
+                systemApps.forEach(app => {
+                    const appTotal = app.screenSec + app.bgSec;
+                    app.usagePct = Math.max(1, Math.round((appTotal / totalSec) * 12));
+                });
             }
             renderActivityList();
         }
@@ -646,24 +975,83 @@ document.addEventListener("DOMContentLoaded", () => {
         isAppVisible = !document.hidden;
         lastActiveTimestamp = Date.now();
     });
+
     renderActivityList();
 
+    // Precise Battery Tracking Engine
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
+            let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
+            let lastUnpluggedTime = localStorage.getItem("ios26_last_unplugged_time") ? parseInt(localStorage.getItem("ios26_last_unplugged_time")) : null;
+            let wasCharging = battery.charging;
+
+            function formatTimeAgo(timestamp) {
+                if (!timestamp) return null;
+                const seconds = Math.floor((Date.now() - timestamp) / 1000);
+                if (seconds < 60) return "Just now";
+                const minutes = Math.floor(seconds / 60);
+                if (minutes < 60) return `${minutes}m ago`;
+                const hours = Math.floor(minutes / 60);
+                if (hours < 24) return `${hours}h ago`;
+                return `${Math.floor(hours / 24)}d ago`;
+            }
+
             function updateBatteryUI() {
                 const currentPercent = Math.round(battery.level * 100);
                 if (batteryPercentText) batteryPercentText.textContent = `${currentPercent}%`;
                 if (mainBatteryStatusText) mainBatteryStatusText.textContent = `${currentPercent}%`;
                 if (batteryLevelFill) batteryLevelFill.style.width = `${currentPercent}%`;
+
+                if (batteryLevelFill) {
+                    batteryLevelFill.classList.remove("color-green", "color-normal", "color-yellow", "color-red");
+
+                    if (currentPercent === 100) {
+                        batteryLevelFill.classList.add("color-green");
+                    } else if (currentPercent >= 21 && currentPercent <= 99) {
+                        batteryLevelFill.classList.add("color-normal");
+                    } else if (currentPercent >= 16 && currentPercent <= 20) {
+                        batteryLevelFill.classList.add("color-yellow");
+                    } else if (currentPercent <= 15) {
+                        batteryLevelFill.classList.add("color-red");
+                    }
+                }
+
+                if (lastChargedText) {
+                    if (lastUnpluggedPercent && lastUnpluggedTime) {
+                        const timeAgoString = formatTimeAgo(lastUnpluggedTime);
+                        lastChargedText.textContent = `Last Charged to ${lastUnpluggedPercent}%: ${timeAgoString}`;
+                    } else {
+                        lastChargedText.textContent = `Last Charged: Not available yet`;
+                    }
+                }
             }
+
+            battery.addEventListener('chargingchange', () => {
+                if (wasCharging && !battery.charging) {
+                    lastUnpluggedPercent = Math.round(battery.level * 100);
+                    lastUnpluggedTime = Date.now();
+                    
+                    localStorage.setItem("ios26_last_unplugged_pct", lastUnpluggedPercent);
+                    localStorage.setItem("ios26_last_unplugged_time", lastUnpluggedTime);
+                }
+                wasCharging = battery.charging;
+                updateBatteryUI();
+            });
+
             battery.addEventListener('levelchange', updateBatteryUI);
             updateBatteryUI();
+            setInterval(updateBatteryUI, 30000);
         });
+    } else {
+        if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
-    // ==========================================
-    // 7. THEME & DISPLAY PREFERENCES ENGINE
-    // ==========================================
+    // Display & Brightness interactive state elements
+    const lightModeOption = document.getElementById("lightModeOption");
+    const darkModeOption = document.getElementById("darkModeOption");
+    const automaticToggle = document.getElementById("automaticToggle");
+    const htmlElement = document.documentElement;
+
     function setTheme(theme) {
         htmlElement.classList.add("theme-transitioning");
         htmlElement.setAttribute("data-theme", theme);
@@ -674,6 +1062,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 lightModeOption.classList.add("active");
                 lightModeOption.querySelector(".radio-check").classList.add("checked");
                 lightModeOption.querySelector(".radio-check").textContent = "✓";
+                
                 darkModeOption.classList.remove("active");
                 darkModeOption.querySelector(".radio-check").classList.remove("checked");
                 darkModeOption.querySelector(".radio-check").textContent = "";
@@ -681,69 +1070,140 @@ document.addEventListener("DOMContentLoaded", () => {
                 darkModeOption.classList.add("active");
                 darkModeOption.querySelector(".radio-check").classList.add("checked");
                 darkModeOption.querySelector(".radio-check").textContent = "✓";
+                
                 lightModeOption.classList.remove("active");
                 lightModeOption.querySelector(".radio-check").classList.remove("checked");
                 lightModeOption.querySelector(".radio-check").textContent = "";
             }
         }
-        setTimeout(() => htmlElement.classList.remove("theme-transitioning"), 200);
+
+        setTimeout(() => {
+            htmlElement.classList.remove("theme-transitioning");
+        }, 200);
     }
 
-    const savedTheme = localStorage.getItem("ios26_theme") || "dark";
-    setTheme(savedTheme);
+    function getSystemTheme() {
+        if (window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+        return "light";
+    }
 
-    if (lightModeOption) lightModeOption.addEventListener("click", () => setTheme("light"));
-    if (darkModeOption) darkModeOption.addEventListener("click", () => setTheme("dark"));
+    const savedTheme = localStorage.getItem("ios26_theme");
+    const savedAutomatic = localStorage.getItem("ios26_automatic") === "true";
+    
+    if (automaticToggle) automaticToggle.checked = savedAutomatic;
+
+    if (savedAutomatic) {
+        setTheme(getSystemTheme());
+    } else if (savedTheme) {
+        setTheme(savedTheme);
+    } else {
+        setTheme("dark");
+    }
+
+    if (lightModeOption) {
+        lightModeOption.addEventListener("click", () => {
+            if (automaticToggle && automaticToggle.checked) {
+                automaticToggle.checked = false;
+                localStorage.setItem("ios26_automatic", "false");
+            }
+            setTheme("light");
+        });
+    }
+
+    if (darkModeOption) {
+        darkModeOption.addEventListener("click", () => {
+            if (automaticToggle && automaticToggle.checked) {
+                automaticToggle.checked = false;
+                localStorage.setItem("ios26_automatic", "false");
+            }
+            setTheme("dark");
+        });
+    }
+
+    if (automaticToggle) {
+        automaticToggle.addEventListener("change", () => {
+            const isAutomatic = automaticToggle.checked;
+            localStorage.setItem("ios26_automatic", isAutomatic);
+            if (isAutomatic) setTheme(getSystemTheme());
+        });
+    }
+
+    // Bold Text interactive state
+    const boldTextToggle = document.getElementById("boldTextToggle");
+    const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
 
     if (boldTextToggle) {
-        const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
         boldTextToggle.checked = savedBoldText;
         if (savedBoldText) htmlElement.classList.add("bold-text-enabled");
 
         boldTextToggle.addEventListener("change", () => {
             const isBold = boldTextToggle.checked;
             localStorage.setItem("ios26_boldtext", isBold);
-            if (isBold) htmlElement.classList.add("bold-text-enabled");
-            else htmlElement.classList.remove("bold-text-enabled");
+            if (isBold) {
+                htmlElement.classList.add("bold-text-enabled");
+            } else {
+                htmlElement.classList.remove("bold-text-enabled");
+            }
         });
     }
 
-    // ==========================================
-    // 8. SUB-PAGE SLIDING NAVIGATION BINDINGS
-    // ==========================================
-    const navBindings = [
-        { nav: generalNav, view: generalView, back: backToMainFromGeneral, parent: mainSettingsView },
-        { nav: displayBrightnessNav, view: displayBrightnessView, back: backToMainSettings, parent: mainSettingsView },
-        { nav: batteryNav, view: batteryView, back: backToMainFromBattery, parent: mainSettingsView },
-        { nav: wifiNav, view: wifiView, back: backToMainFromWifi, parent: mainSettingsView }
-    ];
-
-    navBindings.forEach(item => {
-        if (item.nav && item.view && item.back) {
-            item.nav.addEventListener("click", () => {
-                requestAnimationFrame(() => {
-                    item.parent.classList.add("slide-left");
-                    item.view.classList.add("active");
-                });
+    // Sub-page sliding navigations
+    if (generalNav && generalView && backToMainFromGeneral) {
+        generalNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                generalView.classList.add("active");
             });
-            item.back.addEventListener("click", () => {
-                requestAnimationFrame(() => {
-                    item.view.classList.remove("active");
-                    item.parent.classList.remove("slide-left");
-                });
-            });
-        }
-    });
+        });
 
-    // ==========================================
-    // 9. SETUP WIZARD & PROFILE INITIALIZATION
-    // ==========================================
+        backToMainFromGeneral.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                generalView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
+
+    if (displayBrightnessNav && displayBrightnessView && backToMainSettings) {
+        displayBrightnessNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                displayBrightnessView.classList.add("active");
+            });
+        });
+
+        backToMainSettings.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                displayBrightnessView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
+
+    if (batteryNav && batteryView && backToMainFromBattery) {
+        batteryNav.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                mainSettingsView.classList.add("slide-left");
+                batteryView.classList.add("active");
+            });
+        });
+
+        backToMainFromBattery.addEventListener("click", () => {
+            requestAnimationFrame(() => {
+                batteryView.classList.remove("active");
+                mainSettingsView.classList.remove("slide-left");
+            });
+        });
+    }
+
     const savedFirstName = localStorage.getItem("ios26_firstname");
     const savedLastName = localStorage.getItem("ios26_lastname");
     if ((savedFirstName || savedLastName) && displayProfileName) {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
+    // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
     if (!isSetupFinished && sheetOverlay) {
         setTimeout(() => openSheet(), 400);
@@ -762,6 +1222,20 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "";
     }
 
+    // Add scroll listener to subviews for advanced iOS header blur behavior
+    document.querySelectorAll('.settings-subview').forEach(subview => {
+        subview.addEventListener('scroll', () => {
+            const header = subview.querySelector('.subview-header');
+            if (!header) return;
+            
+            if (subview.scrollTop > 10) {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+    });
+
     function goToPage(pageNumber) {
         const pages = [page1, page2, page3];
         const targetPage = pages[pageNumber - 1];
@@ -778,7 +1252,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (p) p.classList.remove("active", "slide-out-left", "slide-in-right", "slide-out-right", "slide-in-left");
             });
 
-            if (activePage) activePage.classList.add(isForward ? "slide-out-left" : "slide-out-right");
+            if (activePage) {
+                activePage.classList.add(isForward ? "slide-out-left" : "slide-out-right");
+            }
+
             targetPage.classList.add(isForward ? "slide-in-right" : "slide-in-left");
             targetPage.classList.add("active");
         });
