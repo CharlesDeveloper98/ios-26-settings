@@ -125,82 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
         appleSignInSubmitBtn.textContent = "Continue";
     }
 
-
-
-
-    // --- iOS 26 Country Picker Mini-Page Engine ---
-const countryDisplayTag = document.getElementById("countryDisplayTag");
-const countryPickerMiniPage = document.getElementById("countryPickerMiniPage");
-const closeCountryPickerBtn = document.getElementById("closeCountryPickerBtn");
-const countryListContainer = document.getElementById("countryListContainer");
-const countrySearchInput = document.getElementById("countrySearchInput");
-
-function renderCountryList(filterText = "") {
-    if (!countryListContainer) return;
-    countryListContainer.innerHTML = "";
-
-    Object.entries(countryRules).forEach(([code, data]) => {
-        const query = filterText.toLowerCase();
-        if (data.name.toLowerCase().includes(query) || code.includes(query)) {
-            const row = document.createElement("div");
-            row.className = "settings-row clickable country-item-row";
-            row.innerHTML = `
-                <div class="row-left" style="display: flex; align-items: center; gap: 12px;">
-                    <span class="country-flag" style="font-size: 20px;">${data.flag || "🌍"}</span>
-                    <span class="row-label-text">${data.name}</span>
-                </div>
-                <div class="row-right">
-                    <span class="row-status-text" style="color: var(--text-sub);">${code}</span>
-                </div>
-            `;
-            row.addEventListener("click", () => {
-                if (appleIdentifier) {
-                    appleIdentifier.value = code + " ";
-                    if (countryDisplayTag) countryDisplayTag.textContent = data.name;
-                    updateAppleButtonState();
-                }
-                closeCountryPickerMiniPage();
-            });
-            countryListContainer.appendChild(row);
-            
-            // Add divider between rows
-            const divider = document.createElement("div");
-            divider.className = "card-divider indent";
-            countryListContainer.appendChild(divider);
-        }
-    });
-}
-
-function openCountryPickerMiniPage() {
-    if (countryPickerMiniPage) {
-        renderCountryList();
-        countryPickerMiniPage.classList.add("active");
-    }
-}
-
-function closeCountryPickerMiniPage() {
-    if (countryPickerMiniPage) {
-        countryPickerMiniPage.classList.remove("active");
-        if (countrySearchInput) countrySearchInput.value = "";
-    }
-}
-
-if (countryDisplayTag) {
-    countryDisplayTag.addEventListener("click", openCountryPickerMiniPage);
-}
-
-if (closeCountryPickerBtn) {
-    closeCountryPickerBtn.addEventListener("click", closeCountryPickerMiniPage);
-}
-
-if (countrySearchInput) {
-    countrySearchInput.addEventListener("input", (e) => {
-        renderCountryList(e.target.value.trim());
-    });
-}
-
-
-    
     // Rename Popup Elements
     const wifiInfoBtn = document.getElementById("wifiInfoBtn");
     const wifiRenameOverlay = document.getElementById("wifiRenameOverlay");
@@ -282,16 +206,292 @@ if (countrySearchInput) {
         }
     }
 
-        
+    // --- Country code prefix mapping dictionary & formatting definitions ---
+    const countryRules = {
+        "+1": { name: "USA / Canada", mask: "+1 (###) ###-####" },
+        "+1242": { name: "Bahamas", mask: "+1 (242) ###-####" },
+        "+1246": { name: "Barbados", mask: "+1 (246) ###-####" },
+        "+1264": { name: "Anguilla", mask: "+1 (264) ###-####" },
+        "+1268": { name: "Antigua and Barbuda", mask: "+1 (268) ###-####" },
+        "+1284": { name: "British Virgin Islands", mask: "+1 (284) ###-####" },
+        "+1345": { name: "Cayman Islands", mask: "+1 (345) ###-####" },
+        "+1441": { name: "Bermuda", mask: "+1 (441) ###-####" },
+        "+1473": { name: "Grenada", mask: "+1 (473) ###-####" },
+        "+1649": { name: "Turks and Caicos Islands", mask: "+1 (649) ###-####" },
+        "+1664": { name: "Montserrat", mask: "+1 (664) ###-####" },
+        "+1671": { name: "Guam", mask: "+1 (671) ###-####" },
+        "+1684": { name: "American Samoa", mask: "+1 (684) ###-####" },
+        "+1758": { name: "Saint Lucia", mask: "+1 (758) ###-####" },
+        "+1767": { name: "Dominica", mask: "+1 (767) ###-####" },
+        "+1784": { name: "Saint Vincent and the Grenadines", mask: "+1 (784) ###-####" },
+        "+1809": { name: "Dominican Republic", mask: "+1 (809) ###-####" },
+        "+1829": { name: "Dominican Republic", mask: "+1 (829) ###-####" },
+        "+1849": { name: "Dominican Republic", mask: "+1 (849) ###-####" },
+        "+1868": { name: "Trinidad and Tobago", mask: "+1 (868) ###-####" },
+        "+1876": { name: "Jamaica", mask: "+1 (876) ###-####" },
+        "+20": { name: "Egypt", mask: "+20 ### ### ####" },
+        "+212": { name: "Morocco", mask: "+212 ## ####-###" },
+        "+213": { name: "Algeria", mask: "+213 ## ### ####" },
+        "+216": { name: "Tunisia", mask: "+216 ## ### ###" },
+        "+218": { name: "Libya", mask: "+218 ## ### ####" },
+        "+220": { name: "Gambia", mask: "+220 ### ####" },
+        "+221": { name: "Senegal", mask: "+221 ## ### ####" },
+        "+222": { name: "Mauritania", mask: "+222 ## ## ####" },
+        "+223": { name: "Mali", mask: "+223 ## ## ####" },
+        "+224": { name: "Guinea", mask: "+224 ### ## ## ##" },
+        "+225": { name: "Ivory Coast", mask: "+225 ## ## ## ##" },
+        "+226": { name: "Burkina Faso", mask: "+226 ## ## ####" },
+        "+227": { name: "Niger", mask: "+227 ## ## ####" },
+        "+228": { name: "Togo", mask: "+228 ## ## ####" },
+        "+229": { name: "Benin", mask: "+229 ## ## ####" },
+        "+230": { name: "Mauritius", mask: "+230 ### ####" },
+        "+231": { name: "Liberia", mask: "+231 ### ### ###" },
+        "+232": { name: "Sierra Leone", mask: "+232 ## ######" },
+        "+233": { name: "Ghana", mask: "+233 ## ### ####" },
+        "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
+        "+235": { name: "Chad", mask: "+235 ## ## ## ##" },
+        "+236": { name: "Central African Republic", mask: "+236 ## ## ####" },
+        "+237": { name: "Cameroon", mask: "+237 #### ####" },
+        "+238": { name: "Cape Verde", mask: "+238 ### ## ##" },
+        "+239": { name: "Sao Tome and Principe", mask: "+239 ## #####" },
+        "+240": { name: "Equatorial Guinea", mask: "+240 ### ### ###" },
+        "+241": { name: "Gabon", mask: "+241 # ## ## ##" },
+        "+242": { name: "Republic of the Congo", mask: "+242 ## ### ####" },
+        "+243": { name: "Democratic Republic of the Congo", mask: "+243 ### ### ###" },
+        "+244": { name: "Angola", mask: "+244 ### ### ###" },
+        "+245": { name: "Guinea-Bissau", mask: "+245 # ######" },
+        "+248": { name: "Seychelles", mask: "+248 # ### ###" },
+        "+249": { name: "Sudan", mask: "+249 ## ### ####" },
+        "+250": { name: "Rwanda", mask: "+250 ### ### ###" },
+        "+251": { name: "Ethiopia", mask: "+251 ## ### ####" },
+        "+252": { name: "Somalia", mask: "+252 # ### ###" },
+        "+253": { name: "Djibouti", mask: "+253 ## ## ## ##" },
+        "+254": { name: "Kenya", mask: "+254 ### ######" },
+        "+255": { name: "Tanzania", mask: "+255 ## ### ####" },
+        "+256": { name: "Uganda", mask: "+256 ### ######" },
+        "+257": { name: "Burundi", mask: "+257 ## ## ####" },
+        "+258": { name: "Mozambique", mask: "+258 ## ### ###" },
+        "+260": { name: "Zambia", mask: "+260 ## #######" },
+        "+261": { name: "Madagascar", mask: "+261 ## ## #####" },
+        "+263": { name: "Zimbabwe", mask: "+263 # ######" },
+        "+264": { name: "Namibia", mask: "+264 ## ### ####" },
+        "+265": { name: "Malawi", mask: "+265 # ### ####" },
+        "+266": { name: "Lesotho", mask: "+266 # ### ####" },
+        "+267": { name: "Botswana", mask: "+267 ## ### ###" },
+        "+268": { name: "Eswatini", mask: "+268 ## ## ####" },
+        "+269": { name: "Comoros", mask: "+269 ## ## ####" },
+        "+27": { name: "South Africa", mask: "+27 ## ### ####" },
+        "+30": { name: "Greece", mask: "+30 ### ### ####" },
+        "+31": { name: "Netherlands", mask: "+31 # ########" },
+        "+32": { name: "Belgium", mask: "+32 ### ## ## ##" },
+        "+33": { name: "France", mask: "+33 # ## ## ## ##" },
+        "+34": { name: "Spain", mask: "+34 ### ### ###" },
+        "+350": { name: "Gibraltar", mask: "+350 ########" },
+        "+351": { name: "Portugal", mask: "+351 ### ### ###" },
+        "+352": { name: "Luxembourg", mask: "+352 ### ###" },
+        "+353": { name: "Ireland", mask: "+353 ## ### ####" },
+        "+354": { name: "Iceland", mask: "+354 ### ####" },
+        "+355": { name: "Albania", mask: "+355 ## ### ###" },
+        "+356": { name: "Malta", mask: "+356 #### ####" },
+        "+357": { name: "Cyprus", mask: "+357 ## ######" },
+        "+358": { name: "Finland", mask: "+358 ## ### ## ##" },
+        "+359": { name: "Bulgaria", mask: "+359 ### ### ###" },
+        "+36": { name: "Hungary", mask: "+36 ## ### ####" },
+        "+370": { name: "Lithuania", mask: "+370 ### #####" },
+        "+371": { name: "Latvia", mask: "+371 ## ### ###" },
+        "+372": { name: "Estonia", mask: "+372 #### ####" },
+        "+373": { name: "Moldova", mask: "+373 #### ####" },
+        "+374": { name: "Armenia", mask: "+374 ## ######" },
+        "+375": { name: "Belarus", mask: "+375 ## ### ## ##" },
+        "+376": { name: "Andorra", mask: "+376 ### ###" },
+        "+377": { name: "Monaco", mask: "+377 # ## ## ## ##" },
+        "+378": { name: "San Marino", mask: "+378 #### ######" },
+        "+380": { name: "Ukraine", mask: "+380 ## ### ## ##" },
+        "+381": { name: "Serbia", mask: "+381 ## ### ####" },
+        "+382": { name: "Montenegro", mask: "+382 ## ### ###" },
+        "+383": { name: "Kosovo", mask: "+383 ## ### ###" },
+        "+385": { name: "Croatia", mask: "+385 ## ### ####" },
+        "+386": { name: "Slovenia", mask: "+386 ## ### ###" },
+        "+387": { name: "Bosnia and Herzegovina", mask: "+387 ## ######" },
+        "+389": { name: "North Macedonia", mask: "+389 ## ### ###" },
+        "+39": { name: "Italy", mask: "+39 ### ### ####" },
+        "+40": { name: "Romania", mask: "+40 ### ### ###" },
+        "+41": { name: "Switzerland", mask: "+41 ## ### ####" },
+        "+420": { name: "Czech Republic", mask: "+420 ### ### ###" },
+        "+421": { name: "Slovakia", mask: "+421 ### ### ###" },
+        "+423": { name: "Liechtenstein", mask: "+423 ### ####" },
+        "+43": { name: "Austria", mask: "+43 ### ########" },
+        "+44": { name: "UK", mask: "+44 #### ######" },
+        "+45": { name: "Denmark", mask: "+45 ## ## ## ##" },
+        "+46": { name: "Sweden", mask: "+46 ## ### ## ##" },
+        "+47": { name: "Norway", mask: "+47 ### ## ###" },
+        "+48": { name: "Poland", mask: "+48 ### ### ###" },
+        "+49": { name: "Germany", mask: "+49 ### #######" },
+        "+500": { name: "Falkland Islands", mask: "+500 #####" },
+        "+501": { name: "Belize", mask: "+501 ### ####" },
+        "+502": { name: "Guatemala", mask: "+502 #### ####" },
+        "+503": { name: "El Salvador", mask: "+503 #### ####" },
+        "+504": { name: "Honduras", mask: "+504 #### ####" },
+        "+505": { name: "Nicaragua", mask: "+505 #### ####" },
+        "+506": { name: "Costa Rica", mask: "+506 #### ####" },
+        "+507": { name: "Panama", mask: "+507 #### ####" },
+        "+508": { name: "Saint Pierre and Miquelon", mask: "+508 ## ## ##" },
+        "+509": { name: "Haiti", mask: "+509 #### ####" },
+        "+51": { name: "Peru", mask: "+51 ### ### ###" },
+        "+52": { name: "Mexico", mask: "+52 ## #### ####" },
+        "+53": { name: "Cuba", mask: "+53 # #######" },
+        "+54": { name: "Argentina", mask: "+54 # ########" },
+        "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
+        "+56": { name: "Chile", mask: "+56 # #### ####" },
+        "+57": { name: "Colombia", mask: "+57 ### ### ####" },
+        "+58": { name: "Venezuela", mask: "+58 ### ### ####" },
+        "+591": { name: "Bolivia", mask: "+591 # ### ####" },
+        "+592": { name: "Guyana", mask: "+592 ### ####" },
+        "+593": { name: "Ecuador", mask: "+593 # ### ####" },
+        "+595": { name: "Paraguay", mask: "+595 ### ### ###" },
+        "+597": { name: "Suriname", mask: "+597 ### ###" },
+        "+598": { name: "Uruguay", mask: "+598 # ### ####" },
+        "+60": { name: "Malaysia", mask: "+60 ## #### ####" },
+        "+61": { name: "Australia", mask: "+61 ### ### ###" },
+        "+62": { name: "Indonesia", mask: "+62 ### ### ####" },
+        "+63": { name: "Philippines", mask: "+63 ### ### ####" },
+        "+64": { name: "New Zealand", mask: "+64 ## ### ####" },
+        "+65": { name: "Singapore", mask: "+65 #### ####" },
+        "+66": { name: "Thailand", mask: "+66 ## ### ####" },
+        "+670": { name: "East Timor", mask: "+670 #### ####" },
+        "+673": { name: "Brunei", mask: "+673 ### ####" },
+        "+674": { name: "Nauru", mask: "+674 ### ####" },
+        "+675": { name: "Papua New Guinea", mask: "+675 ### ####" },
+        "+676": { name: "Tonga", mask: "+676 #####" },
+        "+677": { name: "Solomon Islands", mask: "+677 #####" },
+        "+678": { name: "Vanuatu", mask: "+678 #####" },
+        "+679": { name: "Fiji", mask: "+679 ## #####" },
+        "+680": { name: "Palau", mask: "+680 ### ####" },
+        "+685": { name: "Samoa", mask: "+685 #####" },
+        "+686": { name: "Kiribati", mask: "+686 #####" },
+        "+688": { name: "Tuvalu", mask: "+688 #####" },
+        "+689": { name: "French Polynesia", mask: "+689 ## ## ##" },
+        "+690": { name: "Tokelau", mask: "+690 ####" },
+        "+691": { name: "Micronesia", mask: "+691 ### ####" },
+        "+692": { name: "Marshall Islands", mask: "+692 ### ####" },
+        "+7": { name: "Russia / Kazakhstan", mask: "+7 (###) ###-##-##" },
+        "+81": { name: "Japan", mask: "+81 ## #### ####" },
+        "+82": { name: "South Korea", mask: "+82 ## #### ####" },
+        "+84": { name: "Vietnam", mask: "+84 ## #### ####" },
+        "+852": { name: "Hong Kong", mask: "+852 #### ####" },
+        "+853": { name: "Macau", mask: "+853 #### ####" },
+        "+855": { name: "Cambodia", mask: "+855 ## ### ###" },
+        "+856": { name: "Laos", mask: "+856 ## ## ### ###" },
+        "+86": { name: "China", mask: "+86 ### #### ####" },
+        "+880": { name: "Bangladesh", mask: "+880 ### ########" },
+        "+886": { name: "Taiwan", mask: "+886 # #### ####" },
+        "+90": { name: "Turkey", mask: "+90 ### ### ####" },
+        "+91": { name: "India", mask: "+91 ##### #####" },
+        "+92": { name: "Pakistan", mask: "+92 ### #######" },
+        "+93": { name: "Afghanistan", mask: "+93 ## ### ####" },
+        "+94": { name: "Sri Lanka", mask: "+94 ## ### ####" },
+        "+95": { name: "Myanmar", mask: "+95 # ### ####" },
+        "+960": { name: "Maldives", mask: "+960 ### ####" },
+        "+961": { name: "Lebanon", mask: "+961 ## ### ###" },
+        "+962": { name: "Jordan", mask: "+962 # #### ####" },
+        "+963": { name: "Syria", mask: "+963 ## ########" },
+        "+964": { name: "Iraq", mask: "+964 ### ### ####" },
+        "+965": { name: "Kuwait", mask: "+965 ########" },
+        "+966": { name: "Saudi Arabia", mask: "+966 ## ### ####" },
+        "+967": { name: "Yemen", mask: "+967 ### ### ###" },
+        "+968": { name: "Oman", mask: "+968 ########" },
+        "+970": { name: "Palestine", mask: "+970 ## ### ####" },
+        "+971": { name: "United Arab Emirates", mask: "+971 ## ### ####" },
+        "+972": { name: "Israel", mask: "+972 ## ### ####" },
+        "+973": { name: "Bahrain", mask: "+973 ########" },
+        "+974": { name: "Qatar", mask: "+974 ########" },
+        "+975": { name: "Bhutan", mask: "+975 # ### ###" },
+        "+976": { name: "Mongolia", mask: "+976 ## ## ####" },
+        "+977": { name: "Nepal", mask: "+977 ## ### ###" },
+        "+98": { name: "Iran", mask: "+98 ### ### ####" },
+        "+992": { name: "Tajikistan", mask: "+992 ## ### ####" },
+        "+993": { name: "Turkmenistan", mask: "+993 # ######" },
+        "+994": { name: "Azerbaijan", mask: "+994 ## ### ## ##" },
+        "+995": { name: "Georgia", mask: "+995 ### ######" },
+        "+996": { name: "Kyrgyzstan", mask: "+996 ### ######" },
+        "+998": { name: "Uzbekistan", mask: "+998 ## ### ####" }
+    };
 
+    // --- iOS 26 Country Picker Mini-Page Engine Elements & Functions ---
+    const countryDisplayTag = document.getElementById("countryDisplayTag");
+    const countryPickerMiniPage = document.getElementById("countryPickerMiniPage");
+    const closeCountryPickerBtn = document.getElementById("closeCountryPickerBtn");
+    const countryListContainer = document.getElementById("countryListContainer");
+    const countrySearchInput = document.getElementById("countrySearchInput");
 
+    function renderCountryList(filterText = "") {
+        if (!countryListContainer) return;
+        countryListContainer.innerHTML = "";
 
-        // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
+        Object.entries(countryRules).forEach(([code, data]) => {
+            const query = filterText.toLowerCase();
+            if (data.name.toLowerCase().includes(query) || code.includes(query)) {
+                const row = document.createElement("div");
+                row.className = "settings-row clickable country-item-row";
+                row.innerHTML = `
+                    <div class="row-left" style="display: flex; align-items: center; gap: 12px;">
+                        <span class="country-flag" style="font-size: 20px;">${data.flag || "🌍"}</span>
+                        <span class="row-label-text">${data.name}</span>
+                    </div>
+                    <div class="row-right">
+                        <span class="row-status-text" style="color: var(--text-sub);">${code}</span>
+                    </div>
+                `;
+                row.addEventListener("click", () => {
+                    if (appleIdentifier) {
+                        appleIdentifier.value = code + " ";
+                        if (countryDisplayTag) countryDisplayTag.textContent = data.name;
+                        updateAppleButtonState();
+                    }
+                    closeCountryPickerMiniPage();
+                });
+                countryListContainer.appendChild(row);
+                
+                const divider = document.createElement("div");
+                divider.className = "card-divider indent";
+                countryListContainer.appendChild(divider);
+            }
+        });
+    }
+
+    function openCountryPickerMiniPage() {
+        if (countryPickerMiniPage) {
+            renderCountryList();
+            countryPickerMiniPage.classList.add("active");
+        }
+    }
+
+    function closeCountryPickerMiniPage() {
+        if (countryPickerMiniPage) {
+            countryPickerMiniPage.classList.remove("active");
+            if (countrySearchInput) countrySearchInput.value = "";
+        }
+    }
+
+    if (countryDisplayTag) {
+        countryDisplayTag.addEventListener("click", openCountryPickerMiniPage);
+    }
+
+    if (closeCountryPickerBtn) {
+        closeCountryPickerBtn.addEventListener("click", closeCountryPickerMiniPage);
+    }
+
+    if (countrySearchInput) {
+        countrySearchInput.addEventListener("input", (e) => {
+            renderCountryList(e.target.value.trim());
+        });
+    }
+
+    // --- iOS 26 Apple Account Signup Advanced Interactivity & Container State Engine ---
     const useEmailBtn = document.getElementById("useEmailBtn");
     const usePhoneBtn = document.getElementById("usePhoneBtn");
     const appleIdentifier = document.getElementById("appleIdentifier");
     const inputLabel = document.getElementById("inputLabel");
-    const countryDisplayTag = document.getElementById("countryDisplayTag");
     const ios26AlertBox = document.getElementById("ios26AlertBox");
 
     let alertFadeTimer = null;
@@ -306,7 +506,6 @@ if (countrySearchInput) {
         ios26AlertBox.textContent = message;
         ios26AlertBox.classList.add("show");
 
-        // 5-second automatic fade-out mechanism
         alertFadeTimer = setTimeout(() => {
             ios26AlertBox.classList.remove("show");
         }, 5000);
@@ -332,7 +531,6 @@ if (countrySearchInput) {
 
     if (useEmailBtn && usePhoneBtn && appleIdentifier) {
         useEmailBtn.addEventListener("click", (e) => {
-            // Strictly intercept and block execution if dimmed, while displaying the alert
             if (useEmailBtn.classList.contains("dimmed")) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
@@ -352,7 +550,6 @@ if (countrySearchInput) {
         });
 
         usePhoneBtn.addEventListener("click", (e) => {
-            // Strictly intercept and block execution if dimmed, while displaying the alert
             if (usePhoneBtn.classList.contains("dimmed")) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
@@ -429,329 +626,6 @@ if (countrySearchInput) {
         });
     }
 
-
-            
-
-
-    // Country code prefix mapping dictionary & formatting definitions
-    const countryRules = {
-    // North America & Caribbean (Zone 1)
-    "+1": { name: "USA / Canada", mask: "+1 (###) ###-####" },
-    "+1242": { name: "Bahamas", mask: "+1 (242) ###-####" },
-    "+1246": { name: "Barbados", mask: "+1 (246) ###-####" },
-    "+1264": { name: "Anguilla", mask: "+1 (264) ###-####" },
-    "+1268": { name: "Antigua and Barbuda", mask: "+1 (268) ###-####" },
-    "+1284": { name: "British Virgin Islands", mask: "+1 (284) ###-####" },
-    "+1345": { name: "Cayman Islands", mask: "+1 (345) ###-####" },
-    "+1441": { name: "Bermuda", mask: "+1 (441) ###-####" },
-    "+1473": { name: "Grenada", mask: "+1 (473) ###-####" },
-    "+1649": { name: "Turks and Caicos Islands", mask: "+1 (649) ###-####" },
-    "+1664": { name: "Montserrat", mask: "+1 (664) ###-####" },
-    "+1671": { name: "Guam", mask: "+1 (671) ###-####" },
-    "+1684": { name: "American Samoa", mask: "+1 (684) ###-####" },
-    "+1758": { name: "Saint Lucia", mask: "+1 (758) ###-####" },
-    "+1767": { name: "Dominica", mask: "+1 (767) ###-####" },
-    "+1784": { name: "Saint Vincent and the Grenadines", mask: "+1 (784) ###-####" },
-    "+1809": { name: "Dominican Republic", mask: "+1 (809) ###-####" },
-    "+1829": { name: "Dominican Republic", mask: "+1 (829) ###-####" },
-    "+1849": { name: "Dominican Republic", mask: "+1 (849) ###-####" },
-    "+1868": { name: "Trinidad and Tobago", mask: "+1 (868) ###-####" },
-    "+1876": { name: "Jamaica", mask: "+1 (876) ###-####" },
-
-    // Africa (Zone 2)
-    "+20": { name: "Egypt", mask: "+20 ### ### ####" },
-    "+212": { name: "Morocco", mask: "+212 ## ####-###" },
-    "+213": { name: "Algeria", mask: "+213 ## ### ####" },
-    "+216": { name: "Tunisia", mask: "+216 ## ### ###" },
-    "+218": { name: "Libya", mask: "+218 ## ### ####" },
-    "+220": { name: "Gambia", mask: "+220 ### ####" },
-    "+221": { name: "Senegal", mask: "+221 ## ### ####" },
-    "+222": { name: "Mauritania", mask: "+222 ## ## ####" },
-    "+223": { name: "Mali", mask: "+223 ## ## ####" },
-    "+224": { name: "Guinea", mask: "+224 ### ## ## ##" },
-    "+225": { name: "Ivory Coast", mask: "+225 ## ## ## ##" },
-    "+226": { name: "Burkina Faso", mask: "+226 ## ## ####" },
-    "+227": { name: "Niger", mask: "+227 ## ## ####" },
-    "+228": { name: "Togo", mask: "+228 ## ## ####" },
-    "+229": { name: "Benin", mask: "+229 ## ## ####" },
-    "+230": { name: "Mauritius", mask: "+230 ### ####" },
-    "+231": { name: "Liberia", mask: "+231 ### ### ###" },
-    "+232": { name: "Sierra Leone", mask: "+232 ## ######" },
-    "+233": { name: "Ghana", mask: "+233 ## ### ####" },
-    "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
-    "+235": { name: "Chad", mask: "+235 ## ## ## ##" },
-    "+236": { name: "Central African Republic", mask: "+236 ## ## ####" },
-    "+237": { name: "Cameroon", mask: "+237 #### ####" },
-    "+238": { name: "Cape Verde", mask: "+238 ### ## ##" },
-    "+239": { name: "Sao Tome and Principe", mask: "+239 ## #####" },
-    "+240": { name: "Equatorial Guinea", mask: "+240 ### ### ###" },
-    "+241": { name: "Gabon", mask: "+241 # ## ## ##" },
-    "+242": { name: "Republic of the Congo", mask: "+242 ## ### ####" },
-    "+243": { name: "Democratic Republic of the Congo", mask: "+243 ### ### ###" },
-    "+244": { name: "Angola", mask: "+244 ### ### ###" },
-    "+245": { name: "Guinea-Bissau", mask: "+245 # ######" },
-    "+248": { name: "Seychelles", mask: "+248 # ### ###" },
-    "+249": { name: "Sudan", mask: "+249 ## ### ####" },
-    "+250": { name: "Rwanda", mask: "+250 ### ### ###" },
-    "+251": { name: "Ethiopia", mask: "+251 ## ### ####" },
-    "+252": { name: "Somalia", mask: "+252 # ### ###" },
-    "+253": { name: "Djibouti", mask: "+253 ## ## ## ##" },
-    "+254": { name: "Kenya", mask: "+254 ### ######" },
-    "+255": { name: "Tanzania", mask: "+255 ## ### ####" },
-    "+256": { name: "Uganda", mask: "+256 ### ######" },
-    "+257": { name: "Burundi", mask: "+257 ## ## ####" },
-    "+258": { name: "Mozambique", mask: "+258 ## ### ###" },
-    "+260": { name: "Zambia", mask: "+260 ## #######" },
-    "+261": { name: "Madagascar", mask: "+261 ## ## #####" },
-    "+263": { name: "Zimbabwe", mask: "+263 # ######" },
-    "+264": { name: "Namibia", mask: "+264 ## ### ####" },
-    "+265": { name: "Malawi", mask: "+265 # ### ####" },
-    "+266": { name: "Lesotho", mask: "+266 # ### ####" },
-    "+267": { name: "Botswana", mask: "+267 ## ### ###" },
-    "+268": { name: "Eswatini", mask: "+268 ## ## ####" },
-    "+269": { name: "Comoros", mask: "+269 ## ## ####" },
-    "+27": { name: "South Africa", mask: "+27 ## ### ####" },
-
-    // Europe (Zones 3 & 4)
-    "+30": { name: "Greece", mask: "+30 ### ### ####" },
-    "+31": { name: "Netherlands", mask: "+31 # ########" },
-    "+32": { name: "Belgium", mask: "+32 ### ## ## ##" },
-    "+33": { name: "France", mask: "+33 # ## ## ## ##" },
-    "+34": { name: "Spain", mask: "+34 ### ### ###" },
-    "+350": { name: "Gibraltar", mask: "+350 ########" },
-    "+351": { name: "Portugal", mask: "+351 ### ### ###" },
-    "+352": { name: "Luxembourg", mask: "+352 ### ###" },
-    "+353": { name: "Ireland", mask: "+353 ## ### ####" },
-    "+354": { name: "Iceland", mask: "+354 ### ####" },
-    "+355": { name: "Albania", mask: "+355 ## ### ###" },
-    "+356": { name: "Malta", mask: "+356 #### ####" },
-    "+357": { name: "Cyprus", mask: "+357 ## ######" },
-    "+358": { name: "Finland", mask: "+358 ## ### ## ##" },
-    "+359": { name: "Bulgaria", mask: "+359 ### ### ###" },
-    "+36": { name: "Hungary", mask: "+36 ## ### ####" },
-    "+370": { name: "Lithuania", mask: "+370 ### #####" },
-    "+371": { name: "Latvia", mask: "+371 ## ### ###" },
-    "+372": { name: "Estonia", mask: "+372 #### ####" },
-    "+373": { name: "Moldova", mask: "+373 #### ####" },
-    "+374": { name: "Armenia", mask: "+374 ## ######" },
-    "+375": { name: "Belarus", mask: "+375 ## ### ## ##" },
-    "+376": { name: "Andorra", mask: "+376 ### ###" },
-    "+377": { name: "Monaco", mask: "+377 # ## ## ## ##" },
-    "+378": { name: "San Marino", mask: "+378 #### ######" },
-    "+380": { name: "Ukraine", mask: "+380 ## ### ## ##" },
-    "+381": { name: "Serbia", mask: "+381 ## ### ####" },
-    "+382": { name: "Montenegro", mask: "+382 ## ### ###" },
-    "+383": { name: "Kosovo", mask: "+383 ## ### ###" },
-    "+385": { name: "Croatia", mask: "+385 ## ### ####" },
-    "+386": { name: "Slovenia", mask: "+386 ## ### ###" },
-    "+387": { name: "Bosnia and Herzegovina", mask: "+387 ## ######" },
-    "+389": { name: "North Macedonia", mask: "+389 ## ### ###" },
-    "+39": { name: "Italy", mask: "+39 ### ### ####" },
-    "+40": { name: "Romania", mask: "+40 ### ### ###" },
-    "+41": { name: "Switzerland", mask: "+41 ## ### ####" },
-    "+420": { name: "Czech Republic", mask: "+420 ### ### ###" },
-    "+421": { name: "Slovakia", mask: "+421 ### ### ###" },
-    "+423": { name: "Liechtenstein", mask: "+423 ### ####" },
-    "+43": { name: "Austria", mask: "+43 ### ########" },
-    "+44": { name: "UK", mask: "+44 #### ######" },
-    "+45": { name: "Denmark", mask: "+45 ## ## ## ##" },
-    "+46": { name: "Sweden", mask: "+46 ## ### ## ##" },
-    "+47": { name: "Norway", mask: "+47 ### ## ###" },
-    "+48": { name: "Poland", mask: "+48 ### ### ###" },
-    "+49": { name: "Germany", mask: "+49 ### #######" },
-
-    // South & Central America (Zone 5)
-    "+500": { name: "Falkland Islands", mask: "+500 #####" },
-    "+501": { name: "Belize", mask: "+501 ### ####" },
-    "+502": { name: "Guatemala", mask: "+502 #### ####" },
-    "+503": { name: "El Salvador", mask: "+503 #### ####" },
-    "+504": { name: "Honduras", mask: "+504 #### ####" },
-    "+505": { name: "Nicaragua", mask: "+505 #### ####" },
-    "+506": { name: "Costa Rica", mask: "+506 #### ####" },
-    "+507": { name: "Panama", mask: "+507 #### ####" },
-    "+508": { name: "Saint Pierre and Miquelon", mask: "+508 ## ## ##" },
-    "+509": { name: "Haiti", mask: "+509 #### ####" },
-    "+51": { name: "Peru", mask: "+51 ### ### ###" },
-    "+52": { name: "Mexico", mask: "+52 ## #### ####" },
-    "+53": { name: "Cuba", mask: "+53 # #######" },
-    "+54": { name: "Argentina", mask: "+54 # ########" },
-    "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
-    "+56": { name: "Chile", mask: "+56 # #### ####" },
-    "+57": { name: "Colombia", mask: "+57 ### ### ####" },
-    "+58": { name: "Venezuela", mask: "+58 ### ### ####" },
-    "+591": { name: "Bolivia", mask: "+591 # ### ####" },
-    "+592": { name: "Guyana", mask: "+592 ### ####" },
-    "+593": { name: "Ecuador", mask: "+593 # ### ####" },
-    "+595": { name: "Paraguay", mask: "+595 ### ### ###" },
-    "+597": { name: "Suriname", mask: "+597 ### ###" },
-    "+598": { name: "Uruguay", mask: "+598 # ### ####" },
-
-    // Oceania & Southeast Asia (Zone 6)
-    "+60": { name: "Malaysia", mask: "+60 ## #### ####" },
-    "+61": { name: "Australia", mask: "+61 ### ### ###" },
-    "+62": { name: "Indonesia", mask: "+62 ### ### ####" },
-    "+63": { name: "Philippines", mask: "+63 ### ### ####" },
-    "+64": { name: "New Zealand", mask: "+64 ## ### ####" },
-    "+65": { name: "Singapore", mask: "+65 #### ####" },
-    "+66": { name: "Thailand", mask: "+66 ## ### ####" },
-    "+670": { name: "East Timor", mask: "+670 #### ####" },
-    "+673": { name: "Brunei", mask: "+673 ### ####" },
-    "+674": { name: "Nauru", mask: "+674 ### ####" },
-    "+675": { name: "Papua New Guinea", mask: "+675 ### ####" },
-    "+676": { name: "Tonga", mask: "+676 #####" },
-    "+677": { name: "Solomon Islands", mask: "+677 #####" },
-    "+678": { name: "Vanuatu", mask: "+678 #####" },
-    "+679": { name: "Fiji", mask: "+679 ## #####" },
-    "+680": { name: "Palau", mask: "+680 ### ####" },
-    "+685": { name: "Samoa", mask: "+685 #####" },
-    "+686": { name: "Kiribati", mask: "+686 #####" },
-    "+688": { name: "Tuvalu", mask: "+688 #####" },
-    "+689": { name: "French Polynesia", mask: "+689 ## ## ##" },
-    "+690": { name: "Tokelau", mask: "+690 ####" },
-    "+691": { name: "Micronesia", mask: "+691 ### ####" },
-    "+692": { name: "Marshall Islands", mask: "+692 ### ####" },
-
-    // Russia & Central Asia (Zone 7)
-    "+7": { name: "Russia / Kazakhstan", mask: "+7 (###) ###-##-##" },
-
-    // East Asia & Special Services (Zone 8)
-    "+81": { name: "Japan", mask: "+81 ## #### ####" },
-    "+82": { name: "South Korea", mask: "+82 ## #### ####" },
-    "+84": { name: "Vietnam", mask: "+84 ## #### ####" },
-    "+852": { name: "Hong Kong", mask: "+852 #### ####" },
-    "+853": { name: "Macau", mask: "+853 #### ####" },
-    "+855": { name: "Cambodia", mask: "+855 ## ### ###" },
-    "+856": { name: "Laos", mask: "+856 ## ## ### ###" },
-    "+86": { name: "China", mask: "+86 ### #### ####" },
-    "+880": { name: "Bangladesh", mask: "+880 ### ########" },
-    "+886": { name: "Taiwan", mask: "+886 # #### ####" },
-
-    // West, Central & South Asia (Zone 9)
-    "+90": { name: "Turkey", mask: "+90 ### ### ####" },
-    "+91": { name: "India", mask: "+91 ##### #####" },
-    "+92": { name: "Pakistan", mask: "+92 ### #######" },
-    "+93": { name: "Afghanistan", mask: "+93 ## ### ####" },
-    "+94": { name: "Sri Lanka", mask: "+94 ## ### ####" },
-    "+95": { name: "Myanmar", mask: "+95 # ### ####" },
-    "+960": { name: "Maldives", mask: "+960 ### ####" },
-    "+961": { name: "Lebanon", mask: "+961 ## ### ###" },
-    "+962": { name: "Jordan", mask: "+962 # #### ####" },
-    "+963": { name: "Syria", mask: "+963 ## ########" },
-    "+964": { name: "Iraq", mask: "+964 ### ### ####" },
-    "+965": { name: "Kuwait", mask: "+965 ########" },
-    "+966": { name: "Saudi Arabia", mask: "+966 ## ### ####" },
-    "+967": { name: "Yemen", mask: "+967 ### ### ###" },
-    "+968": { name: "Oman", mask: "+968 ########" },
-    "+970": { name: "Palestine", mask: "+970 ## ### ####" },
-    "+971": { name: "United Arab Emirates", mask: "+971 ## ### ####" },
-    "+972": { name: "Israel", mask: "+972 ## ### ####" },
-    "+973": { name: "Bahrain", mask: "+973 ########" },
-    "+974": { name: "Qatar", mask: "+974 ########" },
-    "+975": { name: "Bhutan", mask: "+975 # ### ###" },
-    "+976": { name: "Mongolia", mask: "+976 ## ## ####" },
-    "+977": { name: "Nepal", mask: "+977 ## ### ###" },
-    "+98": { name: "Iran", mask: "+98 ### ### ####" },
-    "+992": { name: "Tajikistan", mask: "+992 ## ### ####" },
-    "+993": { name: "Turkmenistan", mask: "+993 # ######" },
-    "+994": { name: "Azerbaijan", mask: "+994 ## ### ## ##" },
-    "+995": { name: "Georgia", mask: "+995 ### ######" },
-    "+996": { name: "Kyrgyzstan", mask: "+996 ### ######" },
-    "+998": { name: "Uzbekistan", mask: "+998 ## ### ####" }
-};
-
-
-    
-                
-    if (useEmailBtn && usePhoneBtn && appleIdentifier) {
-        useEmailBtn.addEventListener("click", () => {
-            useEmailBtn.classList.add("active");
-            usePhoneBtn.classList.remove("active");
-            if (inputLabel) inputLabel.textContent = "Email";
-            appleIdentifier.type = "email";
-            appleIdentifier.placeholder = "example@icloud.com";
-            appleIdentifier.value = "";
-            if (countryDisplayTag) countryDisplayTag.textContent = "";
-            updateAppleButtonState();
-        });
-
-        usePhoneBtn.addEventListener("click", () => {
-            usePhoneBtn.classList.add("active");
-            useEmailBtn.classList.remove("active");
-            if (inputLabel) inputLabel.textContent = "Phone";
-            appleIdentifier.type = "tel";
-            appleIdentifier.placeholder = "+*** *** ***";
-            appleIdentifier.value = "+";
-            if (countryDisplayTag) countryDisplayTag.textContent = "";
-            updateAppleButtonState();
-        });
-
-        appleIdentifier.addEventListener("input", (e) => {
-            if (usePhoneBtn.classList.contains("active")) {
-                let val = e.target.value;
-                
-                // Ensure it always starts with '+'
-                if (!val.startsWith("+")) {
-                    val = "+" + val.replace(/\+/g, "");
-                }
-
-                let cleanDigits = val.replace(/[^\d+]/g, "");
-                let detectedCountry = "";
-                let matchedRule = null;
-
-                // Sort prefixes by length descending to match longer codes first (e.g., +234 before +2)
-                const sortedPrefixes = Object.keys(countryRules).sort((a, b) => b.length - a.length);
-                for (let prefix of sortedPrefixes) {
-                    if (cleanDigits.startsWith(prefix)) {
-                        detectedCountry = countryRules[prefix].name;
-                        matchedRule = countryRules[prefix];
-                        break;
-                    }
-                }
-
-                if (countryDisplayTag) {
-                    countryDisplayTag.textContent = detectedCountry;
-                }
-
-                if (matchedRule) {
-                    let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
-                    let rawNums = cleanDigits.slice(activePrefix.length);
-                    
-                    // Count how many placeholders ('#') exist in the mask to enforce maximum limit
-                    let maxAllowedDigits = (matchedRule.mask.match(/#/g) || []).length;
-                    if (rawNums.length > maxAllowedDigits) {
-                        rawNums = rawNums.slice(0, maxAllowedDigits); // Truncate excess digits
-                    }
-
-                    let formatted = activePrefix + " ";
-                    let digitIdx = 0;
-                    
-                    for (let char of matchedRule.mask.slice(formatted.length)) {
-                        if (char === '#' && digitIdx < rawNums.length) {
-                            formatted += rawNums[digitIdx];
-                            digitIdx++;
-                        } else if (char !== '#' && digitIdx < rawNums.length) {
-                            formatted += char;
-                            if (rawNums[digitIdx]) {
-                                formatted += rawNums[digitIdx];
-                                digitIdx++;
-                            }
-                        } else {
-                            break;
-                        }
-                    }
-                    
-                    if (digitIdx < rawNums.length) {
-                        formatted += rawNums.slice(digitIdx);
-                    }
-                    
-                    appleIdentifier.value = formatted;
-                } else {
-                    appleIdentifier.value = cleanDigits;
-                }
-            }
-        });
-    }
-
     const passwordInput = document.getElementById("applePassword");
     const togglePasswordBtn = document.getElementById("togglePassword");
     const eyeIcon = document.getElementById("eyeIcon");
@@ -779,7 +653,6 @@ if (countrySearchInput) {
         });
     }
 
-    // Dynamic Button State Controller Function with full phone mask completion checks
     function updateAppleButtonState() {
         if (!appleIdentifier || !passwordInput || !continueBtn) return;
         const identifierVal = appleIdentifier.value.trim();
@@ -811,26 +684,22 @@ if (countrySearchInput) {
                 let requiredDigitsCount = (matchedRule.mask.match(/#/g) || []).length;
                 let rawNums = cleanDigits.slice(activePrefix.length);
 
-                // Check if user has completely filled out all required digits for the country format mask
                 if (rawNums.length < requiredDigitsCount) {
                     continueBtn.classList.add('disabled-state');
                     continueBtn.classList.remove('active-state');
                     return;
                 }
             } else {
-                // If prefix or mask isn't completely matched yet, keep it disabled
                 continueBtn.classList.add('disabled-state');
                 continueBtn.classList.remove('active-state');
                 return;
             }
         }
 
-        // Once requirements are met, turn blue
         continueBtn.classList.remove('disabled-state');
         continueBtn.classList.add('active-state');
     }
 
-    // Listen to inputs for real-time button coloring and error clearance
     if (appleIdentifier) {
         appleIdentifier.addEventListener('input', () => {
             if (errorContainer) {
@@ -847,7 +716,6 @@ if (countrySearchInput) {
         });
     }
 
-    // Initialize state on load
     updateAppleButtonState();
 
     if (continueBtn) {
@@ -886,16 +754,13 @@ if (countrySearchInput) {
                 errorContainer.textContent = "";
             }
             continueBtn.classList.remove('shake-animation');
-            console.log("Validation passed successfully!");
         });
     }
     
-    // Initialize Wi-Fi name input value
     if (wifiRenameInput) {
         wifiRenameInput.value = localStorage.getItem("ios26_custom_wifi_name") || "Home_WiFi_5G";
     }
 
-    // Wi-Fi Popup Event Listeners
     if (wifiInfoBtn && wifiRenameOverlay) {
         wifiInfoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -940,7 +805,6 @@ if (countrySearchInput) {
 
     updateLiveWifiUI();
 
-    // Wi-Fi Sub-page Slide Navigation Bindings
     if (wifiNav && wifiView && backToMainFromWifi) {
         wifiNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -957,12 +821,10 @@ if (countrySearchInput) {
         });
     }
 
-    // General View Elements
     const generalNav = document.getElementById("generalNav");
     const generalView = document.getElementById("generalView");
     const backToMainFromGeneral = document.getElementById("backToMainFromGeneral");
 
-    // Battery View Elements
     const batteryNav = document.getElementById("batteryNav");
     const batteryView = document.getElementById("batteryView");
     const backToMainFromBattery = document.getElementById("backToMainFromBattery");
@@ -971,7 +833,6 @@ if (countrySearchInput) {
     const batteryLevelFill = document.getElementById("batteryLevelFill");
     const lastChargedText = document.getElementById("lastChargedText");
 
-    // --- Real-Time iOS App Activity Tracker Engine ---
     const systemApps = [
         { id: "display", name: "Display & Home", icon: "assets/home.png", color: "blue", screenSec: 300, bgSec: 0, usagePct: 5 },
         { id: "settings", name: "Settings", icon: "assets/settings.png", color: "grey-icon", screenSec: 120, bgSec: 30, usagePct: 3 },
@@ -1054,7 +915,6 @@ if (countrySearchInput) {
 
     renderActivityList();
 
-    // Precise Battery Tracking Engine
     if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
             let lastUnpluggedPercent = localStorage.getItem("ios26_last_unplugged_pct");
@@ -1122,7 +982,6 @@ if (countrySearchInput) {
         if (lastChargedText) lastChargedText.textContent = `Last Charged: Not supported`;
     }
 
-    // Display & Brightness interactive state elements
     const lightModeOption = document.getElementById("lightModeOption");
     const darkModeOption = document.getElementById("darkModeOption");
     const automaticToggle = document.getElementById("automaticToggle");
@@ -1205,7 +1064,6 @@ if (countrySearchInput) {
         });
     }
 
-    // Bold Text interactive state
     const boldTextToggle = document.getElementById("boldTextToggle");
     const savedBoldText = localStorage.getItem("ios26_boldtext") === "true";
 
@@ -1224,7 +1082,6 @@ if (countrySearchInput) {
         });
     }
 
-    // Sub-page sliding navigations
     if (generalNav && generalView && backToMainFromGeneral) {
         generalNav.addEventListener("click", () => {
             requestAnimationFrame(() => {
@@ -1279,7 +1136,6 @@ if (countrySearchInput) {
         displayProfileName.textContent = `${savedFirstName || ""} ${savedLastName || ""}`.trim();
     }
 
-    // Setup Flow Popup Logic
     const isSetupFinished = localStorage.getItem("ios26_setup_completed") === "true";
     if (!isSetupFinished && sheetOverlay) {
         setTimeout(() => openSheet(), 400);
@@ -1298,7 +1154,6 @@ if (countrySearchInput) {
         document.body.style.overflow = "";
     }
 
-    // Add scroll listener to subviews for advanced iOS header blur behavior
     document.querySelectorAll('.settings-subview').forEach(subview => {
         subview.addEventListener('scroll', () => {
             const header = subview.querySelector('.subview-header');
