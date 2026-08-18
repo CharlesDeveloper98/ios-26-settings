@@ -1072,19 +1072,18 @@
                 <button class="type-switch-btn" id="usePhoneBtn">Phone Number</button>
             </div>
 
-            <!-- Settings Card: Email & Password Fields -->
+                        <!-- Settings Card: Email & Password Fields in Single Unified Container -->
             <div class="settings-card group-card">
                 <div class="input-row" id="inputRowContainer">
                     <label id="inputLabel" for="appleIdentifier">Email</label>
                     <div class="input-field-wrapper" style="flex-grow: 1; display: flex; align-items: center; position: relative;">
-    <input type="email" id="appleIdentifier" placeholder="example@icloud.com" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none; padding-right: 90px;">
-    <!-- Tappable Country Name Container at Far Right -->
-    <div id="tappableCountryContainer" class="tappable-country-container">
-        <span id="countryDisplayTag" class="country-display-tag"></span>
-    </div>
-</div>
-
-
+                        <input type="email" id="appleIdentifier" placeholder="example@icloud.com" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none; padding-right: 90px;">
+                        <!-- Tappable Country Name Single Container (hidden by default unless phone mode is active) -->
+                        <div id="tappableCountryContainer" class="tappable-country-container" style="display: none; align-items: center; cursor: pointer; position: absolute; right: 0;">
+                            <span id="countryDisplayTag" class="country-display-tag" style="font-size: 15px; color: var(--text-sub);"></span>
+                            <span class="chevron-icon" style="margin-left: 4px; color: var(--text-sub);">›</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-divider"></div>
                 <div class="input-row">
@@ -1102,6 +1101,7 @@
                 </div>
             </div>
 
+
             <!-- Continue Button Container with iOS 26 Error Alert Placement -->
             <div style="margin-top: 24px; display: flex; flex-direction: column; align-items: center; padding: 0 16px;">
                 <button type="button" id="continueButton" class="liquid-glass-btn ios-blue" style="width: 100%; background-color: #0071e3; color: white; border: none; border-radius: 14px; height: 50px; font-size: 16px; font-weight: 500; cursor: pointer;">
@@ -1118,22 +1118,27 @@
         
 
 
-            <!-- iOS 26 Alphabetical Country Picker Pop-up Page -->
+                       <!-- iOS 26 "Add New Keyboard" Styled Country Picker Pop-up Page -->
     <div class="ios26-country-sheet-overlay" id="countrySheetOverlay">
         <div class="ios26-country-sheet-container" id="countrySheetContainer">
             <div class="sheet-indicator"></div>
             <div class="country-sheet-header">
-                <h3 class="country-sheet-title">Select Country</h3>
-                <button type="button" class="country-sheet-close-btn" id="closeCountrySheetBtn">Done</button>
+                <button type="button" class="country-sheet-cancel-btn" id="closeCountrySheetBtn">Cancel</button>
+                <h3 class="country-sheet-title">Countries</h3>
+                <div style="width: 50px;"></div> <!-- Spacer for perfect iOS title centering -->
             </div>
-            <div class="country-search-box-wrapper">
-                <input type="text" id="countrySearchInput" placeholder="Search Country..." autocomplete="off">
+            <div class="country-search-box-wrapper" style="padding: 10px 16px;">
+                <div style="background: var(--grouped-background, rgba(120,120,128,0.12)); border-radius: 10px; display: flex; align-items: center; padding: 6px 10px;">
+                    <span style="color: var(--text-sub); margin-right: 6px;">🔍</span>
+                    <input type="text" id="countrySearchInput" placeholder="Search" autocomplete="off" style="background: transparent; border: none; outline: none; width: 100%; color: var(--text-main); font-size: 15px;">
+                </div>
             </div>
-            <div class="country-list-scroll-view" id="countryListScrollView">
-                <!-- Populated dynamically from script.js -->
+            <div class="country-list-scroll-view" id="countryListScrollView" style="overflow-y: auto; max-height: 60vh; padding: 0 16px;">
+                <!-- Populated dynamically from script.js matching iOS Keyboard style rows -->
             </div>
         </div>
     </div>
+
 
         
         
