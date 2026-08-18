@@ -979,7 +979,7 @@ html.bold-text-enabled .subview-title {
 
 
 
-/* Individual containers below the Wi-Fi toggle */
+    /* Individual containers below the Wi-Fi toggle */
 .wifi-animatable-section {
     max-height: 500px;
     opacity: 1;
