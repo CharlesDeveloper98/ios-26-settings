@@ -113,56 +113,57 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-        // Render Alphabetical List with iOS Keyboard Picker Styling
-    function renderCountryPickerList(filterText = "") {
-        if (!countryListScrollView) return;
+      // Render Alphabetical List with iOS Keyboard Picker Styling inside Single Container rows
+function renderCountryPickerList(filterText = "") {
+    if (!countryListScrollView) return;
 
-        let sortedEntries = Object.entries(countryRules).sort((a, b) => {
-            return a[1].name.localeCompare(b[1].name);
-        });
+    let sortedEntries = Object.entries(countryRules).sort((a, b) => {
+        return a[1].name.localeCompare(b[1].name);
+    });
 
-        if (filterText.trim() !== "") {
-            const query = filterText.toLowerCase();
-            sortedEntries = sortedEntries.filter(([code, data]) => 
-                data.name.toLowerCase().includes(query) || code.includes(query)
-            );
-        }
-
-        countryListScrollView.innerHTML = sortedEntries.map(([code, data]) => {
-            return `
-                <div class="country-picker-row" data-code="${code}" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid var(--separator-color, rgba(255,255,255,0.1)); cursor: pointer;">
-                    <div class="country-row-left" style="display: flex; align-items: center;">
-                        <span class="country-name-text" style="font-size: 16px; color: var(--text-main);">${data.name}</span>
-                    </div>
-                    <div style="display: flex; align-items: center;">
-                        <span class="country-code-far-right" style="font-size: 15px; color: var(--text-sub); margin-right: 8px;">${code}</span>
-                        <span class="country-row-check" style="color: #0071e3; font-weight: 600; width: 16px;"></span>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        // Attach click listeners to rows
-        document.querySelectorAll(".country-picker-row").forEach(row => {
-            row.addEventListener("click", () => {
-                const selectedCode = row.getAttribute("data-code");
-                const matchedRule = countryRules[selectedCode];
-
-                if (appleIdentifier && matchedRule) {
-                    appleIdentifier.value = selectedCode + " ";
-                    if (countryDisplayTag) {
-                        countryDisplayTag.textContent = matchedRule.name;
-                    }
-                    if (tappableCountryContainer) {
-                        tappableCountryContainer.style.display = "flex";
-                    }
-                }
-
-                countrySheetOverlay.classList.remove("active");
-                updateAppleButtonState();
-            });
-        });
+    if (filterText.trim() !== "") {
+        const query = filterText.toLowerCase();
+        sortedEntries = sortedEntries.filter(([code, data]) => 
+            data.name.toLowerCase().includes(query) || code.includes(query)
+        );
     }
+
+    countryListScrollView.innerHTML = sortedEntries.map(([code, data]) => {
+        return `
+            <div class="country-picker-row settings-row clickable" data-code="${code}">
+                <div class="row-left">
+                    <span class="row-label-text">${data.name}</span>
+                </div>
+                <div class="row-right">
+                    <span class="row-status-text">${code}</span>
+                    <span class="country-row-check chevron-icon">✓</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Attach click listeners to rows
+    document.querySelectorAll(".country-picker-row").forEach(row => {
+        row.addEventListener("click", () => {
+            const selectedCode = row.getAttribute("data-code");
+            const matchedRule = countryRules[selectedCode];
+
+            if (appleIdentifier && matchedRule) {
+                appleIdentifier.value = selectedCode + " ";
+                if (countryDisplayTag) {
+                    countryDisplayTag.textContent = matchedRule.name;
+                }
+                if (tappableCountryContainer) {
+                    tappableCountryContainer.style.display = "flex";
+                }
+            }
+
+            countrySheetOverlay.classList.remove("active");
+            updateAppleButtonState();
+        });
+    });
+}
+
 
 
     // Search Filtering Listener
