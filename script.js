@@ -81,6 +81,97 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+
+        // --- iOS 26 Tappable Country Sheet Engine ---
+    const tappableCountryContainer = document.getElementById("tappableCountryContainer");
+    const countrySheetOverlay = document.getElementById("countrySheetOverlay");
+    const closeCountrySheetBtn = document.getElementById("closeCountrySheetBtn");
+    const countryListScrollView = document.getElementById("countryListScrollView");
+    const countrySearchInput = document.getElementById("countrySearchInput");
+
+    // Open Pop-up Sheet
+    if (tappableCountryContainer && countrySheetOverlay) {
+        tappableCountryContainer.addEventListener("click", () => {
+            renderCountryPickerList("");
+            countrySheetOverlay.classList.add("active");
+        });
+    }
+
+    // Close Pop-up Sheet
+    if (closeCountrySheetBtn && countrySheetOverlay) {
+        closeCountrySheetBtn.addEventListener("click", () => {
+            countrySheetOverlay.classList.remove("active");
+        });
+    }
+
+    if (countrySheetOverlay) {
+        countrySheetOverlay.addEventListener("click", (e) => {
+            if (e.target === countrySheetOverlay) {
+                countrySheetOverlay.classList.remove("active");
+            }
+        });
+    }
+
+    // Render Alphabetical List with Flags & Codes
+    function renderCountryPickerList(filterText = "") {
+        if (!countryListScrollView) return;
+
+        // Extract and sort entries alphabetically by country name
+        let sortedEntries = Object.entries(countryRules).sort((a, b) => {
+            return a[1].name.localeCompare(b[1].name);
+        });
+
+        if (filterText.trim() !== "") {
+            const query = filterText.toLowerCase();
+            sortedEntries = sortedEntries.filter(([code, data]) => 
+                data.name.toLowerCase().includes(query) || code.includes(query)
+            );
+        }
+
+        countryListScrollView.innerHTML = sortedEntries.map(([code, data]) => {
+            return `
+                <div class="country-picker-row" data-code="${code}">
+                    <div class="country-row-left">
+                        <span class="country-flag-icon">${data.flag || "🌍"}</span>
+                        <span class="country-name-text">${data.name}</span>
+                    </div>
+                    <span class="country-code-far-right">${code}</span>
+                </div>
+            `;
+        }).join('');
+
+        // Attach click listeners to list items for auto-updating input field
+        document.querySelectorAll(".country-picker-row").forEach(row => {
+            row.addEventListener("click", () => {
+                const selectedCode = row.getAttribute("data-code");
+                const matchedRule = countryRules[selectedCode];
+
+                if (appleIdentifier && matchedRule) {
+                    appleIdentifier.value = selectedCode + " ";
+                    if (countryDisplayTag) {
+                        countryDisplayTag.textContent = matchedRule.name;
+                    }
+                    if (tappableCountryContainer) {
+                        tappableCountryContainer.style.display = "flex";
+                    }
+                }
+
+                countrySheetOverlay.classList.remove("active");
+                updateAppleButtonState();
+            });
+        });
+    }
+
+    // Search Filtering Listener
+    if (countrySearchInput) {
+        countrySearchInput.addEventListener("input", (e) => {
+            renderCountryPickerList(e.target.value);
+        });
+    }
+
+    
+
     // --- iOS 26 Apple Account Signup Modal Engine ---
     const finishSetupNav = document.getElementById("finishSetupNav");
     const profileCardLink = document.querySelector(".profile-card-link");
@@ -360,229 +451,230 @@ document.addEventListener("DOMContentLoaded", () => {
     // Country code prefix mapping dictionary & formatting definitions
     const countryRules = {
     // North America & Caribbean (Zone 1)
-    "+1": { name: "USA / Canada", mask: "+1 (###) ###-####" },
-    "+1242": { name: "Bahamas", mask: "+1 (242) ###-####" },
-    "+1246": { name: "Barbados", mask: "+1 (246) ###-####" },
-    "+1264": { name: "Anguilla", mask: "+1 (264) ###-####" },
-    "+1268": { name: "Antigua and Barbuda", mask: "+1 (268) ###-####" },
-    "+1284": { name: "British Virgin Islands", mask: "+1 (284) ###-####" },
-    "+1345": { name: "Cayman Islands", mask: "+1 (345) ###-####" },
-    "+1441": { name: "Bermuda", mask: "+1 (441) ###-####" },
-    "+1473": { name: "Grenada", mask: "+1 (473) ###-####" },
-    "+1649": { name: "Turks and Caicos Islands", mask: "+1 (649) ###-####" },
-    "+1664": { name: "Montserrat", mask: "+1 (664) ###-####" },
-    "+1671": { name: "Guam", mask: "+1 (671) ###-####" },
-    "+1684": { name: "American Samoa", mask: "+1 (684) ###-####" },
-    "+1758": { name: "Saint Lucia", mask: "+1 (758) ###-####" },
-    "+1767": { name: "Dominica", mask: "+1 (767) ###-####" },
-    "+1784": { name: "Saint Vincent and the Grenadines", mask: "+1 (784) ###-####" },
-    "+1809": { name: "Dominican Republic", mask: "+1 (809) ###-####" },
-    "+1829": { name: "Dominican Republic", mask: "+1 (829) ###-####" },
-    "+1849": { name: "Dominican Republic", mask: "+1 (849) ###-####" },
-    "+1868": { name: "Trinidad and Tobago", mask: "+1 (868) ###-####" },
-    "+1876": { name: "Jamaica", mask: "+1 (876) ###-####" },
+    "+1": { name: "USA / Canada", mask: "+1 (###) ###-####", flag: "🇺🇸🇨🇦" },
+    "+1242": { name: "Bahamas", mask: "+1 (242) ###-####", flag: "🇧🇸" },
+    "+1246": { name: "Barbados", mask: "+1 (246) ###-####", flag: "🇧🇧" },
+    "+1264": { name: "Anguilla", mask: "+1 (264) ###-####", flag: "🇦🇮" },
+    "+1268": { name: "Antigua and Barbuda", mask: "+1 (268) ###-####", flag: "🇦🇬" },
+    "+1284": { name: "British Virgin Islands", mask: "+1 (284) ###-####", flag: "🇻🇬" },
+    "+1345": { name: "Cayman Islands", mask: "+1 (345) ###-####", flag: "🇰🇾" },
+    "+1441": { name: "Bermuda", mask: "+1 (441) ###-####", flag: "🇧🇲" },
+    "+1473": { name: "Grenada", mask: "+1 (473) ###-####", flag: "🇬🇩" },
+    "+1649": { name: "Turks and Caicos Islands", mask: "+1 (649) ###-####", flag: "🇹🇨" },
+    "+1664": { name: "Montserrat", mask: "+1 (664) ###-####", flag: "🇲🇸" },
+    "+1671": { name: "Guam", mask: "+1 (671) ###-####", flag: "🇬🇺" },
+    "+1684": { name: "American Samoa", mask: "+1 (684) ###-####", flag: "🇦🇸" },
+    "+1758": { name: "Saint Lucia", mask: "+1 (758) ###-####", flag: "🇱🇨" },
+    "+1767": { name: "Dominica", mask: "+1 (767) ###-####", flag: "🇩🇲" },
+    "+1784": { name: "Saint Vincent and the Grenadines", mask: "+1 (784) ###-####", flag: "🇻🇨" },
+    "+1809": { name: "Dominican Republic", mask: "+1 (809) ###-####", flag: "🇩🇴" },
+    "+1829": { name: "Dominican Republic", mask: "+1 (829) ###-####", flag: "🇩🇴" },
+    "+1849": { name: "Dominican Republic", mask: "+1 (849) ###-####", flag: "🇩🇴" },
+    "+1868": { name: "Trinidad and Tobago", mask: "+1 (868) ###-####", flag: "🇹🇹" },
+    "+1876": { name: "Jamaica", mask: "+1 (876) ###-####", flag: "🇯🇲" },
 
     // Africa (Zone 2)
-    "+20": { name: "Egypt", mask: "+20 ### ### ####" },
-    "+212": { name: "Morocco", mask: "+212 ## ####-###" },
-    "+213": { name: "Algeria", mask: "+213 ## ### ####" },
-    "+216": { name: "Tunisia", mask: "+216 ## ### ###" },
-    "+218": { name: "Libya", mask: "+218 ## ### ####" },
-    "+220": { name: "Gambia", mask: "+220 ### ####" },
-    "+221": { name: "Senegal", mask: "+221 ## ### ####" },
-    "+222": { name: "Mauritania", mask: "+222 ## ## ####" },
-    "+223": { name: "Mali", mask: "+223 ## ## ####" },
-    "+224": { name: "Guinea", mask: "+224 ### ## ## ##" },
-    "+225": { name: "Ivory Coast", mask: "+225 ## ## ## ##" },
-    "+226": { name: "Burkina Faso", mask: "+226 ## ## ####" },
-    "+227": { name: "Niger", mask: "+227 ## ## ####" },
-    "+228": { name: "Togo", mask: "+228 ## ## ####" },
-    "+229": { name: "Benin", mask: "+229 ## ## ####" },
-    "+230": { name: "Mauritius", mask: "+230 ### ####" },
-    "+231": { name: "Liberia", mask: "+231 ### ### ###" },
-    "+232": { name: "Sierra Leone", mask: "+232 ## ######" },
-    "+233": { name: "Ghana", mask: "+233 ## ### ####" },
-    "+234": { name: "Nigeria", mask: "+234 ### ### ####" },
-    "+235": { name: "Chad", mask: "+235 ## ## ## ##" },
-    "+236": { name: "Central African Republic", mask: "+236 ## ## ####" },
-    "+237": { name: "Cameroon", mask: "+237 #### ####" },
-    "+238": { name: "Cape Verde", mask: "+238 ### ## ##" },
-    "+239": { name: "Sao Tome and Principe", mask: "+239 ## #####" },
-    "+240": { name: "Equatorial Guinea", mask: "+240 ### ### ###" },
-    "+241": { name: "Gabon", mask: "+241 # ## ## ##" },
-    "+242": { name: "Republic of the Congo", mask: "+242 ## ### ####" },
-    "+243": { name: "Democratic Republic of the Congo", mask: "+243 ### ### ###" },
-    "+244": { name: "Angola", mask: "+244 ### ### ###" },
-    "+245": { name: "Guinea-Bissau", mask: "+245 # ######" },
-    "+248": { name: "Seychelles", mask: "+248 # ### ###" },
-    "+249": { name: "Sudan", mask: "+249 ## ### ####" },
-    "+250": { name: "Rwanda", mask: "+250 ### ### ###" },
-    "+251": { name: "Ethiopia", mask: "+251 ## ### ####" },
-    "+252": { name: "Somalia", mask: "+252 # ### ###" },
-    "+253": { name: "Djibouti", mask: "+253 ## ## ## ##" },
-    "+254": { name: "Kenya", mask: "+254 ### ######" },
-    "+255": { name: "Tanzania", mask: "+255 ## ### ####" },
-    "+256": { name: "Uganda", mask: "+256 ### ######" },
-    "+257": { name: "Burundi", mask: "+257 ## ## ####" },
-    "+258": { name: "Mozambique", mask: "+258 ## ### ###" },
-    "+260": { name: "Zambia", mask: "+260 ## #######" },
-    "+261": { name: "Madagascar", mask: "+261 ## ## #####" },
-    "+263": { name: "Zimbabwe", mask: "+263 # ######" },
-    "+264": { name: "Namibia", mask: "+264 ## ### ####" },
-    "+265": { name: "Malawi", mask: "+265 # ### ####" },
-    "+266": { name: "Lesotho", mask: "+266 # ### ####" },
-    "+267": { name: "Botswana", mask: "+267 ## ### ###" },
-    "+268": { name: "Eswatini", mask: "+268 ## ## ####" },
-    "+269": { name: "Comoros", mask: "+269 ## ## ####" },
-    "+27": { name: "South Africa", mask: "+27 ## ### ####" },
+    "+20": { name: "Egypt", mask: "+20 ### ### ####", flag: "🇪🇬" },
+    "+212": { name: "Morocco", mask: "+212 ## ####-###", flag: "🇲🇦" },
+    "+213": { name: "Algeria", mask: "+213 ## ### ####", flag: "🇩🇿" },
+    "+216": { name: "Tunisia", mask: "+216 ## ### ###", flag: "🇹🇳" },
+    "+218": { name: "Libya", mask: "+218 ## ### ####", flag: "🇱🇾" },
+    "+220": { name: "Gambia", mask: "+220 ### ####", flag: "🇬🇲" },
+    "+221": { name: "Senegal", mask: "+221 ## ### ####", flag: "🇸🇳" },
+    "+222": { name: "Mauritania", mask: "+222 ## ## ####", flag: "🇲🇷" },
+    "+223": { name: "Mali", mask: "+223 ## ## ####", flag: "🇲🇱" },
+    "+224": { name: "Guinea", mask: "+224 ### ## ## ##", flag: "🇬🇳" },
+    "+225": { name: "Ivory Coast", mask: "+225 ## ## ## ##", flag: "🇨🇮" },
+    "+226": { name: "Burkina Faso", mask: "+226 ## ## ####", flag: "🇧🇫" },
+    "+227": { name: "Niger", mask: "+227 ## ## ####", flag: "🇳🇪" },
+    "+228": { name: "Togo", mask: "+228 ## ## ####", flag: "🇹🇬" },
+    "+229": { name: "Benin", mask: "+229 ## ## ####", flag: "🇧🇯" },
+    "+230": { name: "Mauritius", mask: "+230 ### ####", flag: "🇲🇺" },
+    "+231": { name: "Liberia", mask: "+231 ### ### ###", flag: "🇱🇷" },
+    "+232": { name: "Sierra Leone", mask: "+232 ## ######", flag: "🇸🇱" },
+    "+233": { name: "Ghana", mask: "+233 ## ### ####", flag: "🇬🇭" },
+    "+234": { name: "Nigeria", mask: "+234 ### ### ####", flag: "🇳🇬" },
+    "+235": { name: "Chad", mask: "+235 ## ## ## ##", flag: "🇹🇩" },
+    "+236": { name: "Central African Republic", mask: "+236 ## ## ####", flag: "🇨🇫" },
+    "+237": { name: "Cameroon", mask: "+237 #### ####", flag: "🇨🇲" },
+    "+238": { name: "Cape Verde", mask: "+238 ### ## ##", flag: "🇨🇻" },
+    "+239": { name: "Sao Tome and Principe", mask: "+239 ## #####", flag: "🇸🇹" },
+    "+240": { name: "Equatorial Guinea", mask: "+240 ### ### ###", flag: "🇬🇶" },
+    "+241": { name: "Gabon", mask: "+241 # ## ## ##", flag: "🇬🇦" },
+    "+242": { name: "Republic of the Congo", mask: "+242 ## ### ####", flag: "🇨🇬" },
+    "+243": { name: "Democratic Republic of the Congo", mask: "+243 ### ### ###", flag: "🇨🇩" },
+    "+244": { name: "Angola", mask: "+244 ### ### ###", flag: "🇦🇴" },
+    "+245": { name: "Guinea-Bissau", mask: "+245 # ######", flag: "🇬🇼" },
+    "+248": { name: "Seychelles", mask: "+248 # ### ###", flag: "🇸🇨" },
+    "+249": { name: "Sudan", mask: "+249 ## ### ####", flag: "🇸🇩" },
+    "+250": { name: "Rwanda", mask: "+250 ### ### ###", flag: "🇷🇼" },
+    "+251": { name: "Ethiopia", mask: "+251 ## ### ####", flag: "🇪🇹" },
+    "+252": { name: "Somalia", mask: "+252 # ### ###", flag: "🇸🇴" },
+    "+253": { name: "Djibouti", mask: "+253 ## ## ## ##", flag: "🇩🇯" },
+    "+254": { name: "Kenya", mask: "+254 ### ######", flag: "🇰🇪" },
+    "+255": { name: "Tanzania", mask: "+255 ## ### ####", flag: "🇹🇿" },
+    "+256": { name: "Uganda", mask: "+256 ### ######", flag: "🇺🇬" },
+    "+257": { name: "Burundi", mask: "+257 ## ## ####", flag: "🇧🇮" },
+    "+258": { name: "Mozambique", mask: "+258 ## ### ###", flag: "🇲🇿" },
+    "+260": { name: "Zambia", mask: "+260 ## #######", flag: "🇿🇲" },
+    "+261": { name: "Madagascar", mask: "+261 ## ## #####", flag: "🇲🇬" },
+    "+263": { name: "Zimbabwe", mask: "+263 # ######", flag: "🇿🇼" },
+    "+264": { name: "Namibia", mask: "+264 ## ### ####", flag: "🇳🇦" },
+    "+265": { name: "Malawi", mask: "+265 # ### ####", flag: "🇲🇼" },
+    "+266": { name: "Lesotho", mask: "+266 # ### ####", flag: "🇱🇸" },
+    "+267": { name: "Botswana", mask: "+267 ## ### ###", flag: "🇧🇼" },
+    "+268": { name: "Eswatini", mask: "+268 ## ## ####", flag: "🇸🇿" },
+    "+269": { name: "Comoros", mask: "+269 ## ## ####", flag: "🇰🇲" },
+    "+27": { name: "South Africa", mask: "+27 ## ### ####", flag: "🇿🇦" },
 
     // Europe (Zones 3 & 4)
-    "+30": { name: "Greece", mask: "+30 ### ### ####" },
-    "+31": { name: "Netherlands", mask: "+31 # ########" },
-    "+32": { name: "Belgium", mask: "+32 ### ## ## ##" },
-    "+33": { name: "France", mask: "+33 # ## ## ## ##" },
-    "+34": { name: "Spain", mask: "+34 ### ### ###" },
-    "+350": { name: "Gibraltar", mask: "+350 ########" },
-    "+351": { name: "Portugal", mask: "+351 ### ### ###" },
-    "+352": { name: "Luxembourg", mask: "+352 ### ###" },
-    "+353": { name: "Ireland", mask: "+353 ## ### ####" },
-    "+354": { name: "Iceland", mask: "+354 ### ####" },
-    "+355": { name: "Albania", mask: "+355 ## ### ###" },
-    "+356": { name: "Malta", mask: "+356 #### ####" },
-    "+357": { name: "Cyprus", mask: "+357 ## ######" },
-    "+358": { name: "Finland", mask: "+358 ## ### ## ##" },
-    "+359": { name: "Bulgaria", mask: "+359 ### ### ###" },
-    "+36": { name: "Hungary", mask: "+36 ## ### ####" },
-    "+370": { name: "Lithuania", mask: "+370 ### #####" },
-    "+371": { name: "Latvia", mask: "+371 ## ### ###" },
-    "+372": { name: "Estonia", mask: "+372 #### ####" },
-    "+373": { name: "Moldova", mask: "+373 #### ####" },
-    "+374": { name: "Armenia", mask: "+374 ## ######" },
-    "+375": { name: "Belarus", mask: "+375 ## ### ## ##" },
-    "+376": { name: "Andorra", mask: "+376 ### ###" },
-    "+377": { name: "Monaco", mask: "+377 # ## ## ## ##" },
-    "+378": { name: "San Marino", mask: "+378 #### ######" },
-    "+380": { name: "Ukraine", mask: "+380 ## ### ## ##" },
-    "+381": { name: "Serbia", mask: "+381 ## ### ####" },
-    "+382": { name: "Montenegro", mask: "+382 ## ### ###" },
-    "+383": { name: "Kosovo", mask: "+383 ## ### ###" },
-    "+385": { name: "Croatia", mask: "+385 ## ### ####" },
-    "+386": { name: "Slovenia", mask: "+386 ## ### ###" },
-    "+387": { name: "Bosnia and Herzegovina", mask: "+387 ## ######" },
-    "+389": { name: "North Macedonia", mask: "+389 ## ### ###" },
-    "+39": { name: "Italy", mask: "+39 ### ### ####" },
-    "+40": { name: "Romania", mask: "+40 ### ### ###" },
-    "+41": { name: "Switzerland", mask: "+41 ## ### ####" },
-    "+420": { name: "Czech Republic", mask: "+420 ### ### ###" },
-    "+421": { name: "Slovakia", mask: "+421 ### ### ###" },
-    "+423": { name: "Liechtenstein", mask: "+423 ### ####" },
-    "+43": { name: "Austria", mask: "+43 ### ########" },
-    "+44": { name: "UK", mask: "+44 #### ######" },
-    "+45": { name: "Denmark", mask: "+45 ## ## ## ##" },
-    "+46": { name: "Sweden", mask: "+46 ## ### ## ##" },
-    "+47": { name: "Norway", mask: "+47 ### ## ###" },
-    "+48": { name: "Poland", mask: "+48 ### ### ###" },
-    "+49": { name: "Germany", mask: "+49 ### #######" },
+    "+30": { name: "Greece", mask: "+30 ### ### ####", flag: "🇬🇷" },
+    "+31": { name: "Netherlands", mask: "+31 # ########", flag: "🇳🇱" },
+    "+32": { name: "Belgium", mask: "+32 ### ## ## ##", flag: "🇧🇪" },
+    "+33": { name: "France", mask: "+33 # ## ## ## ##", flag: "🇫🇷" },
+    "+34": { name: "Spain", mask: "+34 ### ### ###", flag: "🇪🇸" },
+    "+350": { name: "Gibraltar", mask: "+350 ########", flag: "🇬🇮" },
+    "+351": { name: "Portugal", mask: "+351 ### ### ###", flag: "🇵🇹" },
+    "+352": { name: "Luxembourg", mask: "+352 ### ###", flag: "🇱🇺" },
+    "+353": { name: "Ireland", mask: "+353 ## ### ####", flag: "🇮🇪" },
+    "+354": { name: "Iceland", mask: "+354 ### ####", flag: "🇮🇸" },
+    "+355": { name: "Albania", mask: "+355 ## ### ###", flag: "🇦🇱" },
+    "+356": { name: "Malta", mask: "+356 #### ####", flag: "🇲🇹" },
+    "+357": { name: "Cyprus", mask: "+357 ## ######", flag: "🇨🇾" },
+    "+358": { name: "Finland", mask: "+358 ## ### ## ##", flag: "🇫🇮" },
+    "+359": { name: "Bulgaria", mask: "+359 ### ### ###", flag: "🇧🇬" },
+    "+36": { name: "Hungary", mask: "+36 ## ### ####", flag: "🇭🇺" },
+    "+370": { name: "Lithuania", mask: "+370 ### #####", flag: "🇱🇹" },
+    "+371": { name: "Latvia", mask: "+371 ## ### ###", flag: "🇱🇻" },
+    "+372": { name: "Estonia", mask: "+372 #### ####", flag: "🇪🇪" },
+    "+373": { name: "Moldova", mask: "+373 #### ####", flag: "🇲🇩" },
+    "+374": { name: "Armenia", mask: "+374 ## ######", flag: "🇦🇲" },
+    "+375": { name: "Belarus", mask: "+375 ## ### ## ##", flag: "🇧🇾" },
+    "+376": { name: "Andorra", mask: "+376 ### ###", flag: "🇦🇩" },
+    "+377": { name: "Monaco", mask: "+377 # ## ## ## ##", flag: "🇲🇨" },
+    "+378": { name: "San Marino", mask: "+378 #### ######", flag: "🇸🇲" },
+    "+380": { name: "Ukraine", mask: "+380 ## ### ## ##", flag: "🇺🇦" },
+    "+381": { name: "Serbia", mask: "+381 ## ### ####", flag: "🇷🇸" },
+    "+382": { name: "Montenegro", mask: "+382 ## ### ###", flag: "🇲🇪" },
+    "+383": { name: "Kosovo", mask: "+383 ## ### ###", flag: "🇽🇰" },
+    "+385": { name: "Croatia", mask: "+385 ## ### ####", flag: "🇭🇷" },
+    "+386": { name: "Slovenia", mask: "+386 ## ### ###", flag: "🇸🇮" },
+    "+387": { name: "Bosnia and Herzegovina", mask: "+387 ## ######", flag: "🇧🇦" },
+    "+389": { name: "North Macedonia", mask: "+389 ## ### ###", flag: "🇲🇰" },
+    "+39": { name: "Italy", mask: "+39 ### ### ####", flag: "🇮🇹" },
+    "+40": { name: "Romania", mask: "+40 ### ### ###", flag: "🇷🇴" },
+    "+41": { name: "Switzerland", mask: "+41 ## ### ####", flag: "🇨🇭" },
+    "+420": { name: "Czech Republic", mask: "+420 ### ### ###", flag: "🇨🇿" },
+    "+421": { name: "Slovakia", mask: "+421 ### ### ###", flag: "🇸🇰" },
+    "+423": { name: "Liechtenstein", mask: "+423 ### ####", flag: "🇱🇮" },
+    "+43": { name: "Austria", mask: "+43 ### ########", flag: "🇦🇹" },
+    "+44": { name: "UK", mask: "+44 #### ######", flag: "🇬🇧" },
+    "+45": { name: "Denmark", mask: "+45 ## ## ## ##", flag: "🇩🇰" },
+    "+46": { name: "Sweden", mask: "+46 ## ### ## ##", flag: "🇸🇪" },
+    "+47": { name: "Norway", mask: "+47 ### ## ###", flag: "🇳🇴" },
+    "+48": { name: "Poland", mask: "+48 ### ### ###", flag: "🇵🇱" },
+    "+49": { name: "Germany", mask: "+49 ### #######", flag: "🇩🇪" },
 
     // South & Central America (Zone 5)
-    "+500": { name: "Falkland Islands", mask: "+500 #####" },
-    "+501": { name: "Belize", mask: "+501 ### ####" },
-    "+502": { name: "Guatemala", mask: "+502 #### ####" },
-    "+503": { name: "El Salvador", mask: "+503 #### ####" },
-    "+504": { name: "Honduras", mask: "+504 #### ####" },
-    "+505": { name: "Nicaragua", mask: "+505 #### ####" },
-    "+506": { name: "Costa Rica", mask: "+506 #### ####" },
-    "+507": { name: "Panama", mask: "+507 #### ####" },
-    "+508": { name: "Saint Pierre and Miquelon", mask: "+508 ## ## ##" },
-    "+509": { name: "Haiti", mask: "+509 #### ####" },
-    "+51": { name: "Peru", mask: "+51 ### ### ###" },
-    "+52": { name: "Mexico", mask: "+52 ## #### ####" },
-    "+53": { name: "Cuba", mask: "+53 # #######" },
-    "+54": { name: "Argentina", mask: "+54 # ########" },
-    "+55": { name: "Brazil", mask: "+55 ## ##### ####" },
-    "+56": { name: "Chile", mask: "+56 # #### ####" },
-    "+57": { name: "Colombia", mask: "+57 ### ### ####" },
-    "+58": { name: "Venezuela", mask: "+58 ### ### ####" },
-    "+591": { name: "Bolivia", mask: "+591 # ### ####" },
-    "+592": { name: "Guyana", mask: "+592 ### ####" },
-    "+593": { name: "Ecuador", mask: "+593 # ### ####" },
-    "+595": { name: "Paraguay", mask: "+595 ### ### ###" },
-    "+597": { name: "Suriname", mask: "+597 ### ###" },
-    "+598": { name: "Uruguay", mask: "+598 # ### ####" },
+    "+500": { name: "Falkland Islands", mask: "+500 #####", flag: "🇫🇰" },
+    "+501": { name: "Belize", mask: "+501 ### ####", flag: "🇧🇿" },
+    "+502": { name: "Guatemala", mask: "+502 #### ####", flag: "🇬🇹" },
+    "+503": { name: "El Salvador", mask: "+503 #### ####", flag: "🇸🇻" },
+    "+504": { name: "Honduras", mask: "+504 #### ####", flag: "🇭🇳" },
+    "+505": { name: "Nicaragua", mask: "+505 #### ####", flag: "🇳🇮" },
+    "+506": { name: "Costa Rica", mask: "+506 #### ####", flag: "🇨🇷" },
+    "+507": { name: "Panama", mask: "+507 #### ####", flag: "🇵🇦" },
+    "+508": { name: "Saint Pierre and Miquelon", mask: "+508 ## ## ##", flag: "🇵🇲" },
+    "+509": { name: "Haiti", mask: "+509 #### ####", flag: "🇭🇹" },
+    "+51": { name: "Peru", mask: "+51 ### ### ###", flag: "🇵🇪" },
+    "+52": { name: "Mexico", mask: "+52 ## #### ####", flag: "🇲🇽" },
+    "+53": { name: "Cuba", mask: "+53 # #######", flag: "🇨🇺" },
+    "+54": { name: "Argentina", mask: "+54 # ########", flag: "🇦🇷" },
+    "+55": { name: "Brazil", mask: "+55 ## ##### ####", flag: "🇧🇷" },
+    "+56": { name: "Chile", mask: "+56 # #### ####", flag: "🇨🇱" },
+    "+57": { name: "Colombia", mask: "+57 ### ### ####", flag: "🇨🇴" },
+    "+58": { name: "Venezuela", mask: "+58 ### ### ####", flag: "🇻🇪" },
+    "+591": { name: "Bolivia", mask: "+591 # ### ####", flag: "🇧🇴" },
+    "+592": { name: "Guyana", mask: "+592 ### ####", flag: "🇬🇾" },
+    "+593": { name: "Ecuador", mask: "+593 # ### ####", flag: "🇪🇨" },
+    "+595": { name: "Paraguay", mask: "+595 ### ### ###", flag: "🇵🇾" },
+    "+597": { name: "Suriname", mask: "+597 ### ###", flag: "🇸🇷" },
+    "+598": { name: "Uruguay", mask: "+598 # ### ####", flag: "🇺🇾" },
 
     // Oceania & Southeast Asia (Zone 6)
-    "+60": { name: "Malaysia", mask: "+60 ## #### ####" },
-    "+61": { name: "Australia", mask: "+61 ### ### ###" },
-    "+62": { name: "Indonesia", mask: "+62 ### ### ####" },
-    "+63": { name: "Philippines", mask: "+63 ### ### ####" },
-    "+64": { name: "New Zealand", mask: "+64 ## ### ####" },
-    "+65": { name: "Singapore", mask: "+65 #### ####" },
-    "+66": { name: "Thailand", mask: "+66 ## ### ####" },
-    "+670": { name: "East Timor", mask: "+670 #### ####" },
-    "+673": { name: "Brunei", mask: "+673 ### ####" },
-    "+674": { name: "Nauru", mask: "+674 ### ####" },
-    "+675": { name: "Papua New Guinea", mask: "+675 ### ####" },
-    "+676": { name: "Tonga", mask: "+676 #####" },
-    "+677": { name: "Solomon Islands", mask: "+677 #####" },
-    "+678": { name: "Vanuatu", mask: "+678 #####" },
-    "+679": { name: "Fiji", mask: "+679 ## #####" },
-    "+680": { name: "Palau", mask: "+680 ### ####" },
-    "+685": { name: "Samoa", mask: "+685 #####" },
-    "+686": { name: "Kiribati", mask: "+686 #####" },
-    "+688": { name: "Tuvalu", mask: "+688 #####" },
-    "+689": { name: "French Polynesia", mask: "+689 ## ## ##" },
-    "+690": { name: "Tokelau", mask: "+690 ####" },
-    "+691": { name: "Micronesia", mask: "+691 ### ####" },
-    "+692": { name: "Marshall Islands", mask: "+692 ### ####" },
+    "+60": { name: "Malaysia", mask: "+60 ## #### ####", flag: "🇲🇾" },
+    "+61": { name: "Australia", mask: "+61 ### ### ###", flag: "🇦🇺" },
+    "+62": { name: "Indonesia", mask: "+62 ### ### ####", flag: "🇮🇩" },
+    "+63": { name: "Philippines", mask: "+63 ### ### ####", flag: "🇵🇭" },
+    "+64": { name: "New Zealand", mask: "+64 ## ### ####", flag: "🇳🇿" },
+    "+65": { name: "Singapore", mask: "+65 #### ####", flag: "🇸🇬" },
+    "+66": { name: "Thailand", mask: "+66 ## ### ####", flag: "🇹🇭" },
+    "+670": { name: "East Timor", mask: "+670 #### ####", flag: "🇹🇱" },
+    "+673": { name: "Brunei", mask: "+673 ### ####", flag: "🇧🇳" },
+    "+674": { name: "Nauru", mask: "+674 ### ####", flag: "🇳🇷" },
+    "+675": { name: "Papua New Guinea", mask: "+675 ### ####", flag: "🇵🇬" },
+    "+676": { name: "Tonga", mask: "+676 #####", flag: "🇹🇴" },
+    "+677": { name: "Solomon Islands", mask: "+677 #####", flag: "🇸🇧" },
+    "+678": { name: "Vanuatu", mask: "+678 #####", flag: "🇻🇺" },
+    "+679": { name: "Fiji", mask: "+679 ## #####", flag: "🇫🇯" },
+    "+680": { name: "Palau", mask: "+680 ### ####", flag: "🇵🇼" },
+    "+685": { name: "Samoa", mask: "+685 #####", flag: "🇼🇸" },
+    "+686": { name: "Kiribati", mask: "+686 #####", flag: "🇰🇮" },
+    "+688": { name: "Tuvalu", mask: "+688 #####", flag: "🇹🇻" },
+    "+689": { name: "French Polynesia", mask: "+689 ## ## ##", flag: "🇵🇫" },
+    "+690": { name: "Tokelau", mask: "+690 ####", flag: "🇹🇰" },
+    "+691": { name: "Micronesia", mask: "+691 ### ####", flag: "🇫🇲" },
+    "+692": { name: "Marshall Islands", mask: "+692 ### ####", flag: "🇲🇭" },
 
     // Russia & Central Asia (Zone 7)
-    "+7": { name: "Russia / Kazakhstan", mask: "+7 (###) ###-##-##" },
+    "+7": { name: "Russia / Kazakhstan", mask: "+7 (###) ###-##-##", flag: "🇷🇺🇰🇿" },
 
     // East Asia & Special Services (Zone 8)
-    "+81": { name: "Japan", mask: "+81 ## #### ####" },
-    "+82": { name: "South Korea", mask: "+82 ## #### ####" },
-    "+84": { name: "Vietnam", mask: "+84 ## #### ####" },
-    "+852": { name: "Hong Kong", mask: "+852 #### ####" },
-    "+853": { name: "Macau", mask: "+853 #### ####" },
-    "+855": { name: "Cambodia", mask: "+855 ## ### ###" },
-    "+856": { name: "Laos", mask: "+856 ## ## ### ###" },
-    "+86": { name: "China", mask: "+86 ### #### ####" },
-    "+880": { name: "Bangladesh", mask: "+880 ### ########" },
-    "+886": { name: "Taiwan", mask: "+886 # #### ####" },
+    "+81": { name: "Japan", mask: "+81 ## #### ####", flag: "🇯🇵" },
+    "+82": { name: "South Korea", mask: "+82 ## #### ####", flag: "🇰🇷" },
+    "+84": { name: "Vietnam", mask: "+84 ## #### ####", flag: "🇻🇳" },
+    "+852": { name: "Hong Kong", mask: "+852 #### ####", flag: "🇭🇰" },
+    "+853": { name: "Macau", mask: "+853 #### ####", flag: "🇲🇴" },
+    "+855": { name: "Cambodia", mask: "+855 ## ### ###", flag: "🇰🇭" },
+    "+856": { name: "Laos", mask: "+856 ## ## ### ###", flag: "🇱🇦" },
+    "+86": { name: "China", mask: "+86 ### #### ####", flag: "🇨🇳" },
+    "+880": { name: "Bangladesh", mask: "+880 ### ########", flag: "🇧🇩" },
+    "+886": { name: "Taiwan", mask: "+886 # #### ####", flag: "🇹🇼" },
 
     // West, Central & South Asia (Zone 9)
-    "+90": { name: "Turkey", mask: "+90 ### ### ####" },
-    "+91": { name: "India", mask: "+91 ##### #####" },
-    "+92": { name: "Pakistan", mask: "+92 ### #######" },
-    "+93": { name: "Afghanistan", mask: "+93 ## ### ####" },
-    "+94": { name: "Sri Lanka", mask: "+94 ## ### ####" },
-    "+95": { name: "Myanmar", mask: "+95 # ### ####" },
-    "+960": { name: "Maldives", mask: "+960 ### ####" },
-    "+961": { name: "Lebanon", mask: "+961 ## ### ###" },
-    "+962": { name: "Jordan", mask: "+962 # #### ####" },
-    "+963": { name: "Syria", mask: "+963 ## ########" },
-    "+964": { name: "Iraq", mask: "+964 ### ### ####" },
-    "+965": { name: "Kuwait", mask: "+965 ########" },
-    "+966": { name: "Saudi Arabia", mask: "+966 ## ### ####" },
-    "+967": { name: "Yemen", mask: "+967 ### ### ###" },
-    "+968": { name: "Oman", mask: "+968 ########" },
-    "+970": { name: "Palestine", mask: "+970 ## ### ####" },
-    "+971": { name: "United Arab Emirates", mask: "+971 ## ### ####" },
-    "+972": { name: "Israel", mask: "+972 ## ### ####" },
-    "+973": { name: "Bahrain", mask: "+973 ########" },
-    "+974": { name: "Qatar", mask: "+974 ########" },
-    "+975": { name: "Bhutan", mask: "+975 # ### ###" },
-    "+976": { name: "Mongolia", mask: "+976 ## ## ####" },
-    "+977": { name: "Nepal", mask: "+977 ## ### ###" },
-    "+98": { name: "Iran", mask: "+98 ### ### ####" },
-    "+992": { name: "Tajikistan", mask: "+992 ## ### ####" },
-    "+993": { name: "Turkmenistan", mask: "+993 # ######" },
-    "+994": { name: "Azerbaijan", mask: "+994 ## ### ## ##" },
-    "+995": { name: "Georgia", mask: "+995 ### ######" },
-    "+996": { name: "Kyrgyzstan", mask: "+996 ### ######" },
-    "+998": { name: "Uzbekistan", mask: "+998 ## ### ####" }
+    "+90": { name: "Turkey", mask: "+90 ### ### ####", flag: "🇹🇷" },
+    "+91": { name: "India", mask: "+91 ##### #####", flag: "🇮🇳" },
+    "+92": { name: "Pakistan", mask: "+92 ### #######", flag: "🇵🇰" },
+    "+93": { name: "Afghanistan", mask: "+93 ## ### ####", flag: "🇦🇫" },
+    "+94": { name: "Sri Lanka", mask: "+94 ## ### ####", flag: "🇱🇰" },
+    "+95": { name: "Myanmar", mask: "+95 # ### ####", flag: "🇲🇲" },
+    "+960": { name: "Maldives", mask: "+960 ### ####", flag: "🇲🇻" },
+    "+961": { name: "Lebanon", mask: "+961 ## ### ###", flag: "🇱🇧" },
+    "+962": { name: "Jordan", mask: "+962 # #### ####", flag: "🇯🇴" },
+    "+963": { name: "Syria", mask: "+963 ## ########", flag: "🇸🇾" },
+    "+964": { name: "Iraq", mask: "+964 ### ### ####", flag: "🇮🇶" },
+    "+965": { name: "Kuwait", mask: "+965 ########", flag: "🇰🇼" },
+    "+966": { name: "Saudi Arabia", mask: "+966 ## ### ####", flag: "🇸🇦" },
+    "+967": { name: "Yemen", mask: "+967 ### ### ###", flag: "🇾🇪" },
+    "+968": { name: "Oman", mask: "+968 ########", flag: "🇴🇲" },
+    "+970": { name: "Palestine", mask: "+970 ## ### ####", flag: "🇵🇸" },
+    "+971": { name: "United Arab Emirates", mask: "+971 ## ### ####", flag: "🇦🇪" },
+    "+972": { name: "Israel", mask: "+972 ## ### ####", flag: "🇮🇱" },
+    "+973": { name: "Bahrain", mask: "+973 ########", flag: "🇧🇭" },
+    "+974": { name: "Qatar", mask: "+974 ########", flag: "🇶🇦" },
+    "+975": { name: "Bhutan", mask: "+975 # ### ###", flag: "🇧🇹" },
+    "+976": { name: "Mongolia", mask: "+976 ## ## ####", flag: "🇲🇳" },
+    "+977": { name: "Nepal", mask: "+977 ## ### ###", flag: "🇳🇵" },
+    "+98": { name: "Iran", mask: "+98 ### ### ####", flag: "🇮🇷" },
+    "+992": { name: "Tajikistan", mask: "+992 ## ### ####", flag: "🇹🇯" },
+    "+993": { name: "Turkmenistan", mask: "+993 # ######", flag: "🇹🇲" },
+    "+994": { name: "Azerbaijan", mask: "+994 ## ### ## ##", flag: "🇦🇿" },
+    "+995": { name: "Georgia", mask: "+995 ### ######", flag: "🇬🇪" },
+    "+996": { name: "Kyrgyzstan", mask: "+996 ### ######", flag: "🇰🇬" },
+    "+998": { name: "Uzbekistan", mask: "+998 ## ### ####", flag: "🇺🇿" }
 };
-
+    
+    
 
     
                 
