@@ -113,11 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Render Alphabetical List with Flags & Codes
+        // Render Alphabetical List with iOS Keyboard Picker Styling
     function renderCountryPickerList(filterText = "") {
         if (!countryListScrollView) return;
 
-        // Extract and sort entries alphabetically by country name
         let sortedEntries = Object.entries(countryRules).sort((a, b) => {
             return a[1].name.localeCompare(b[1].name);
         });
@@ -131,17 +130,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         countryListScrollView.innerHTML = sortedEntries.map(([code, data]) => {
             return `
-                <div class="country-picker-row" data-code="${code}">
-                    <div class="country-row-left">
-                        <span class="country-flag-icon">${data.flag || "🌍"}</span>
-                        <span class="country-name-text">${data.name}</span>
+                <div class="country-picker-row" data-code="${code}" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid var(--separator-color, rgba(255,255,255,0.1)); cursor: pointer;">
+                    <div class="country-row-left" style="display: flex; align-items: center;">
+                        <span class="country-name-text" style="font-size: 16px; color: var(--text-main);">${data.name}</span>
                     </div>
-                    <span class="country-code-far-right">${code}</span>
+                    <div style="display: flex; align-items: center;">
+                        <span class="country-code-far-right" style="font-size: 15px; color: var(--text-sub); margin-right: 8px;">${code}</span>
+                        <span class="country-row-check" style="color: #0071e3; font-weight: 600; width: 16px;"></span>
+                    </div>
                 </div>
             `;
         }).join('');
 
-        // Attach click listeners to list items for auto-updating input field
+        // Attach click listeners to rows
         document.querySelectorAll(".country-picker-row").forEach(row => {
             row.addEventListener("click", () => {
                 const selectedCode = row.getAttribute("data-code");
@@ -162,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+
 
     // Search Filtering Listener
     if (countrySearchInput) {
