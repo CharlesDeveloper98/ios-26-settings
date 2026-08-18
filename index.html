@@ -1119,25 +1119,34 @@
 
 
                        <!-- iOS 26 "Add New Keyboard" Styled Country Picker Pop-up Page -->
-    <div class="ios26-country-sheet-overlay" id="countrySheetOverlay">
-        <div class="ios26-country-sheet-container" id="countrySheetContainer">
-            <div class="sheet-indicator"></div>
-            <div class="country-sheet-header">
-                <button type="button" class="country-sheet-cancel-btn" id="closeCountrySheetBtn">Cancel</button>
-                <h3 class="country-sheet-title">Countries</h3>
-                <div style="width: 50px;"></div> <!-- Spacer for perfect iOS title centering -->
-            </div>
-            <div class="country-search-box-wrapper" style="padding: 10px 16px;">
-                <div style="background: var(--grouped-background, rgba(120,120,128,0.12)); border-radius: 10px; display: flex; align-items: center; padding: 6px 10px;">
-                    <span style="color: var(--text-sub); margin-right: 6px;">🔍</span>
-                    <input type="text" id="countrySearchInput" placeholder="Search" autocomplete="off" style="background: transparent; border: none; outline: none; width: 100%; color: var(--text-main); font-size: 15px;">
+<div class="ios26-country-sheet-overlay" id="countrySheetOverlay">
+    <div class="ios26-country-sheet-container" id="countrySheetContainer">
+        <!-- iOS 26 Liquid Glass Header with Blur and "X" Close Button -->
+        <div class="country-sheet-header liquid-glass-header">
+            <div class="liquidglass-effect"></div>
+            <div class="header-content-inner">
+                <div class="liquid-back-btn liquid-glass-x-btn" id="closeCountrySheetBtn">
+                    <span class="back-chevron">✕</span>
                 </div>
-            </div>
-            <div class="country-list-scroll-view" id="countryListScrollView" style="overflow-y: auto; max-height: 60vh; padding: 0 16px;">
-                <!-- Populated dynamically from script.js matching iOS Keyboard style rows -->
+                <h3 class="country-sheet-title">Countries</h3>
+                <div style="width: 36px;"></div> <!-- Spacer for perfect iOS title centering -->
             </div>
         </div>
+
+        <!-- Search Box Wrapper -->
+        <div class="country-search-box-wrapper">
+            <div class="search-input-inner">
+                <span class="search-magnifier">🔍</span>
+                <input type="text" id="countrySearchInput" placeholder="Search" autocomplete="off">
+            </div>
+        </div>
+
+        <!-- Scrollable Country List Container -->
+        <div class="country-list-scroll-view" id="countryListScrollView">
+            <!-- Populated dynamically from script.js matching iOS Keyboard style rows -->
+        </div>
     </div>
+</div>
 
 
         
