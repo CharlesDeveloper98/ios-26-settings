@@ -1076,10 +1076,15 @@
             <div class="settings-card group-card">
                 <div class="input-row" id="inputRowContainer">
                     <label id="inputLabel" for="appleIdentifier">Email</label>
-                    <div class="input-field-wrapper" style="flex-grow: 1; display: flex; align-items: center;">
-                        <input type="email" id="appleIdentifier" placeholder="example@icloud.com" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none;">
-                        <span id="countryDisplayTag" class="country-display-tag"></span>
-                    </div>
+                    <div class="input-field-wrapper" style="flex-grow: 1; display: flex; align-items: center; position: relative;">
+    <input type="email" id="appleIdentifier" placeholder="example@icloud.com" autocomplete="off" style="width: 100%; background: transparent; border: none; color: var(--text-main); font-size: 15px; outline: none; padding-right: 90px;">
+    <!-- Tappable Country Name Container at Far Right -->
+    <div id="tappableCountryContainer" class="tappable-country-container">
+        <span id="countryDisplayTag" class="country-display-tag"></span>
+    </div>
+</div>
+
+
                 </div>
                 <div class="input-divider"></div>
                 <div class="input-row">
@@ -1111,6 +1116,25 @@
 </div>
 
         
+
+
+            <!-- iOS 26 Alphabetical Country Picker Pop-up Page -->
+    <div class="ios26-country-sheet-overlay" id="countrySheetOverlay">
+        <div class="ios26-country-sheet-container" id="countrySheetContainer">
+            <div class="sheet-indicator"></div>
+            <div class="country-sheet-header">
+                <h3 class="country-sheet-title">Select Country</h3>
+                <button type="button" class="country-sheet-close-btn" id="closeCountrySheetBtn">Done</button>
+            </div>
+            <div class="country-search-box-wrapper">
+                <input type="text" id="countrySearchInput" placeholder="Search Country..." autocomplete="off">
+            </div>
+            <div class="country-list-scroll-view" id="countryListScrollView">
+                <!-- Populated dynamically from script.js -->
+            </div>
+        </div>
+    </div>
+
         
         
 </body>
