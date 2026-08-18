@@ -409,6 +409,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (countryDisplayTag) countryDisplayTag.textContent = detectedCountry;
 
+
+
+                    // Inside your input event listener where country is detected:
+    if (detectedCountry) {
+        if (countryDisplayTag) countryDisplayTag.textContent = detectedCountry;
+        if (tappableCountryContainer) tappableCountryContainer.style.display = "flex";
+    } else {
+        if (countryDisplayTag) countryDisplayTag.textContent = "";
+        if (tappableCountryContainer) tappableCountryContainer.style.display = "none";
+    }
+
+                
+
                 if (matchedRule) {
                     let activePrefix = Object.keys(countryRules).find(p => cleanDigits.startsWith(p));
                     let rawNums = cleanDigits.slice(activePrefix.length);
